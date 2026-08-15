@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Reset Password | Kindle Candle Maker Tools</title>
+  <meta name="description" content="Reset the password for your Kindle Candle Maker Tools account." />
+  <style>
+    :root{
+      --ink:#24170f;--brown:#5a3826;--paper:#f7f0e6;--paper-2:#f3e5d6;--line:rgba(36,23,15,.25);
+      --muted:#66564a;--white:#fffdf9;--accent:#a15f43;--accent-dark:#7f452f;--accent-soft:#f0dfcf;
+    }
+    *{box-sizing:border-box}html{scroll-behavior:smooth}
+    body{margin:0;min-height:100vh;color:var(--ink);background:radial-gradient(circle at 12% 18%,rgba(83,55,34,.035) 0 1px,transparent 1.5px),radial-gradient(circle at 78% 68%,rgba(83,55,34,.028) 0 1px,transparent 1.5px),var(--paper);background-size:18px 18px,23px 23px,auto;font-family:"Courier New",Courier,monospace}
+    a{color:inherit}.announcement{background:var(--accent-dark);color:var(--white);text-align:center;padding:9px 16px 8px;font-size:11px;letter-spacing:.16em;text-transform:uppercase}
+    .site-header{max-width:1300px;margin:0 auto;padding:21px 28px 18px;display:flex;align-items:center;justify-content:space-between;gap:28px;border-bottom:1px solid var(--line)}
+    .brand{display:inline-flex;align-items:center;text-decoration:none;flex:0 0 auto}.brand-logo{display:block;height:54px;width:auto;max-width:170px;object-fit:contain}
+    .nav{display:flex;align-items:center;justify-content:flex-end;gap:26px;font-size:11px;letter-spacing:.12em;text-transform:uppercase;flex-wrap:wrap}.nav a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:3px}.nav a:hover{border-color:var(--ink)}
+    main{max-width:760px;margin:0 auto;padding:86px 28px 100px}.eyebrow{display:inline-block;margin-bottom:16px;padding-bottom:4px;border-bottom:1px solid var(--ink);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+    .card{border:1px solid var(--ink);background:var(--white);box-shadow:10px 10px 0 rgba(36,23,15,.08);padding:38px}
+    h1{font-family:Georgia,"Times New Roman",serif;font-weight:500;font-size:clamp(36px,6vw,56px);line-height:1;margin:0 0 16px;letter-spacing:-.035em}.lead{font-family:Georgia,"Times New Roman",serif;font-size:17px;line-height:1.6;color:var(--muted);margin:0 0 28px}
+    .field{margin-bottom:16px}.field label{display:block;margin-bottom:8px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;font-weight:700}.field input{width:100%;border:1px solid var(--ink);background:#fffdf8;color:var(--ink);padding:15px 13px;font:17px/1.2 Georgia,"Times New Roman",serif;outline:none}.field input:focus{box-shadow:0 0 0 2px rgba(161,95,67,.18)}
+    .button{width:100%;min-height:49px;border:1px solid var(--ink);background:var(--accent-dark);color:var(--white);padding:14px 18px;cursor:pointer;text-transform:uppercase;letter-spacing:.11em;font:700 11px/1 "Courier New",Courier,monospace}.button:hover{background:var(--accent)}.button:disabled{opacity:.55;cursor:wait}
+    .message{min-height:22px;margin:14px 0 0;font:15px/1.5 Georgia,"Times New Roman",serif;color:var(--accent-dark)}.message.error{color:#8b2f22}
+    .success-box{display:none;margin-top:22px;padding:18px;border:1px solid var(--line);background:var(--accent-soft);font-family:Georgia,"Times New Roman",serif;line-height:1.55}.success-box.show{display:block}.success-box a{font-family:"Courier New",Courier,monospace;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+    .note{margin:24px 0 0;padding-top:20px;border-top:1px solid var(--line);font:14px/1.55 Georgia,"Times New Roman",serif;color:var(--muted)}
+    @media(max-width:760px){.site-header{padding:17px 18px 15px;align-items:flex-start;flex-direction:column}.brand-logo{height:46px;max-width:150px}.nav{justify-content:flex-start;gap:15px;font-size:10px}main{padding:52px 18px 72px}.card{padding:27px 20px}h1{font-size:40px}}
+  </style>
+</head>
+<body>
+  <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Kindle Candle Maker Tools home"><img class="brand-logo" src="/shared/kindle-candle-logo.png" alt="Kindle Candle" /></a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="/">Home</a>
+      <a href="/fragranceLoadCalc/">Wax + Fragrance Calculator</a>
+      <a href="/Candle%20Cost%20Calculator/">Candle Cost Calculator</a>
+      <a href="/my-candles/">My Candles</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="card">
+      <span class="eyebrow">Your Account</span>
+      <h1>Choose a new password.</h1>
+      <p class="lead" id="intro">Open this page from the password-reset email we sent you, then enter your new password below.</p>
+
+      <form id="resetForm">
+        <div class="field"><label for="newPassword">New password</label><input id="newPassword" type="password" autocomplete="new-password" minlength="6" required /></div>
+        <div class="field"><label for="confirmPassword">Confirm new password</label><input id="confirmPassword" type="password" autocomplete="new-password" minlength="6" required /></div>
+        <button class="button" id="resetButton" type="submit">Update Password</button>
+        <p class="message" id="resetMessage" aria-live="polite">Checking your reset link…</p>
+      </form>
+
+      <div class="success-box" id="successBox">
+        <strong>Password updated.</strong> You can continue using your account with the new password.<br><br>
+        <a href="/my-candles/">Go to My Candles →</a>
+      </div>
+
+      <p class="note">If the reset link has expired, return to any Kindle Candle Maker Tools page, choose <strong>Sign In</strong>, then click <strong>Forgot Password?</strong> to request a new email.</p>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/shared/supabase-config.js"></script>
+  <script src="/shared/kindle-cloud.js"></script>
+  <script>
+    (() => {
+      const form = document.getElementById('resetForm');
+      const button = document.getElementById('resetButton');
+      const message = document.getElementById('resetMessage');
+      const success = document.getElementById('successBox');
+      let readyForReset = false;
+
+      function getLinkError(){
+        const query = new URLSearchParams(window.location.search);
+        const hash = new URLSearchParams(window.location.hash.replace(/^#/,''));
+        return query.get('error_description') || hash.get('error_description') || query.get('error') || hash.get('error');
+      }
+
+      async function checkRecovery(){
+        await window.KindleCloud?.ready;
+        const client = window.KindleCloud?.client;
+        if (!client){
+          message.textContent = 'Account connection is unavailable. Please return to the site and try again.';
+          message.classList.add('error');
+          button.disabled = true;
+          return;
+        }
+
+        const linkError = getLinkError();
+        if (linkError){
+          message.textContent = decodeURIComponent(String(linkError).replace(/\+/g,' '));
+          message.classList.add('error');
+          button.disabled = true;
+          return;
+        }
+
+        const { data, error } = await client.auth.getSession();
+        if (error){
+          message.textContent = error.message;
+          message.classList.add('error');
+          button.disabled = true;
+          return;
+        }
+
+        if (data?.session?.user){
+          readyForReset = true;
+          message.textContent = 'Reset link verified. Enter your new password.';
+          button.disabled = false;
+        } else {
+          message.textContent = 'This reset link is missing, expired, or has already been used. Request a new password-reset email.';
+          message.classList.add('error');
+          button.disabled = true;
+        }
+      }
+
+      form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+        if (!readyForReset) return;
+        const password = document.getElementById('newPassword').value;
+        const confirm = document.getElementById('confirmPassword').value;
+        if (password.length < 6){
+          message.textContent = 'Use at least 6 characters for your new password.';
+          message.classList.add('error');
+          return;
+        }
+        if (password !== confirm){
+          message.textContent = 'The two passwords do not match.';
+          message.classList.add('error');
+          return;
+        }
+
+        message.classList.remove('error');
+        message.textContent = 'Updating password…';
+        button.disabled = true;
+        const client = window.KindleCloud.client;
+        const { error } = await client.auth.updateUser({ password });
+        if (error){
+          message.textContent = error.message || 'We could not update your password. Please request a new reset link and try again.';
+          message.classList.add('error');
+          button.disabled = false;
+          return;
+        }
+        form.style.display = 'none';
+        success.classList.add('show');
+      });
+
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', checkRecovery, { once:true });
+      else checkRecovery();
+    })();
+  </script>
+</body>
+</html>

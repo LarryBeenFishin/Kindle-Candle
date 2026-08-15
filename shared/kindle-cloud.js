@@ -73,6 +73,10 @@
       .kindle-auth-field label{display:block;margin-bottom:6px;font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;letter-spacing:.08em;text-transform:uppercase}
       .kindle-auth-field input{box-sizing:border-box;width:100%;border:1px solid #2a1b14;background:#fffdf8;color:#20150f;padding:13px 12px;font:16px/1.2 Georgia,serif;outline:none}
       .kindle-auth-field input:focus{box-shadow:0 0 0 2px rgba(141,74,47,.18)}
+      .kindle-auth-forgot-wrap{display:flex;justify-content:flex-end;margin:-4px 0 14px}
+      .kindle-auth-forgot{appearance:none;border:0;background:transparent;color:#8d4a2f;padding:2px 0;cursor:pointer;font:700 11px/1.2 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;letter-spacing:.08em;text-transform:uppercase;border-bottom:1px solid transparent}
+      .kindle-auth-forgot:hover{border-bottom-color:#8d4a2f}
+      .kindle-auth-forgot:disabled{opacity:.55;cursor:wait}
       .kindle-auth-submit,.kindle-auth-logout{width:100%;border:1px solid #2a1b14;background:#8d4a2f;color:#fff;padding:13px 14px;cursor:pointer;font:700 11px/1 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
       .kindle-auth-submit:hover,.kindle-auth-logout:hover{background:#6f3824}
       .kindle-auth-message{min-height:20px;margin-top:12px!important;font:14px/1.4 Georgia,serif!important;color:#8d4a2f!important}
@@ -116,6 +120,7 @@
             <form id="kindleAuthForm">
               <div class="kindle-auth-field"><label for="kindleAuthEmail">Email</label><input id="kindleAuthEmail" type="email" autocomplete="email" required></div>
               <div class="kindle-auth-field"><label for="kindleAuthPassword">Password</label><input id="kindleAuthPassword" type="password" autocomplete="current-password" minlength="6" required></div>
+              <div class="kindle-auth-forgot-wrap" id="kindleForgotWrap"><button id="kindleForgotPassword" class="kindle-auth-forgot" type="button">Forgot Password?</button></div>
               <button id="kindleAuthSubmit" class="kindle-auth-submit" type="submit">Sign In</button>
               <p class="kindle-auth-message" id="kindleAuthMessage" aria-live="polite"></p>
               <p class="kindle-auth-note">You can use the calculators without an account. An account is only required to save candle and blend data.</p>
@@ -138,6 +143,7 @@
         button.addEventListener('click', () => setAuthMode(button.dataset.authMode));
       });
       document.getElementById('kindleAuthForm').addEventListener('submit', handleAuthSubmit);
+      document.getElementById('kindleForgotPassword').addEventListener('click', handleForgotPassword);
       document.getElementById('kindleAuthLogout').addEventListener('click', signOut);
       document.addEventListener('keydown', event => { if (event.key === 'Escape') closeAuth(); });
     }
@@ -153,6 +159,8 @@
     const password = document.getElementById('kindleAuthPassword');
     if (submit) submit.textContent = signup ? 'Create Account' : 'Sign In';
     if (password) password.autocomplete = signup ? 'new-password' : 'current-password';
+    const forgotWrap = document.getElementById('kindleForgotWrap');
+    if (forgotWrap) forgotWrap.hidden = signup;
     const message = document.getElementById('kindleAuthMessage');
     if (message) message.textContent = '';
   }
@@ -203,6 +211,34 @@
   function closeAuth() {
     document.getElementById('kindleAuthOverlay')?.classList.remove('open');
     document.body.style.overflow = '';
+  }
+
+  async function handleForgotPassword() {
+    if (!client) return;
+    const emailInput = document.getElementById('kindleAuthEmail');
+    const message = document.getElementById('kindleAuthMessage');
+    const button = document.getElementById('kindleForgotPassword');
+    const email = emailInput?.value.trim() || '';
+
+    if (!email) {
+      if (message) message.textContent = 'Enter your email address above, then click Forgot Password.';
+      emailInput?.focus();
+      return;
+    }
+
+    if (message) message.textContent = 'Sending reset email…';
+    if (button) button.disabled = true;
+
+    try {
+      const redirectTo = `${window.location.origin}/reset-password/`;
+      const { error } = await client.auth.resetPasswordForEmail(email, { redirectTo });
+      if (error) throw error;
+      if (message) message.textContent = 'Password reset email sent. Check your inbox and follow the link to choose a new password.';
+    } catch (error) {
+      if (message) message.textContent = error?.message || 'We could not send the reset email. Please try again.';
+    } finally {
+      if (button) button.disabled = false;
+    }
   }
 
   async function handleAuthSubmit(event) {
