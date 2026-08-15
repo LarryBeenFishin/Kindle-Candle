@@ -165,19 +165,6 @@
       position: relative;
     }
 
-    .tool-shell::before {
-      content: "KINDLE CANDLE • MAKER TOOL";
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--paper);
-      padding: 3px 12px;
-      white-space: nowrap;
-      font-size: 10px;
-      letter-spacing: .18em;
-    }
-
     .calculator {
       display: grid;
       grid-template-columns: minmax(0, 1.12fr) minmax(340px, .88fr);
@@ -1268,26 +1255,21 @@
   </style>
 </head>
 <body>
-  <div class="announcement">Free candle-making tools • built for repeatable pours</div>
+  <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
 
   <header class="site-header">
-    <a class="brand" href="https://kindlecandle.com/" aria-label="Kindle Candle home">
+    <a class="brand" href="/" aria-label="Kindle Candle tools home">
       <span class="brand-mark" aria-hidden="true"></span>
       <span>Kindle Candle</span>
     </a>
     <nav class="nav" aria-label="Main navigation">
-      <a href="https://kindlecandle.com/">Home</a>
-      <a href="#calculator">Batch Tool</a>
-      <a href="#saved-recipes">Saved Candles</a>
-      <a href="#wax-guide">Wax Reference</a>
-      <a href="#maker-tips">Pouring Tips</a>
-      <a href="https://kindlecandle.com/collections/candles">Candles</a>
+      <a href="/">Home</a>
+      <a href="/fragranceLoadCalc/" aria-current="page">Wax + Fragrance Calculator</a>
     </nav>
   </header>
 
   <main>
     <section class="hero">
-      <span class="eyebrow">Kindle Candle Maker Resource</span>
       <h1>Wax + Fragrance<br>Batch Calculator</h1>
       <p>Plan a pour in seconds. Enter your vessel capacity, batch quantity, fragrance percentage, and wax density to get the weights you need before you start melting.</p>
     </section>
