@@ -1255,7 +1255,7 @@
     <nav class="nav" aria-label="Main navigation">
       <a href="https://kindlecandle.com/">Home</a>
       <a href="#calculator">Batch Tool</a>
-      <a href="#saved-recipes">Saved Recipes</a>
+      <a href="#saved-recipes">Saved Candles</a>
       <a href="#wax-guide">Wax Reference</a>
       <a href="#maker-tips">Pouring Tips</a>
       <a href="https://kindlecandle.com/collections/candles">Candles</a>
@@ -1408,10 +1408,10 @@
           <button class="copy" id="copyBtn" type="button">Copy Batch Summary</button>
 
           <div class="save-recipe-box">
-            <label class="save-recipe-label" for="recipeName">Save this formula</label>
+            <label class="save-recipe-label" for="recipeName">Save Candle</label>
             <div class="save-recipe-row">
               <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Golden Hour 8 oz" autocomplete="off" />
-              <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Recipe</button>
+              <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Candle</button>
             </div>
             <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, unit, and your active fragrance blend. Your batch quantity stays separate.</div>
             <div class="save-recipe-status" id="saveRecipeStatus" role="status"></div>
@@ -1424,12 +1424,12 @@
       <div class="saved-recipes-head">
         <div>
           <span class="eyebrow" style="margin-bottom:10px;">Your Formula Library</span>
-          <h2 id="savedRecipesTitle">Saved Recipes</h2>
+          <h2 id="savedRecipesTitle">Saved Candles</h2>
         </div>
-        <div class="recipe-count" id="recipeCount">0 recipes saved</div>
+        <div class="recipe-count" id="recipeCount">0 candles saved</div>
       </div>
       <div class="saved-recipes-head" style="margin-top:-6px; margin-bottom:18px;">
-        <p>Save the formula once, then load it whenever you pour again. When a recipe is loaded, the batch quantity starts at 1 so you can enter exactly how many candles you want to make.</p>
+        <p>Save a candle once, then load it whenever you pour again. When a candle is loaded, the batch quantity starts at 1 so you can enter exactly how many candles you want to make.</p>
       </div>
       <div class="recipe-list" id="recipeList"></div>
     </section>
@@ -1963,10 +1963,10 @@
       const recipes = getSavedRecipes();
       const list = $('recipeList');
       const count = $('recipeCount');
-      count.textContent = `${recipes.length} ${recipes.length === 1 ? 'recipe' : 'recipes'} saved`;
+      count.textContent = `${recipes.length} ${recipes.length === 1 ? 'candle' : 'candles'} saved`;
 
       if (!recipes.length) {
-        list.innerHTML = '<div class="recipe-empty">No saved recipes yet. Build a batch above, give the formula a name, and choose <strong>Save Recipe</strong>.</div>';
+        list.innerHTML = '<div class="recipe-empty">No saved candles yet. Build a batch above, give the candle a name, and choose <strong>Save Candle</strong>.</div>';
         return;
       }
 
@@ -2041,10 +2041,10 @@
 
       if (existingIndex >= 0) {
         recipes[existingIndex] = recipe;
-        flashRecipeStatus('Recipe updated ✓');
+        flashRecipeStatus('Candle updated ✓');
       } else {
         recipes.unshift(recipe);
-        flashRecipeStatus('Recipe saved ✓');
+        flashRecipeStatus('Candle saved ✓');
       }
 
       setSavedRecipes(recipes);
