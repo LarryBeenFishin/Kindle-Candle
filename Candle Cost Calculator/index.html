@@ -547,6 +547,17 @@
       button { width: 100%; }
       .result-value { font-size: 26px; }
     }
+  
+    .brand-logo {
+      display: block;
+      height: 54px;
+      width: auto;
+      max-width: 170px;
+      object-fit: contain;
+    }
+    @media (max-width: 720px) {
+      .brand-logo { height: 46px; max-width: 150px; }
+    }
   </style>
 </head>
 <body>
@@ -554,8 +565,7 @@
 
   <header class="site-header">
     <a class="brand" href="/" aria-label="Go to home page">
-      <span class="brand-mark" aria-hidden="true"></span>
-      <span>Kindle Candle</span>
+      <img class="brand-logo" src="../shared/kindle-candle-logo.png" alt="Kindle Candle" />
     </a>
     <nav class="nav" aria-label="Main navigation">
       <a href="/">Home</a>
