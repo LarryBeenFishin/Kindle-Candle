@@ -265,16 +265,10 @@
             </div>
 
             <div class="step">
-              <div class="step-kicker">Step 03</div><h3>Labor + other costs</h3>
+              <div class="step-kicker">Step 03</div><h3>Transaction fee</h3>
+              <p class="section-intro">If your payment processor or selling platform charges a percentage fee, enter it here. Leave this at 0% if you do not want to include a transaction fee.</p>
               <div class="fields three">
-                <div class="field"><label for="laborMinutes">Labor minutes / batch</label><input id="laborMinutes" type="number" min="0" step="1" value="90"></div>
-                <div class="field"><label for="hourlyRate">Hourly labor rate</label><input id="hourlyRate" type="number" min="0" step="0.01" value="20.00"></div>
-                <div class="field"><label>Labor / candle</label><input id="laborPer" readonly value="$0.00"></div>
-              </div>
-              <div class="fields three" style="margin-top:14px">
-                <div class="field"><label for="overhead">Overhead / candle</label><input id="overhead" type="number" min="0" step="0.01" value="0.50"></div>
-                <div class="field"><label for="fulfillment">Packaging / fulfillment</label><input id="fulfillment" type="number" min="0" step="0.01" value="0"></div>
-                <div class="field"><label for="sellingFee">Selling fee %</label><input id="sellingFee" type="number" min="0" max="100" step="0.1" value="3.5"></div>
+                <div class="field"><label for="sellingFee">Transaction fee (%)</label><input id="sellingFee" type="number" min="0" max="100" step="0.1" value="0" placeholder="0"></div>
               </div>
             </div>
 
@@ -295,9 +289,7 @@
             <div class="result-main"><div class="result-label">True cost per candle</div><div class="big-amount" id="trueCost">$0.00</div><div class="result-sub" id="batchCostText">$0.00 total batch cost</div></div>
             <div class="result-list">
               <div class="result-line"><span>Materials</span><strong id="resMaterials">$0.00</strong></div>
-              <div class="result-line"><span>Labor</span><strong id="resLabor">$0.00</strong></div>
-              <div class="result-line"><span>Overhead + fulfillment</span><strong id="resOther">$0.00</strong></div>
-              <div class="result-line"><span>Retail selling fee</span><strong id="resFee">$0.00</strong></div>
+              <div class="result-line"><span>Transaction fee</span><strong id="resFee">$0.00</strong></div>
             </div>
             <div class="profit-box"><div class="result-label">At your retail price</div><div class="profit-line"><span>Profit / candle</span><strong id="retailProfit">$0.00</strong></div><div class="margin-track"><span id="marginBar"></span></div><div class="margin-copy" id="marginCopy">0% gross margin</div></div>
             <div class="pricing">
@@ -477,18 +469,17 @@
 
   function calculate(){
     const p=selectedPreset(),batch=Math.max(1,Math.round(num($('#batchQty').value)||1)),usages=renderCalcMaterials(p,batch),materials=usages.reduce((s,u)=>s+u.cost,0);
-    const labor=(num($('#laborMinutes').value)/60*num($('#hourlyRate').value))/batch;$('#laborPer').value=money(labor);
-    const other=num($('#overhead').value)+num($('#fulfillment').value),retail=num($('#retailPrice').value),fee=retail*num($('#sellingFee').value)/100,trueCost=materials+labor+other+fee,batchCost=trueCost*batch;
-    $('#trueCost').textContent=money(trueCost);$('#batchCostText').textContent=`${money(batchCost)} total for ${batch} candle${batch===1?'':'s'}`;$('#resMaterials').textContent=money(materials);$('#resLabor').textContent=money(labor);$('#resOther').textContent=money(other);$('#resFee').textContent=money(fee);
+    const retail=num($('#retailPrice').value),fee=retail*num($('#sellingFee').value)/100,trueCost=materials+fee,batchCost=trueCost*batch;
+    $('#trueCost').textContent=money(trueCost);$('#batchCostText').textContent=`${money(batchCost)} total for ${batch} candle${batch===1?'':'s'}`;$('#resMaterials').textContent=money(materials);$('#resFee').textContent=money(fee);
     const profit=retail-trueCost,margin=retail?profit/retail*100:0;$('#retailProfit').textContent=money(profit);$('#marginCopy').textContent=`${margin.toFixed(1)}% gross margin · ${money(profit*batch)} projected batch profit`;$('#marginBar').style.width=clamp(margin,0,100)+'%';
-    const wholesale=num($('#wholesalePrice').value),wm=wholesale?(wholesale-(materials+labor+other))/wholesale*100:0,tr=clamp(num($('#targetRetail').value),1,95),tw=clamp(num($('#targetWholesale').value),1,95),baseNoFee=materials+labor+other,feeRate=num($('#sellingFee').value)/100,suggestedRetail=baseNoFee/Math.max(.01,1-feeRate-tr/100),suggestedWholesale=baseNoFee/Math.max(.01,1-tw/100);
+    const wholesale=num($('#wholesalePrice').value),wm=wholesale?(wholesale-materials)/wholesale*100:0,tr=clamp(num($('#targetRetail').value),1,95),tw=clamp(num($('#targetWholesale').value),1,95),baseNoFee=materials,feeRate=num($('#sellingFee').value)/100,suggestedRetail=baseNoFee/Math.max(.01,1-feeRate-tr/100),suggestedWholesale=baseNoFee/Math.max(.01,1-tw/100);
     $('#yourRetail').textContent=money(retail);$('#retailDetail').textContent=`${margin.toFixed(1)}% margin`;$('#suggestRetail').textContent=money(suggestedRetail);$('#retailTargetLabel').textContent=`${tr}% target margin`;$('#yourWholesale').textContent=money(wholesale);$('#wholesaleDetail').textContent=`${wm.toFixed(1)}% margin`;$('#suggestWholesale').textContent=money(suggestedWholesale);$('#wholesaleTargetLabel').textContent=`${tw}% target margin`;
-    return{p,batch,usages,materials,labor,other,fee,trueCost,batchCost,retail,profit,margin,wholesale}
+    return{p,batch,usages,materials,fee,trueCost,batchCost,retail,profit,margin,wholesale}
   }
-  ['batchQty','retailPrice','laborMinutes','hourlyRate','overhead','fulfillment','sellingFee','wholesalePrice','targetRetail','targetWholesale'].forEach(id=>$('#'+id).addEventListener('input',calculate));
+  ['batchQty','retailPrice','sellingFee','wholesalePrice','targetRetail','targetWholesale'].forEach(id=>$('#'+id).addEventListener('input',calculate));
   $('#recordBatch').onclick=()=>{const r=calculate();if(!r.p){toast('Choose a candle preset');return}const missing=r.usages.filter(u=>!u.mat);if(missing.length){alert('This preset has materials that are no longer in inventory. Edit the preset first.');return}const short=r.usages.filter(u=>!u.enough);if(short.length){alert('Not enough inventory for: '+short.map(u=>u.mat.name).join(', '));return}if(!confirm(`Deduct materials for ${r.batch} × “${r.p.name}” from inventory?`))return;r.usages.forEach(u=>u.mat.qty=Math.max(0,num(u.mat.qty)-u.needInv));saveAll();refreshAfterInventory();calculate();toast('Batch deducted from inventory')};
-  $('#resetCalculator').onclick=()=>{if(!confirm('Reset the calculator settings?'))return;$('#batchQty').value=24;$('#retailPrice').value=24;$('#wholesalePrice').value=12;$('#laborMinutes').value=90;$('#hourlyRate').value=20;$('#overhead').value=.5;$('#fulfillment').value=0;$('#sellingFee').value=3.5;$('#targetRetail').value=65;$('#targetWholesale').value=45;calculate()};
-  $('#copySummary').onclick=async()=>{const r=calculate(),name=r.p?.name||'Candle';const lines=[`${name} — Kindle Candle Cost Summary`,`True cost: ${money(r.trueCost)} / candle`,`Materials: ${money(r.materials)}`,`Labor: ${money(r.labor)}`,`Other: ${money(r.other)}`,`Retail: ${money(r.retail)}`,`Profit: ${money(r.profit)} / candle`,`Gross margin: ${r.margin.toFixed(1)}%`,`Batch (${r.batch}): ${money(r.batchCost)} cost`];try{await navigator.clipboard.writeText(lines.join('\n'));toast('Summary copied')}catch(e){toast('Copy unavailable')}};
+  $('#resetCalculator').onclick=()=>{if(!confirm('Reset the calculator settings?'))return;$('#batchQty').value=24;$('#retailPrice').value=24;$('#wholesalePrice').value=12;$('#sellingFee').value=0;$('#targetRetail').value=65;$('#targetWholesale').value=45;calculate()};
+  $('#copySummary').onclick=async()=>{const r=calculate(),name=r.p?.name||'Candle';const lines=[`${name} — Kindle Candle Cost Summary`,`True cost: ${money(r.trueCost)} / candle`,`Materials: ${money(r.materials)}`,`Transaction fee: ${money(r.fee)}`,`Retail: ${money(r.retail)}`,`Profit: ${money(r.profit)} / candle`,`Gross margin: ${r.margin.toFixed(1)}%`,`Batch (${r.batch}): ${money(r.batchCost)} cost`];try{await navigator.clipboard.writeText(lines.join('\n'));toast('Summary copied')}catch(e){toast('Copy unavailable')}};
 
   function refreshAfterInventory(){renderInventory();refreshPresetBuilderSelects();renderPresets();renderCalculatorPresetSelect();calculate()}
 
