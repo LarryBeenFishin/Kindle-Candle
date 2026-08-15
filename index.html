@@ -1,0 +1,593 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Candle Making Tools | Kindle Candle</title>
+  <meta name="description" content="Free candle making calculators from Kindle Candle. Plan wax and fragrance batches, calculate true candle costs, compare pricing, and build better production numbers." />
+  <style>
+    :root {
+      --ink: #211a14;
+      --brown: #4a3424;
+      --brown-2: #6a4b32;
+      --paper: #f4ede2;
+      --paper-2: #eadcc9;
+      --kraft: #cfb896;
+      --line: rgba(33, 26, 20, 0.30);
+      --muted: #74685c;
+      --white: #fffdf8;
+      --shadow: 0 18px 50px rgba(60, 42, 28, .13);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 12% 18%, rgba(83,55,34,.035) 0 1px, transparent 1.5px),
+        radial-gradient(circle at 78% 68%, rgba(83,55,34,.028) 0 1px, transparent 1.5px),
+        var(--paper);
+      background-size: 18px 18px, 23px 23px, auto;
+      font-family: "Courier New", Courier, monospace;
+      min-height: 100vh;
+    }
+
+    a { color: inherit; }
+
+    .announcement {
+      background: var(--ink);
+      color: var(--paper);
+      text-align: center;
+      padding: 9px 16px 8px;
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .site-header {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 22px 28px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: 15px;
+      font-weight: 700;
+    }
+
+    .brand-mark {
+      width: 27px;
+      height: 27px;
+      border: 1.5px solid var(--ink);
+      border-radius: 50% 50% 48% 48%;
+      display: grid;
+      place-items: center;
+      position: relative;
+      flex: 0 0 auto;
+    }
+
+    .brand-mark::before {
+      content: "";
+      width: 7px;
+      height: 12px;
+      border-radius: 55% 45% 55% 45%;
+      border: 1.5px solid var(--ink);
+      transform: rotate(12deg);
+    }
+
+    .brand-mark::after {
+      content: "";
+      position: absolute;
+      bottom: -5px;
+      width: 1px;
+      height: 7px;
+      background: var(--ink);
+    }
+
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 26px;
+      font-size: 11px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .nav a {
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      padding-bottom: 3px;
+    }
+
+    .nav a:hover { border-color: var(--ink); }
+
+    main {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 86px 28px 96px;
+    }
+
+    .hero {
+      max-width: 960px;
+      margin: 0 auto 76px;
+      text-align: center;
+    }
+
+    .eyebrow {
+      display: inline-block;
+      margin-bottom: 18px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--ink);
+      font-size: 11px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(42px, 6.5vw, 82px);
+      line-height: .92;
+      letter-spacing: -.055em;
+      font-weight: 500;
+    }
+
+    .hero p {
+      max-width: 740px;
+      margin: 26px auto 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 18px;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      margin-top: 31px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 14px 20px;
+      border: 1px solid var(--ink);
+      background: var(--ink);
+      color: var(--paper);
+      text-decoration: none;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      font-size: 11px;
+      font-weight: 700;
+      transition: .18s ease;
+    }
+
+    .button:hover {
+      background: var(--brown);
+      transform: translateY(-1px);
+    }
+
+    .button.secondary {
+      background: transparent;
+      color: var(--ink);
+    }
+
+    .button.secondary:hover { background: var(--paper-2); }
+
+    .tools-wrap {
+      position: relative;
+      margin-top: 34px;
+      border: 1px solid var(--ink);
+      background: rgba(255, 253, 248, .52);
+      box-shadow: var(--shadow);
+      padding: 48px 34px 34px;
+    }
+
+    .tools-wrap::before {
+      content: "KINDLE CANDLE • MAKER TOOLS";
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--paper);
+      padding: 3px 12px;
+      white-space: nowrap;
+      font-size: 10px;
+      letter-spacing: .18em;
+    }
+
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 24px;
+      margin-bottom: 28px;
+    }
+
+    .section-head h2 {
+      margin: 0;
+      font-size: clamp(26px, 4vw, 42px);
+      line-height: 1;
+      letter-spacing: -.035em;
+      font-weight: 500;
+    }
+
+    .section-head p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .tool-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .tool-card {
+      position: relative;
+      border: 1px solid var(--ink);
+      background: var(--white);
+      min-height: 405px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .tool-card.featured {
+      background: var(--paper-2);
+    }
+
+    .tool-card::after {
+      content: "";
+      position: absolute;
+      width: 155px;
+      height: 155px;
+      border: 1px solid rgba(33, 26, 20, .15);
+      border-radius: 50%;
+      right: -76px;
+      top: -78px;
+    }
+
+    .card-number {
+      color: var(--muted);
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 48px;
+    }
+
+    .tool-card h3 {
+      margin: 0;
+      max-width: 500px;
+      font-size: clamp(25px, 3vw, 38px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      font-weight: 500;
+    }
+
+    .tool-card p {
+      margin: 19px 0 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+
+    .mini-list {
+      margin: 22px 0 30px;
+      padding: 0;
+      list-style: none;
+      display: grid;
+      gap: 9px;
+      font-size: 11px;
+      letter-spacing: .04em;
+    }
+
+    .mini-list li::before {
+      content: "→";
+      margin-right: 9px;
+    }
+
+    .card-action {
+      margin-top: auto;
+      padding-top: 8px;
+    }
+
+    .coming {
+      margin-top: 18px;
+      border: 1px dashed var(--brown);
+      background: rgba(207,184,150,.18);
+      padding: 24px 26px;
+      display: grid;
+      grid-template-columns: 1fr auto;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .coming h3 {
+      margin: 0 0 8px;
+      font-size: 18px;
+      letter-spacing: -.02em;
+    }
+
+    .coming p {
+      margin: 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    .coming-tag {
+      border: 1px solid var(--ink);
+      padding: 8px 10px;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .why {
+      padding: 92px 0 20px;
+    }
+
+    .why-grid {
+      display: grid;
+      grid-template-columns: .8fr 1.2fr;
+      gap: 72px;
+      align-items: start;
+    }
+
+    .why h2 {
+      margin: 0;
+      font-size: clamp(31px, 4vw, 52px);
+      line-height: .98;
+      letter-spacing: -.045em;
+      font-weight: 500;
+    }
+
+    .why-copy {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      border-top: 1px solid var(--line);
+      border-left: 1px solid var(--line);
+    }
+
+    .why-item {
+      min-height: 175px;
+      padding: 24px;
+      border-right: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .why-item strong {
+      display: block;
+      margin-bottom: 10px;
+      font-size: 12px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+
+    .why-item p {
+      margin: 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .shop-strip {
+      margin-top: 76px;
+      border-top: 1px solid var(--ink);
+      border-bottom: 1px solid var(--ink);
+      padding: 31px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 26px;
+    }
+
+    .shop-strip h2 {
+      margin: 0 0 7px;
+      font-size: 20px;
+      letter-spacing: -.02em;
+    }
+
+    .shop-strip p {
+      margin: 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+
+    footer {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 26px 28px 34px;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      gap: 24px;
+      color: var(--muted);
+      font-size: 10px;
+      letter-spacing: .10em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 800px) {
+      .site-header { align-items: flex-start; }
+      .nav { gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
+      main { padding-top: 64px; }
+      .hero { margin-bottom: 58px; }
+      .section-head { align-items: start; flex-direction: column; }
+      .tool-grid { grid-template-columns: 1fr; }
+      .tool-card { min-height: 365px; }
+      .why-grid { grid-template-columns: 1fr; gap: 32px; }
+      .why-copy { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 560px) {
+      .announcement { font-size: 9px; }
+      .site-header { padding: 18px 18px 16px; flex-direction: column; }
+      .nav { justify-content: flex-start; }
+      main { padding: 52px 18px 72px; }
+      h1 { font-size: clamp(42px, 14vw, 62px); }
+      .hero p { font-size: 16px; }
+      .hero-actions { flex-direction: column; }
+      .button { width: 100%; }
+      .tools-wrap { padding: 42px 16px 16px; }
+      .tools-wrap::before { font-size: 9px; letter-spacing: .12em; }
+      .tool-card { padding: 26px 22px; }
+      .card-number { margin-bottom: 34px; }
+      .coming { grid-template-columns: 1fr; }
+      .coming-tag { justify-self: start; }
+      .why-copy { grid-template-columns: 1fr; }
+      .shop-strip { align-items: flex-start; flex-direction: column; }
+      footer { padding: 24px 18px 32px; flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+  <div class="announcement">Free candle-making tools • built by candle makers</div>
+
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="Kindle Candle Maker Tools home">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span>Kindle Candle</span>
+    </a>
+    <nav class="nav" aria-label="Main navigation">
+      <a href="#tools">Tools</a>
+      <a href="#why">Why we built them</a>
+      <a href="https://kindlecandle.com/" target="_blank" rel="noopener">Kindle Candle ↗</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <span class="eyebrow">Kindle Candle • Maker Tools</span>
+      <h1>Better candle math.<br>Less guesswork.</h1>
+      <p>Simple, practical calculators for the numbers candle makers deal with every day — from planning a pour to figuring out what a finished candle actually costs.</p>
+      <div class="hero-actions">
+        <a class="button" href="#tools">Explore the tools</a>
+        <a class="button secondary" href="https://kindlecandle.com/" target="_blank" rel="noopener">Visit Kindle Candle</a>
+      </div>
+    </section>
+
+    <section class="tools-wrap" id="tools">
+      <div class="section-head">
+        <div>
+          <span class="eyebrow">Free calculators</span>
+          <h2>Tools made for the pour table.</h2>
+        </div>
+        <p>No complicated spreadsheet setup. Enter the numbers you already have and get the production numbers you actually need.</p>
+      </div>
+
+      <div class="tool-grid">
+        <article class="tool-card featured">
+          <div class="card-number">Tool 01 • Production</div>
+          <h3>Wax + Fragrance Batch Calculator</h3>
+          <p>Plan a single candle or a full production run using your vessel size, quantity, fragrance percentage, and wax density.</p>
+          <ul class="mini-list">
+            <li>Wax needed for the full batch</li>
+            <li>Fragrance oil needed</li>
+            <li>Per-candle breakdown</li>
+            <li>Wax density reference guide</li>
+          </ul>
+          <div class="card-action">
+            <a class="button" href="/fragrance-load-calculator/">Open batch calculator →</a>
+          </div>
+        </article>
+
+        <article class="tool-card">
+          <div class="card-number">Tool 02 • Pricing</div>
+          <h3>Candle Cost + Pricing Calculator</h3>
+          <p>Turn supplier costs into a true per-candle cost, then see profit, margin, batch totals, and pricing targets.</p>
+          <ul class="mini-list">
+            <li>Upload or manually enter supplier costs</li>
+            <li>Account for shipping and tax</li>
+            <li>Build the cost of one finished candle</li>
+            <li>Compare retail and wholesale targets</li>
+          </ul>
+          <div class="card-action">
+            <a class="button" href="/cost-calculator/">Open cost calculator →</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="coming">
+        <div>
+          <h3>Fragrance Blend Calculator</h3>
+          <p>Enter your total fragrance amount and blend percentages to get the exact weight of every oil in your formula. This one is next.</p>
+        </div>
+        <span class="coming-tag">Coming soon</span>
+      </div>
+    </section>
+
+    <section class="why" id="why">
+      <div class="why-grid">
+        <div>
+          <span class="eyebrow">Why Kindle tools</span>
+          <h2>Built around real candle production.</h2>
+        </div>
+        <div class="why-copy">
+          <div class="why-item">
+            <strong>Fast to use</strong>
+            <p>Designed for quick checks while you are planning, weighing, pricing, or getting a batch ready to pour.</p>
+          </div>
+          <div class="why-item">
+            <strong>Useful numbers</strong>
+            <p>The focus is on practical outputs like batch weights, landed material cost, margins, and per-candle totals.</p>
+          </div>
+          <div class="why-item">
+            <strong>No account required</strong>
+            <p>Open a calculator, enter your numbers, and use it. No signup just to run basic candle math.</p>
+          </div>
+          <div class="why-item">
+            <strong>Made to grow</strong>
+            <p>We are building this into a larger collection of free tools for makers running real candle businesses.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="shop-strip">
+      <div>
+        <h2>Made by Kindle Candle</h2>
+        <p>We make candles and fragrance products ourselves, so these tools are built around the same production questions we deal with.</p>
+      </div>
+      <a class="button secondary" href="https://kindlecandle.com/" target="_blank" rel="noopener">Shop Kindle Candle ↗</a>
+    </section>
+  </main>
+
+  <footer>
+    <span>© <span id="year"></span> Kindle Candle • Maker Tools</span>
+    <span>For planning and educational use</span>
+  </footer>
+
+  <script>
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
