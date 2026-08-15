@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>My Candles | Kindle Candle Maker Tools</title>
-  <meta name="description" content="View and manage your saved candle recipes, fragrance blends, and candle cost profiles with Kindle Candle Maker Tools." />
+  <meta name="description" content="View and manage your saved candles and fragrance blends with Kindle Candle Maker Tools." />
   <style>
     :root {
       --ink:#24170f;
@@ -13,14 +13,13 @@
       --paper-2:#f3e5d6;
       --card:#fffdf9;
       --tan:#ead8c1;
-      --line:rgba(36,23,15,.25);
-      --muted:#66564a;
+      --line:rgba(36,23,15,.22);
+      --muted:#6b5b50;
       --accent:#a15f43;
       --accent-dark:#7f452f;
       --accent-soft:#f0dfcf;
-      --success:#57704b;
       --danger:#8a3f32;
-      --shadow:0 18px 50px rgba(60,42,28,.12);
+      --shadow:0 14px 38px rgba(60,42,28,.09);
     }
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -28,8 +27,8 @@
       margin:0;
       color:var(--ink);
       background:
-        radial-gradient(circle at 12% 18%,rgba(83,55,34,.035) 0 1px,transparent 1.5px),
-        radial-gradient(circle at 78% 68%,rgba(83,55,34,.028) 0 1px,transparent 1.5px),
+        radial-gradient(circle at 12% 18%,rgba(83,55,34,.032) 0 1px,transparent 1.5px),
+        radial-gradient(circle at 78% 68%,rgba(83,55,34,.024) 0 1px,transparent 1.5px),
         var(--paper);
       background-size:18px 18px,23px 23px,auto;
       font-family:"Courier New",Courier,monospace;
@@ -46,72 +45,103 @@
     .nav{display:flex;align-items:center;gap:24px;font-size:11px;letter-spacing:.11em;text-transform:uppercase;flex-wrap:wrap;justify-content:flex-end}
     .nav a{text-decoration:none;border-bottom:1px solid transparent;padding-bottom:3px;white-space:nowrap}
     .nav a:hover,.nav a[aria-current="page"]{border-color:var(--ink)}
-    main{max-width:1180px;margin:0 auto;padding:66px 28px 94px}
-    .hero{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:32px;align-items:end;margin-bottom:32px}
-    .eyebrow{display:inline-block;margin-bottom:13px;padding-bottom:4px;border-bottom:1px solid var(--ink);font-size:11px;letter-spacing:.18em;text-transform:uppercase}
-    h1{margin:0;font-size:clamp(42px,6vw,72px);line-height:.95;letter-spacing:-.05em;font-weight:500}
-    .hero p{max-width:700px;margin:19px 0 0;color:var(--muted);font:17px/1.6 Georgia,"Times New Roman",serif}
-    .account-chip{border:1px solid var(--line);background:var(--accent-soft);padding:14px 16px;min-width:230px}
-    .account-chip span{display:block;font-size:10px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:5px;color:var(--brown)}
-    .account-chip strong{display:block;font:16px/1.25 Georgia,"Times New Roman",serif;word-break:break-word}
-    .signed-out{border:1px solid var(--ink);background:var(--card);box-shadow:var(--shadow);padding:42px;display:none;text-align:center}
+
+    main{max-width:1080px;margin:0 auto;padding:54px 28px 88px}
+    .hero{display:flex;align-items:flex-end;justify-content:space-between;gap:28px;margin-bottom:30px}
+    .eyebrow{display:inline-block;margin-bottom:11px;padding-bottom:4px;border-bottom:1px solid var(--ink);font-size:10px;letter-spacing:.17em;text-transform:uppercase}
+    h1{margin:0;font-size:clamp(40px,5vw,62px);line-height:.96;letter-spacing:-.045em;font-weight:500}
+    .hero p{max-width:650px;margin:15px 0 0;color:var(--muted);font:16px/1.55 Georgia,"Times New Roman",serif}
+    .account-chip{border:1px solid var(--line);background:var(--accent-soft);padding:12px 14px;min-width:210px}
+    .account-chip span{display:block;font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:4px;color:var(--brown)}
+    .account-chip strong{display:block;font:14px/1.25 Georgia,"Times New Roman",serif;word-break:break-word}
+
+    .signed-out{border:1px solid var(--ink);background:var(--card);box-shadow:var(--shadow);padding:40px;display:none;text-align:center}
     .signed-out.show{display:block}
-    .signed-out h2{margin:0 0 10px;font-size:28px}
-    .signed-out p{max-width:600px;margin:0 auto 22px;color:var(--muted);font:16px/1.6 Georgia,"Times New Roman",serif}
-    .btn{appearance:none;border:1px solid var(--ink);background:var(--accent-dark);color:white;padding:13px 17px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;letter-spacing:.1em;font-size:11px;font-weight:700;min-height:44px}
+    .signed-out h2{margin:0 0 10px;font-size:27px}
+    .signed-out p{max-width:580px;margin:0 auto 21px;color:var(--muted);font:16px/1.6 Georgia,"Times New Roman",serif}
+    .btn{appearance:none;border:1px solid var(--ink);background:var(--accent-dark);color:white;padding:12px 16px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-transform:uppercase;letter-spacing:.09em;font-size:10px;font-weight:700;min-height:42px}
     .btn:hover{background:var(--accent)}
     .btn.secondary{background:transparent;color:var(--ink)}
     .btn.secondary:hover{background:var(--accent-soft)}
-    .btn.danger{background:transparent;color:var(--danger);border-color:rgba(138,63,50,.55)}
-    .btn.danger:hover{background:#f3dfd9}
+
     .dashboard{display:none}
     .dashboard.show{display:block}
-    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:18px}
-    .stat{border:1px solid var(--line);background:var(--card);padding:18px 19px}
-    .stat-label{font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--brown);margin-bottom:9px}
-    .stat-value{font:32px/1 Georgia,"Times New Roman",serif}
-    .toolbar{border:1px solid var(--ink);background:var(--paper-2);padding:16px;display:flex;align-items:center;justify-content:space-between;gap:14px;margin-bottom:18px}
-    .search-wrap{display:flex;align-items:center;gap:10px;flex:1;max-width:560px}
-    .search-wrap label{font-size:10px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
-    .search-wrap input{width:100%;min-height:44px;border:1px solid var(--ink);background:#fffdf9;padding:11px 13px;color:var(--ink);font-size:15px;outline:none}
-    .search-wrap input:focus{box-shadow:0 0 0 2px rgba(161,95,67,.15)}
-    .toolbar-note{font:13px/1.4 Georgia,"Times New Roman",serif;color:var(--muted);text-align:right}
-    .empty{border:1px dashed var(--brown);padding:34px 24px;text-align:center;background:rgba(255,253,249,.7);font:16px/1.55 Georgia,"Times New Roman",serif;color:var(--muted)}
+    .library-shell{border:1px solid var(--ink);background:rgba(255,253,249,.68);box-shadow:var(--shadow)}
+    .library-top{padding:18px 20px;background:var(--paper-2);border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap}
+    .tab{appearance:none;border:1px solid var(--line);background:var(--card);color:var(--ink);padding:11px 14px;cursor:pointer;text-transform:uppercase;letter-spacing:.09em;font-size:10px;font-weight:700}
+    .tab:hover{border-color:var(--ink)}
+    .tab.active{background:var(--accent-dark);border-color:var(--accent-dark);color:white}
+    .tab .count{opacity:.72;margin-left:6px}
+    .search-wrap{display:flex;align-items:center;gap:9px;min-width:min(100%,360px);flex:0 1 400px}
+    .search-wrap label{font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap}
+    .search-wrap input{width:100%;min-height:40px;border:1px solid var(--line);background:#fffdf9;padding:9px 11px;color:var(--ink);font-size:14px;outline:none}
+    .search-wrap input:focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(161,95,67,.12)}
+    .library-content{padding:20px}
+    .section-intro{display:flex;align-items:end;justify-content:space-between;gap:18px;margin-bottom:14px}
+    .section-intro h2{margin:0;font-size:24px;line-height:1.1;font-weight:500}
+    .section-intro p{margin:5px 0 0;color:var(--muted);font:13px/1.45 Georgia,"Times New Roman",serif}
+    .empty{border:1px dashed var(--brown);padding:30px 22px;text-align:center;background:rgba(255,253,249,.72);font:15px/1.55 Georgia,"Times New Roman",serif;color:var(--muted)}
     .empty strong{color:var(--ink)}
-    .candle-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-    .candle-card{border:1px solid var(--ink);background:var(--card);box-shadow:7px 7px 0 rgba(90,56,38,.08);display:flex;flex-direction:column;min-width:0}
-    .card-head{padding:19px 20px 16px;background:var(--accent-soft);border-bottom:1px solid var(--line);display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
-    .card-head h2{margin:0;font-size:22px;line-height:1.15;overflow-wrap:anywhere}
-    .updated{margin-top:7px;font:12px/1.3 Georgia,"Times New Roman",serif;color:var(--muted)}
-    .badge{border:1px solid rgba(36,23,15,.35);padding:5px 7px;font-size:9px;letter-spacing:.1em;text-transform:uppercase;white-space:nowrap;background:#fffaf3}
-    .card-body{padding:18px 20px 19px;display:flex;flex-direction:column;gap:16px;flex:1}
-    .formula-grid{display:grid;grid-template-columns:repeat(3,1fr);border:1px solid var(--line)}
-    .formula-cell{padding:11px 12px;border-right:1px solid var(--line);min-width:0}
-    .formula-cell:last-child{border-right:0}
-    .formula-cell span{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--brown);margin-bottom:5px}
-    .formula-cell strong{display:block;font:16px/1.2 Georgia,"Times New Roman",serif;overflow-wrap:anywhere}
-    .weights{display:grid;grid-template-columns:1fr 1fr;background:var(--paper-2);border:1px solid var(--line)}
-    .weight{padding:13px 14px}
-    .weight:first-child{border-right:1px solid var(--line)}
-    .weight span{display:block;font-size:9px;letter-spacing:.1em;text-transform:uppercase;color:var(--brown);margin-bottom:5px}
-    .weight strong{font-size:18px}
-    .blend-box,.cost-box{border:1px solid var(--line);padding:13px 14px}
-    .box-title{font-size:10px;letter-spacing:.13em;text-transform:uppercase;margin-bottom:9px;font-weight:700}
-    .blend-line,.cost-line{display:flex;justify-content:space-between;gap:14px;padding:5px 0;font:14px/1.35 Georgia,"Times New Roman",serif;border-bottom:1px dotted rgba(36,23,15,.18)}
-    .blend-line:last-child,.cost-line:last-child{border-bottom:0}
-    .blend-line span:last-child,.cost-line span:last-child{font-weight:700;text-align:right}
-    .cost-box.has-cost{background:#f4eadc}
-    .cost-box.no-cost{background:#faf6ef;color:var(--muted)}
-    .card-actions{margin-top:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px;padding-top:2px}
-    .card-actions .btn{width:100%;padding-left:10px;padding-right:10px}
-    .card-tools{display:flex;gap:8px;border-top:1px solid var(--line);padding:12px 20px;background:#fbf6ee}
-    .small-btn{appearance:none;border:0;background:transparent;color:var(--brown);padding:5px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-    .small-btn.danger-link{margin-left:auto;color:var(--danger)}
+
+    /* Candle cards intentionally show only the essentials. */
+    .candle-list{display:grid;gap:12px}
+    .candle-card{border:1px solid var(--line);background:var(--card);overflow:hidden}
+    .candle-main{padding:17px 18px;display:grid;grid-template-columns:minmax(190px,1.25fr) minmax(260px,1.5fr) auto;gap:18px;align-items:center}
+    .candle-title h3{margin:0;font-size:18px;line-height:1.2;overflow-wrap:anywhere}
+    .candle-title .updated{margin-top:5px;color:var(--muted);font:11px/1.35 Georgia,"Times New Roman",serif}
+    .status{display:inline-block;margin-top:8px;padding:4px 6px;border:1px solid var(--line);background:#fffaf3;font-size:8px;letter-spacing:.09em;text-transform:uppercase}
+    .summary{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));border-left:1px solid var(--line)}
+    .summary-item{padding:3px 12px;border-right:1px solid var(--line);min-width:0}
+    .summary-item:last-child{border-right:0}
+    .summary-item span{display:block;color:var(--brown);font-size:8px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:5px}
+    .summary-item strong{display:block;font:14px/1.25 Georgia,"Times New Roman",serif;overflow-wrap:anywhere}
+    .quick-actions{display:flex;gap:7px;justify-content:flex-end}
+    .quick-actions .btn{min-height:38px;padding:9px 11px;white-space:nowrap}
+    details.card-details{border-top:1px solid var(--line);background:#fbf6ee}
+    details.card-details summary{cursor:pointer;list-style:none;padding:10px 18px;color:var(--brown);font-size:9px;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;justify-content:space-between}
+    details.card-details summary::-webkit-details-marker{display:none}
+    details.card-details summary::after{content:"+";font-size:15px;line-height:1}
+    details.card-details[open] summary::after{content:"−"}
+    .detail-body{padding:3px 18px 15px;display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .detail-box{border:1px solid var(--line);background:var(--card);padding:12px 13px;min-width:0}
+    .detail-title{font-size:9px;letter-spacing:.12em;text-transform:uppercase;margin-bottom:8px;font-weight:700}
+    .detail-line{display:flex;justify-content:space-between;gap:12px;padding:4px 0;font:13px/1.35 Georgia,"Times New Roman",serif;border-bottom:1px dotted rgba(36,23,15,.15)}
+    .detail-line:last-child{border-bottom:0}
+    .detail-line span:last-child{font-weight:700;text-align:right}
+    .detail-tools{grid-column:1/-1;display:flex;gap:15px;padding-top:2px}
+    .text-btn{appearance:none;border:0;background:transparent;color:var(--brown);padding:3px 0;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-size:9px;letter-spacing:.08em;text-transform:uppercase}
+    .text-btn.danger{color:var(--danger);margin-left:auto}
+
+    /* Blend library */
+    .blend-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .blend-card{border:1px solid var(--line);background:var(--card);padding:17px 18px;display:flex;flex-direction:column;gap:13px;min-width:0}
+    .blend-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+    .blend-head h3{margin:0;font-size:18px;line-height:1.2;overflow-wrap:anywhere}
+    .blend-date{margin-top:5px;color:var(--muted);font:11px/1.35 Georgia,"Times New Roman",serif}
+    .blend-total{border:1px solid var(--line);padding:5px 7px;background:var(--accent-soft);font-size:8px;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+    .blend-source{display:inline-block;margin-top:7px;color:var(--muted);font:10px/1.3 ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,"Liberation Mono",monospace;letter-spacing:.07em;text-transform:uppercase}
+    .component-list{border-top:1px solid var(--line)}
+    .component{display:flex;justify-content:space-between;gap:14px;padding:8px 0;border-bottom:1px solid var(--line);font:14px/1.35 Georgia,"Times New Roman",serif}
+    .component strong{font-family:"Courier New",Courier,monospace;font-size:12px}
+    .blend-actions{display:flex;gap:14px;margin-top:auto;padding-top:2px}
+    .blend-actions .text-btn:last-child{margin-left:auto}
+
     .toast{position:fixed;right:22px;bottom:22px;background:var(--ink);color:white;padding:12px 15px;border:1px solid var(--ink);font:14px/1.35 Georgia,"Times New Roman",serif;box-shadow:6px 6px 0 rgba(36,23,15,.15);opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s ease;z-index:99998;max-width:min(360px,calc(100vw - 44px))}
     .toast.show{opacity:1;transform:none}
-    footer{max-width:1180px;margin:0 auto;padding:24px 28px 34px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
-    @media(max-width:940px){.site-header{align-items:flex-start}.nav{gap:14px}.hero{grid-template-columns:1fr}.account-chip{width:100%;min-width:0}.candle-grid{grid-template-columns:1fr}}
-    @media(max-width:720px){.site-header{padding:18px;flex-direction:column}.nav{width:100%;justify-content:flex-start}.announcement{font-size:9px}.nav a{font-size:10px}main{padding:46px 18px 70px}.stats{grid-template-columns:1fr}.toolbar{align-items:stretch;flex-direction:column}.search-wrap{max-width:none;display:block}.search-wrap label{display:block;margin-bottom:7px}.toolbar-note{text-align:left}.formula-grid{grid-template-columns:1fr}.formula-cell{border-right:0;border-bottom:1px solid var(--line)}.formula-cell:last-child{border-bottom:0}.card-actions{grid-template-columns:1fr}.signed-out{padding:30px 18px}footer{padding:24px 18px 32px;flex-direction:column}}
+    footer{max-width:1080px;margin:0 auto;padding:24px 28px 34px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:20px;color:var(--muted);font-size:10px;letter-spacing:.08em;text-transform:uppercase}
+
+    @media(max-width:980px){
+      .site-header{align-items:flex-start}.nav{gap:14px}.hero{align-items:flex-start;flex-direction:column}.account-chip{width:100%;min-width:0}
+      .candle-main{grid-template-columns:1fr}.summary{border-left:0;border-top:1px solid var(--line);padding-top:12px}.quick-actions{justify-content:flex-start}
+    }
+    @media(max-width:760px){
+      .site-header{padding:18px;flex-direction:column}.nav{width:100%;justify-content:flex-start}.announcement{font-size:9px}.nav a{font-size:10px}
+      main{padding:42px 18px 68px}.library-top{align-items:stretch}.tabs{width:100%}.tab{flex:1}.search-wrap{flex:1 1 100%;min-width:0}.search-wrap label{display:none}
+      .library-content{padding:14px}.summary{grid-template-columns:1fr 1fr;gap:0}.summary-item{padding:9px 10px;border-bottom:1px solid var(--line)}.summary-item:nth-child(2n){border-right:0}.summary-item:nth-last-child(-n+2){border-bottom:0}
+      .quick-actions{display:grid;grid-template-columns:1fr 1fr}.quick-actions .btn{width:100%}.detail-body{grid-template-columns:1fr}.blend-grid{grid-template-columns:1fr}.signed-out{padding:30px 18px}
+      footer{padding:24px 18px 32px;flex-direction:column}
+    }
   </style>
 </head>
 <body>
@@ -133,30 +163,28 @@
       <div>
         <span class="eyebrow">Your Maker Library</span>
         <h1>My Candles</h1>
-        <p>One place for every candle you save. Review the formula, fragrance blend, and cost profile, then jump back into either calculator when you need to make changes.</p>
+        <p>Keep your candle recipes and fragrance blends organized in one place. Open a saved candle when you need to formulate a batch or update its cost.</p>
       </div>
       <div class="account-chip" id="accountChip" hidden><span>Signed in as</span><strong id="accountEmail">—</strong></div>
     </section>
 
     <section class="signed-out" id="signedOutPanel">
-      <h2>Sign in to see your candles</h2>
-      <p>Your candle profiles are stored in your account so they can follow you across devices. The calculators are still free to use without signing in.</p>
+      <h2>Sign in to see your library</h2>
+      <p>Your saved candles and fragrance blends are stored in your account so they can follow you across devices.</p>
       <button class="btn" id="signInBtn" type="button">Sign In / Create Account</button>
     </section>
 
     <section class="dashboard" id="dashboard">
-      <div class="stats">
-        <div class="stat"><div class="stat-label">Saved Candles</div><div class="stat-value" id="candleCount">0</div></div>
-        <div class="stat"><div class="stat-label">With Cost Data</div><div class="stat-value" id="costCount">0</div></div>
-        <div class="stat"><div class="stat-label">Saved Fragrance Blends</div><div class="stat-value" id="blendCount">0</div></div>
+      <div class="library-shell">
+        <div class="library-top">
+          <div class="tabs" role="tablist" aria-label="Saved maker data">
+            <button class="tab active" id="candlesTab" type="button" data-view="candles" role="tab" aria-selected="true">Saved Candles <span class="count" id="candleCount">0</span></button>
+            <button class="tab" id="blendsTab" type="button" data-view="blends" role="tab" aria-selected="false">Saved Blends <span class="count" id="blendCount">0</span></button>
+          </div>
+          <div class="search-wrap"><label for="librarySearch">Search</label><input id="librarySearch" type="search" placeholder="Search saved candles" autocomplete="off" /></div>
+        </div>
+        <div class="library-content" id="libraryContent"></div>
       </div>
-
-      <div class="toolbar">
-        <div class="search-wrap"><label for="searchCandles">Search candles</label><input id="searchCandles" type="search" placeholder="Search by candle or blend name" autocomplete="off" /></div>
-        <div class="toolbar-note">Changes made here sync to your account.</div>
-      </div>
-
-      <div id="candleList"></div>
     </section>
   </main>
 
@@ -172,6 +200,7 @@
       const RECIPE_KEY = 'kindleFragranceRecipesV1';
       const BLEND_KEY = 'kindleFragranceBlendsV1';
       const $ = id => document.getElementById(id);
+      let activeView = 'candles';
       let searchTerm = '';
 
       function parseArray(key) {
@@ -230,18 +259,104 @@
         const trueCost=materialCost+transactionFee;
         const profit=sellPrice-trueCost;
         const margin=sellPrice>0 ? profit/sellPrice*100 : 0;
-        return {materialCost,transactionFee,trueCost,sellPrice,profit,margin};
+        return {materialCost,trueCost,sellPrice,profit,margin};
       }
 
       function dateLabel(value) {
-        if(!value) return 'Saved candle';
-        const d=new Date(value); if(Number.isNaN(d.getTime())) return 'Saved candle';
+        if(!value) return 'Saved';
+        const d=new Date(value); if(Number.isNaN(d.getTime())) return 'Saved';
         return `Updated ${d.toLocaleDateString(undefined,{month:'short',day:'numeric',year:'numeric'})}`;
       }
 
       function toast(message) {
         const el=$('toast'); el.textContent=message; el.classList.add('show');
         clearTimeout(toast.t); toast.t=setTimeout(()=>el.classList.remove('show'),2200);
+      }
+
+      function candleCard(recipe) {
+        const per=perCandle(recipe);
+        const unit=recipe.unit||'oz';
+        const cost=per ? costSummary(recipe,per) : null;
+        const blend=recipe.blendEnabled && Array.isArray(recipe.blendComponents) && recipe.blendComponents.length>=2;
+        const blendDetails = blend
+          ? `<div class="detail-box"><div class="detail-title">Fragrance Blend${recipe.blendName?` — ${esc(recipe.blendName)}`:''}</div>${recipe.blendComponents.map(c=>`<div class="detail-line"><span>${esc(c.name||'Fragrance')}</span><span>${fmt(c.percent,2)}%</span></div>`).join('')}</div>`
+          : `<div class="detail-box"><div class="detail-title">Fragrance</div><div class="detail-line"><span>Blend</span><span>Single fragrance</span></div></div>`;
+        const costDetails = cost
+          ? `<div class="detail-box"><div class="detail-title">Cost Snapshot</div><div class="detail-line"><span>Materials / candle</span><span>${money(cost.materialCost)}</span></div><div class="detail-line"><span>Selling price</span><span>${money(cost.sellPrice)}</span></div><div class="detail-line"><span>Profit / candle</span><span>${money(cost.profit)}</span></div><div class="detail-line"><span>Margin</span><span>${fmt(cost.margin,1)}%</span></div></div>`
+          : `<div class="detail-box"><div class="detail-title">Cost Snapshot</div><div class="detail-line"><span>Status</span><span>Not added yet</span></div></div>`;
+
+        return `<article class="candle-card" data-id="${esc(recipe.id)}">
+          <div class="candle-main">
+            <div class="candle-title">
+              <h3>${esc(recipe.name||'Untitled Candle')}</h3>
+              <div class="updated">${esc(dateLabel(recipe.updatedAt))}</div>
+              <span class="status">${cost?'Cost data saved':'Formula saved'}</span>
+            </div>
+            <div class="summary">
+              <div class="summary-item"><span>Vessel</span><strong>${esc(recipe.containerSize||'—')} ${esc(unit)}</strong></div>
+              <div class="summary-item"><span>Fragrance</span><strong>${esc(recipe.fragranceLoad||'—')}%</strong></div>
+              <div class="summary-item"><span>Wax / Candle</span><strong>${per?`${fmt(per.wax,3)} ${esc(unit)}`:'—'}</strong></div>
+              <div class="summary-item"><span>Cost / Candle</span><strong>${cost?money(cost.trueCost):'—'}</strong></div>
+            </div>
+            <div class="quick-actions">
+              <a class="btn" href="/fragranceLoadCalc/?candle=${encodeURIComponent(recipe.id)}">Formula</a>
+              <a class="btn secondary" href="/Candle%20Cost%20Calculator/?candle=${encodeURIComponent(recipe.id)}">Cost</a>
+            </div>
+          </div>
+          <details class="card-details">
+            <summary>View details</summary>
+            <div class="detail-body">
+              <div class="detail-box"><div class="detail-title">Formula Details</div><div class="detail-line"><span>Wax gravity</span><span>${esc(recipe.waxGravity||'—')}</span></div><div class="detail-line"><span>Wax / candle</span><span>${per?`${fmt(per.wax,3)} ${esc(unit)}`:'—'}</span></div><div class="detail-line"><span>Fragrance / candle</span><span>${per?`${fmt(per.fragrance,3)} ${esc(unit)}`:'—'}</span></div></div>
+              ${blendDetails}
+              ${costDetails}
+              <div class="detail-tools"><button class="text-btn" type="button" data-action="rename-candle" data-id="${esc(recipe.id)}">Rename candle</button><button class="text-btn danger" type="button" data-action="delete-candle" data-id="${esc(recipe.id)}">Delete candle</button></div>
+            </div>
+          </details>
+        </article>`;
+      }
+
+      function normalizedBlendSignature(components) {
+        return (Array.isArray(components) ? components : [])
+          .map(c => `${String(c?.name||'').trim().toLowerCase()}:${number(c?.percent).toFixed(4)}`)
+          .sort()
+          .join('|');
+      }
+
+      function availableBlends(candles) {
+        const standalone = parseArray(BLEND_KEY).map(b => ({...b, derived:false}));
+        const seen = new Set(standalone.map(b => `${String(b.name||'').trim().toLowerCase()}::${normalizedBlendSignature(b.components)}`));
+        const derived = [];
+        (Array.isArray(candles) ? candles : []).forEach(candle => {
+          const components = Array.isArray(candle.blendComponents) ? candle.blendComponents : [];
+          if (!candle.blendEnabled || components.length < 2) return;
+          const name = String(candle.blendName || '').trim() || `${String(candle.name || 'Saved Candle').trim()} Blend`;
+          const signature = `${name.toLowerCase()}::${normalizedBlendSignature(components)}`;
+          if (seen.has(signature)) return;
+          seen.add(signature);
+          derived.push({
+            id:`candle-blend-${candle.id}`,
+            name,
+            components,
+            updatedAt:candle.updatedAt,
+            derived:true,
+            sourceCandleName:candle.name || 'Saved candle'
+          });
+        });
+        return [...standalone, ...derived].sort((a,b)=>String(b.updatedAt||'').localeCompare(String(a.updatedAt||'')));
+      }
+
+      function blendCard(blend) {
+        const components = Array.isArray(blend.components) ? blend.components : [];
+        const total = components.reduce((sum,c)=>sum+number(c.percent),0);
+        const source = blend.derived ? `<div class="blend-source">From candle: ${esc(blend.sourceCandleName||'Saved candle')}</div>` : '';
+        const actions = blend.derived
+          ? `<a class="text-btn" href="/fragranceLoadCalc/">Open calculator</a>`
+          : `<a class="text-btn" href="/fragranceLoadCalc/">Open calculator</a><button class="text-btn" type="button" data-action="rename-blend" data-id="${esc(blend.id)}">Rename</button><button class="text-btn danger" type="button" data-action="delete-blend" data-id="${esc(blend.id)}">Delete</button>`;
+        return `<article class="blend-card" data-id="${esc(blend.id)}">
+          <div class="blend-head"><div><h3>${esc(blend.name||'Untitled Blend')}</h3><div class="blend-date">${esc(dateLabel(blend.updatedAt))}</div>${source}</div><span class="blend-total">${fmt(total,1)}% total</span></div>
+          <div class="component-list">${components.length ? components.map(c=>`<div class="component"><span>${esc(c.name||'Fragrance')}</span><strong>${fmt(c.percent,2)}%</strong></div>`).join('') : '<div class="component"><span>No fragrance components saved</span><strong>—</strong></div>'}</div>
+          <div class="blend-actions">${actions}</div>
+        </article>`;
       }
 
       function render() {
@@ -251,69 +366,91 @@
         $('accountChip').hidden=!user;
         if(!user) return;
         $('accountEmail').textContent=user.email || 'Signed in';
+
         const candles=parseArray(RECIPE_KEY);
-        const blends=parseArray(BLEND_KEY);
+        const blends=availableBlends(candles);
         $('candleCount').textContent=candles.length;
-        $('costCount').textContent=candles.filter(c=>c.costData && typeof c.costData==='object').length;
         $('blendCount').textContent=blends.length;
-        const filtered=candles.filter(c=>{
-          const hay=[c.name,c.blendName,...(Array.isArray(c.blendComponents)?c.blendComponents.map(x=>x.name):[])].join(' ').toLowerCase();
-          return !searchTerm || hay.includes(searchTerm);
-        });
-        const list=$('candleList');
-        if(!candles.length){
-          list.innerHTML='<div class="empty">No candles saved yet. Build your first candle in the <strong>Wax + Fragrance Calculator</strong>, then choose <strong>Save Candle</strong>.</div>';
-          return;
+        $('candlesTab').classList.toggle('active',activeView==='candles');
+        $('blendsTab').classList.toggle('active',activeView==='blends');
+        $('candlesTab').setAttribute('aria-selected',String(activeView==='candles'));
+        $('blendsTab').setAttribute('aria-selected',String(activeView==='blends'));
+        $('librarySearch').placeholder=activeView==='candles'?'Search saved candles':'Search saved blends';
+
+        const content=$('libraryContent');
+        if(activeView==='candles') {
+          const filtered=candles.filter(c=>{
+            const hay=[c.name,c.blendName,...(Array.isArray(c.blendComponents)?c.blendComponents.map(x=>x.name):[])].join(' ').toLowerCase();
+            return !searchTerm || hay.includes(searchTerm);
+          });
+          const intro='<div class="section-intro"><div><h2>Saved Candles</h2><p>Your formulas stay compact here. Open details only when you need them.</p></div></div>';
+          if(!candles.length){ content.innerHTML=intro+'<div class="empty">No candles saved yet. Build your first candle in the <strong>Wax + Fragrance Calculator</strong>, then choose <strong>Save Candle</strong>.</div>'; return; }
+          if(!filtered.length){ content.innerHTML=intro+'<div class="empty">No saved candles match your search.</div>'; return; }
+          content.innerHTML=intro+'<div class="candle-list">'+filtered.map(candleCard).join('')+'</div>';
+        } else {
+          const filtered=blends.filter(b=>{
+            const hay=[b.name,...(Array.isArray(b.components)?b.components.map(x=>x.name):[])].join(' ').toLowerCase();
+            return !searchTerm || hay.includes(searchTerm);
+          });
+          const intro='<div class="section-intro"><div><h2>Saved Fragrance Blends</h2><p>Standalone saved blends and blends attached to saved candles appear here together.</p></div></div>';
+          if(!blends.length){ content.innerHTML=intro+'<div class="empty">No fragrance blends saved yet. Create a blend in the <strong>Wax + Fragrance Calculator</strong> and choose <strong>Save Blend</strong>.</div>'; return; }
+          if(!filtered.length){ content.innerHTML=intro+'<div class="empty">No saved blends match your search.</div>'; return; }
+          content.innerHTML=intro+'<div class="blend-grid">'+filtered.map(blendCard).join('')+'</div>';
         }
-        if(!filtered.length){ list.innerHTML='<div class="empty">No saved candles match your search.</div>'; return; }
-        list.innerHTML='<div class="candle-grid">'+filtered.map(recipe=>card(recipe)).join('')+'</div>';
       }
 
-      function card(recipe) {
-        const per=perCandle(recipe);
-        const unit=recipe.unit||'oz';
-        const cost=per ? costSummary(recipe,per) : null;
-        const blend=recipe.blendEnabled && Array.isArray(recipe.blendComponents) && recipe.blendComponents.length>=2;
-        const blendHtml=blend ? `<div class="blend-box"><div class="box-title">Fragrance Blend${recipe.blendName?` — ${esc(recipe.blendName)}`:''}</div>${recipe.blendComponents.map(c=>`<div class="blend-line"><span>${esc(c.name||'Fragrance')}</span><span>${fmt(c.percent,2)}%</span></div>`).join('')}</div>` : '';
-        const costHtml=cost ? `<div class="cost-box has-cost"><div class="box-title">Saved Cost Snapshot</div><div class="cost-line"><span>Materials / candle</span><span>${money(cost.materialCost)}</span></div><div class="cost-line"><span>Selling price</span><span>${money(cost.sellPrice)}</span></div><div class="cost-line"><span>Profit / candle</span><span>${money(cost.profit)}</span></div><div class="cost-line"><span>Margin</span><span>${fmt(cost.margin,1)}%</span></div></div>` : `<div class="cost-box no-cost"><div class="box-title">Cost Profile</div>No cost data saved yet. Open this candle in the Candle Cost Calculator to add it.</div>`;
-        const weights=per ? `<div class="weights"><div class="weight"><span>Wax / candle</span><strong>${fmt(per.wax,3)} ${esc(unit)}</strong></div><div class="weight"><span>Fragrance / candle</span><strong>${fmt(per.fragrance,3)} ${esc(unit)}</strong></div></div>` : '';
-        return `<article class="candle-card" data-id="${esc(recipe.id)}">
-          <div class="card-head"><div><h2>${esc(recipe.name||'Untitled Candle')}</h2><div class="updated">${esc(dateLabel(recipe.updatedAt))}</div></div><span class="badge">${cost?'Costed':'Formula'}</span></div>
-          <div class="card-body">
-            <div class="formula-grid"><div class="formula-cell"><span>Vessel</span><strong>${esc(recipe.containerSize||'—')} ${esc(unit)}</strong></div><div class="formula-cell"><span>Fragrance Load</span><strong>${esc(recipe.fragranceLoad||'—')}%</strong></div><div class="formula-cell"><span>Wax Gravity</span><strong>${esc(recipe.waxGravity||'—')}</strong></div></div>
-            ${weights}${blendHtml}${costHtml}
-            <div class="card-actions"><a class="btn" href="/fragranceLoadCalc/?candle=${encodeURIComponent(recipe.id)}">Open Formula</a><a class="btn secondary" href="/Candle%20Cost%20Calculator/?candle=${encodeURIComponent(recipe.id)}">Open Cost</a></div>
-          </div>
-          <div class="card-tools"><button class="small-btn" type="button" data-action="rename" data-id="${esc(recipe.id)}">Rename</button><button class="small-btn danger-link" type="button" data-action="delete" data-id="${esc(recipe.id)}">Delete Candle</button></div>
-        </article>`;
+      async function renameItem(type,id) {
+        const key=type==='candle'?RECIPE_KEY:BLEND_KEY;
+        const label=type==='candle'?'candle':'blend';
+        const items=parseArray(key); const i=items.findIndex(item=>String(item.id)===String(id)); if(i<0)return;
+        const current=items[i]; const next=window.prompt(`Rename ${label}`,current.name||''); if(next===null)return;
+        const name=next.trim(); if(!name){toast(`${label[0].toUpperCase()+label.slice(1)} name cannot be blank.`);return;}
+        const duplicate=items.some((item,index)=>index!==i && String(item.name||'').toLowerCase()===name.toLowerCase());
+        if(duplicate){toast(`A ${label} with that name already exists.`);return;}
+        const updated={...current,name,updatedAt:new Date().toISOString()}; items[i]=updated; saveArray(key,items); render();
+        const result=await window.KindleCloud.saveItem(type,updated);
+        if(result.error){toast(`Could not rename ${label}.`); await window.KindleCloud.syncCaches();} else toast(`${label[0].toUpperCase()+label.slice(1)} renamed ✓`);
       }
 
-      async function renameCandle(id) {
-        const candles=parseArray(RECIPE_KEY); const i=candles.findIndex(c=>String(c.id)===String(id)); if(i<0)return;
-        const current=candles[i]; const next=window.prompt('Rename candle',current.name||''); if(next===null)return;
-        const name=next.trim(); if(!name){toast('Candle name cannot be blank.');return;}
-        const duplicate=candles.some((c,index)=>index!==i && String(c.name||'').toLowerCase()===name.toLowerCase());
-        if(duplicate){toast('A candle with that name already exists.');return;}
-        const updated={...current,name,updatedAt:new Date().toISOString()}; candles[i]=updated; saveArray(RECIPE_KEY,candles); render();
-        const result=await window.KindleCloud.saveItem('candle',updated); if(result.error){toast('Could not rename candle.'); await window.KindleCloud.syncCaches();} else toast('Candle renamed ✓');
-      }
-
-      async function deleteCandle(id) {
-        const candles=parseArray(RECIPE_KEY); const candle=candles.find(c=>String(c.id)===String(id)); if(!candle)return;
-        if(!window.confirm(`Delete “${candle.name}”? This removes the saved candle and its cost data from your account.`))return;
-        const result=await window.KindleCloud.deleteItem('candle',id); if(result.error){toast('Could not delete candle.');return;}
-        saveArray(RECIPE_KEY,candles.filter(c=>String(c.id)!==String(id))); render(); toast('Candle deleted.');
+      async function deleteItem(type,id) {
+        const key=type==='candle'?RECIPE_KEY:BLEND_KEY;
+        const label=type==='candle'?'candle':'fragrance blend';
+        const items=parseArray(key); const item=items.find(x=>String(x.id)===String(id)); if(!item)return;
+        if(!window.confirm(`Delete ${label} “${item.name}”?`))return;
+        const result=await window.KindleCloud.deleteItem(type,id); if(result.error){toast(`Could not delete ${label}.`);return;}
+        saveArray(key,items.filter(x=>String(x.id)!==String(id))); render(); toast(`${label[0].toUpperCase()+label.slice(1)} deleted.`);
       }
 
       $('signInBtn').addEventListener('click',()=>window.KindleCloud?.openAuth('signin'));
-      $('searchCandles').addEventListener('input',e=>{searchTerm=e.target.value.trim().toLowerCase();render();});
-      $('candleList').addEventListener('click',e=>{const btn=e.target.closest('button[data-action]');if(!btn)return;if(btn.dataset.action==='rename')renameCandle(btn.dataset.id);if(btn.dataset.action==='delete')deleteCandle(btn.dataset.id);});
+      $('librarySearch').addEventListener('input',e=>{searchTerm=e.target.value.trim().toLowerCase();render();});
+      document.querySelector('.tabs').addEventListener('click',e=>{
+        const tab=e.target.closest('[data-view]'); if(!tab)return;
+        activeView=tab.dataset.view; searchTerm=''; $('librarySearch').value=''; render();
+      });
+      $('libraryContent').addEventListener('click',e=>{
+        const btn=e.target.closest('button[data-action]'); if(!btn)return;
+        const action=btn.dataset.action;
+        if(action==='rename-candle') renameItem('candle',btn.dataset.id);
+        if(action==='delete-candle') deleteItem('candle',btn.dataset.id);
+        if(action==='rename-blend') renameItem('blend',btn.dataset.id);
+        if(action==='delete-blend') deleteItem('blend',btn.dataset.id);
+      });
       window.addEventListener('kindle-cloud-data-ready',render);
       window.addEventListener('kindle-auth-change',render);
       window.addEventListener('kindle-cloud-item-saved',render);
       window.addEventListener('kindle-cloud-item-deleted',render);
+      window.addEventListener('storage', event => {
+        if (event.key === RECIPE_KEY || event.key === BLEND_KEY) render();
+      });
+      window.addEventListener('focus', async () => {
+        if (window.KindleCloud?.currentUser) await window.KindleCloud.syncCaches();
+        else render();
+      });
       $('year').textContent=new Date().getFullYear();
-      window.KindleCloud?.ready.then(render);
+      window.KindleCloud?.ready.then(async () => {
+        if (window.KindleCloud.currentUser) await window.KindleCloud.syncCaches();
+        render();
+      });
       render();
     })();
   </script>
