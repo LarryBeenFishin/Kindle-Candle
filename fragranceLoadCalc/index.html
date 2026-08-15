@@ -154,7 +154,7 @@
     }
 
     .tool-shell {
-      max-width: 950px;
+      max-width: 1080px;
       margin: 0 auto;
       background: rgba(255, 253, 248, .68);
       border: 1px solid var(--ink);
@@ -177,7 +177,7 @@
 
     .calculator {
       display: grid;
-      grid-template-columns: minmax(0, 1.05fr) minmax(300px, .95fr);
+      grid-template-columns: minmax(0, 1.12fr) minmax(340px, .88fr);
     }
 
     .inputs,
@@ -188,9 +188,7 @@
     .results {
       background: var(--paper-2);
       border-left: 1px solid var(--ink);
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+      align-self: stretch;
     }
 
     .section-title {
@@ -348,19 +346,19 @@
     .total-row .result-value { font-size: 42px; }
 
     .per-candle {
-      margin: 22px 0 0;
+      margin: 20px 0 0;
       padding: 15px 16px;
       border: 1px dashed rgba(33,26,20,.55);
       background: rgba(255,255,255,.23);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 13px;
-      line-height: 1.55;
+      font-size: 14px;
+      line-height: 1.6;
     }
 
     .copy {
       width: 100%;
-      margin-top: 15px;
-      padding: 12px 14px;
+      margin-top: 18px;
+      padding: 13px 14px;
       background: transparent;
       color: var(--ink);
       font-size: 10px;
@@ -479,6 +477,38 @@
     .wax-table td:nth-child(4) { width: 45%; }
 
     .wax-table tbody tr:last-child td { border-bottom: 0; }
+
+    .gravity-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 8px;
+    }
+
+    .use-gravity-btn {
+      appearance: none;
+      border: 1px solid var(--ink);
+      background: transparent;
+      color: var(--ink);
+      padding: 7px 9px;
+      font-family: "Courier New", Courier, monospace;
+      font-size: 9px;
+      line-height: 1;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background .15s ease, color .15s ease, transform .15s ease;
+    }
+
+    .use-gravity-btn:hover,
+    .use-gravity-btn:focus-visible {
+      background: var(--ink);
+      color: var(--white);
+      outline: none;
+    }
+
+    .use-gravity-btn:active { transform: translateY(1px); }
 
     .wax-guide-disclaimer {
       margin: 15px 2px 0;
@@ -659,32 +689,33 @@
 
     /* Fragrance blend builder */
     .blend-toggle-card {
-      grid-column: 1 / -1;
-      border: 1px solid var(--line);
-      background: rgba(234, 220, 201, .32);
-      padding: 16px 17px;
+      margin-top: 26px;
+      border: 1px solid var(--ink);
+      background: rgba(234, 220, 201, .38);
+      padding: 17px 18px;
     }
 
     .blend-toggle-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 18px;
+      gap: 22px;
     }
 
     .blend-toggle-copy strong {
       display: block;
       margin-bottom: 5px;
-      font-size: 12px;
-      letter-spacing: .06em;
+      font-size: 13px;
+      letter-spacing: .05em;
     }
 
     .blend-toggle-copy span {
       display: block;
+      max-width: 470px;
       color: var(--muted);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 12px;
-      line-height: 1.45;
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     .blend-switch {
@@ -701,8 +732,8 @@
 
     .blend-switch-ui {
       display: block;
-      width: 48px;
-      height: 27px;
+      width: 52px;
+      height: 30px;
       border: 1px solid var(--ink);
       background: var(--white);
       position: relative;
@@ -714,119 +745,127 @@
       position: absolute;
       top: 4px;
       left: 4px;
-      width: 17px;
-      height: 17px;
+      width: 20px;
+      height: 20px;
       background: var(--ink);
       transition: transform .15s ease, background .15s ease;
     }
 
-    .blend-switch input:checked + .blend-switch-ui {
-      background: var(--ink);
-    }
-
+    .blend-switch input:checked + .blend-switch-ui { background: var(--ink); }
     .blend-switch input:checked + .blend-switch-ui::after {
-      transform: translateX(21px);
+      transform: translateX(22px);
       background: var(--paper);
     }
-
     .blend-switch input:focus-visible + .blend-switch-ui {
       box-shadow: 0 0 0 3px rgba(74, 52, 36, .16);
     }
 
     .blend-panel {
-      grid-column: 1 / -1;
       border: 1px solid var(--ink);
-      background: rgba(255, 253, 248, .55);
-      padding: 19px 18px 18px;
-      margin-top: -10px;
+      border-top: 0;
+      background: rgba(255, 253, 248, .62);
+      padding: 22px;
     }
 
     .blend-panel[hidden],
     .blend-results[hidden] { display: none; }
 
     .blend-panel-head {
-      display: flex;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 18px;
-      margin-bottom: 15px;
+      padding-bottom: 17px;
+      border-bottom: 1px solid var(--line);
     }
 
     .blend-panel-head strong {
       display: block;
-      font-size: 12px;
-      letter-spacing: .1em;
+      font-size: 13px;
+      letter-spacing: .11em;
       text-transform: uppercase;
     }
 
     .blend-panel-head span {
       display: block;
-      margin-top: 5px;
+      max-width: 530px;
+      margin-top: 6px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 13px;
+      line-height: 1.5;
+    }
+
+    .blend-section {
+      padding: 18px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .blend-section:last-of-type { border-bottom: 0; padding-bottom: 4px; }
+
+    .blend-section-heading {
+      display: flex;
+      justify-content: space-between;
+      gap: 18px;
+      align-items: baseline;
+      margin-bottom: 11px;
+    }
+
+    .blend-section-heading strong {
+      font-size: 11px;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+    }
+
+    .blend-section-heading span {
       color: var(--muted);
       font-family: Georgia, "Times New Roman", serif;
       font-size: 11px;
-      line-height: 1.45;
+      line-height: 1.4;
+      text-align: right;
     }
 
     .saved-blend-row,
     .blend-save-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto auto;
-      gap: 7px;
-      margin-bottom: 15px;
+      gap: 9px;
     }
 
-    .blend-save-row {
-      grid-template-columns: minmax(0, 1fr) auto;
-      margin: 15px 0 0;
-      padding-top: 15px;
-      border-top: 1px solid var(--line);
-    }
+    .blend-save-row { grid-template-columns: minmax(0, 1fr) auto; }
 
     .saved-blend-row select,
     .blend-save-row input {
-      min-height: 41px;
-      padding: 10px 11px;
-      font-size: 13px;
+      min-height: 45px;
+      padding: 11px 12px;
+      font-size: 14px;
     }
 
     .blend-mini-btn {
-      padding: 9px 11px;
+      min-height: 45px;
+      padding: 10px 13px;
       background: transparent;
       color: var(--ink);
       font-size: 9px;
       white-space: nowrap;
     }
 
-    .blend-mini-btn.primary {
-      background: var(--ink);
-      color: var(--paper);
-    }
+    .blend-mini-btn.primary { background: var(--ink); color: var(--paper); }
 
     .blend-table-head,
     .blend-row {
       display: grid;
-      grid-template-columns: minmax(0, 1.45fr) minmax(90px, .55fr) 34px;
-      gap: 8px;
+      grid-template-columns: minmax(0, 1.6fr) minmax(92px, .5fr) 38px;
+      gap: 9px;
       align-items: center;
     }
 
     .blend-table-head {
-      margin-bottom: 7px;
+      margin: 4px 0 7px;
       color: var(--muted);
       font-size: 9px;
-      letter-spacing: .1em;
+      letter-spacing: .11em;
       text-transform: uppercase;
     }
 
-    .blend-row { margin-bottom: 8px; }
-
-    .blend-row input {
-      min-height: 40px;
-      padding: 9px 10px;
-      font-size: 13px;
-    }
-
+    .blend-row { margin-bottom: 9px; }
+    .blend-row input { min-height: 43px; padding: 10px 11px; font-size: 14px; }
     .blend-percent-wrap { position: relative; }
     .blend-percent-wrap input { padding-right: 30px; }
     .blend-percent-wrap span {
@@ -840,8 +879,8 @@
     }
 
     .blend-remove {
-      width: 34px;
-      height: 40px;
+      width: 38px;
+      height: 43px;
       padding: 0;
       background: transparent;
       color: var(--ink);
@@ -853,44 +892,49 @@
       align-items: center;
       justify-content: space-between;
       gap: 14px;
-      margin-top: 4px;
+      margin-top: 7px;
     }
 
     .blend-add {
-      padding: 9px 11px;
+      padding: 10px 12px;
       background: transparent;
       color: var(--ink);
       font-size: 9px;
     }
 
     .blend-total {
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      background: var(--paper-2);
       font-size: 10px;
       letter-spacing: .08em;
       text-transform: uppercase;
     }
 
-    .blend-total strong { font-size: 12px; }
-    .blend-total.invalid { color: #7a4136; }
+    .blend-total strong { font-size: 13px; }
+    .blend-total.invalid { color: #7a4136; border-color: #7a4136; }
 
     .blend-status {
       min-height: 16px;
-      margin-top: 7px;
+      margin-top: 9px;
       color: var(--brown);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 11px;
-      line-height: 1.4;
+      font-size: 12px;
+      line-height: 1.45;
     }
 
     .blend-results {
-      margin-top: 14px;
-      padding: 14px 15px 12px;
-      border: 1px dashed rgba(33,26,20,.55);
-      background: rgba(255,255,255,.23);
+      margin-top: 18px;
+      padding: 16px 17px 13px;
+      border: 1px solid rgba(33,26,20,.48);
+      background: rgba(255,255,255,.28);
     }
 
     .blend-results-title {
-      margin-bottom: 10px;
-      font-size: 10px;
+      margin-bottom: 11px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+      font-size: 11px;
       letter-spacing: .12em;
       text-transform: uppercase;
       font-weight: 700;
@@ -899,52 +943,41 @@
     .blend-result-row {
       display: grid;
       grid-template-columns: minmax(0, 1fr) auto;
-      gap: 12px;
-      padding: 8px 0;
+      gap: 14px;
+      padding: 10px 0;
       border-top: 1px solid var(--line);
     }
 
     .blend-result-row:first-child { border-top: 0; }
-
-    .blend-result-name {
-      font-size: 11px;
-      line-height: 1.4;
-    }
-
+    .blend-result-name { font-size: 12px; line-height: 1.4; }
     .blend-result-name small {
+      display: block;
+      margin-top: 3px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+    }
+    .blend-result-amount { text-align: right; font-size: 14px; font-weight: 700; line-height: 1.35; }
+    .blend-result-amount small {
       display: block;
       margin-top: 2px;
       color: var(--muted);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 10px;
-    }
-
-    .blend-result-amount {
-      text-align: right;
-      font-size: 12px;
-      font-weight: 700;
-      line-height: 1.4;
-    }
-
-    .blend-result-amount small {
-      display: block;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 10px;
+      font-size: 11px;
       font-weight: 400;
     }
 
     /* Saved recipe library */
     .save-recipe-box {
-      margin-top: 14px;
-      padding-top: 16px;
+      margin-top: 18px;
+      padding-top: 18px;
       border-top: 1px solid var(--line);
     }
 
     .save-recipe-label {
       display: block;
       margin-bottom: 8px;
-      font-size: 10px;
+      font-size: 11px;
       letter-spacing: .14em;
       text-transform: uppercase;
       font-weight: 700;
@@ -979,10 +1012,10 @@
 
     .save-recipe-note,
     .save-recipe-status {
-      margin-top: 8px;
+      margin-top: 9px;
       color: var(--muted);
       font-family: Georgia, "Times New Roman", serif;
-      font-size: 11px;
+      font-size: 12px;
       line-height: 1.45;
     }
 
@@ -1127,6 +1160,8 @@
       .save-recipe-row { grid-template-columns: 1fr; }
       .save-recipe-btn { width: 100%; }
       .blend-toggle-row { align-items: flex-start; }
+      .blend-section-heading { align-items: flex-start; flex-direction: column; gap: 4px; }
+      .blend-section-heading span { text-align: left; }
       .saved-blend-row { grid-template-columns: 1fr 1fr; }
       .saved-blend-row select { grid-column: 1 / -1; }
       .saved-blend-row .blend-mini-btn { width: 100%; }
@@ -1278,8 +1313,8 @@
           <div class="blend-toggle-card" id="blendBuilder">
             <div class="blend-toggle-row">
               <div class="blend-toggle-copy">
-                <strong>Mixing more than one fragrance?</strong>
-                <span>Turn on Fragrance Blend to split the total fragrance weight across multiple oils.</span>
+                <strong>Using more than one fragrance?</strong>
+                <span>Turn on Fragrance Blend to divide the total fragrance weight between multiple oils.</span>
               </div>
               <label class="blend-switch" for="blendToggle" aria-label="Use a fragrance blend">
                 <input id="blendToggle" type="checkbox" />
@@ -1290,35 +1325,51 @@
 
           <div class="blend-panel" id="blendPanel" hidden>
             <div class="blend-panel-head">
-              <div>
-                <strong>Fragrance Blend</strong>
-                <span>Your blend percentages should add up to 100%. The calculator will split the total fragrance needed for you.</span>
+              <strong>Fragrance Blend</strong>
+              <span>Build a blend below or load one you already saved. Blend percentages must total 100%.</span>
+            </div>
+
+            <div class="blend-section">
+              <div class="blend-section-heading">
+                <strong>Saved Blends</strong>
+                <span>Reuse a blend you make often.</span>
+              </div>
+              <div class="saved-blend-row">
+                <select id="savedBlendSelect" aria-label="Saved fragrance blends">
+                  <option value="">Choose a saved blend…</option>
+                </select>
+                <button class="blend-mini-btn primary" id="loadBlendBtn" type="button">Load</button>
+                <button class="blend-mini-btn" id="deleteBlendBtn" type="button">Delete</button>
               </div>
             </div>
 
-            <div class="saved-blend-row">
-              <select id="savedBlendSelect" aria-label="Saved fragrance blends">
-                <option value="">Choose a saved blend…</option>
-              </select>
-              <button class="blend-mini-btn primary" id="loadBlendBtn" type="button">Load</button>
-              <button class="blend-mini-btn" id="deleteBlendBtn" type="button">Delete</button>
+            <div class="blend-section">
+              <div class="blend-section-heading">
+                <strong>Blend Formula</strong>
+                <span>Enter each oil and its share of the blend.</span>
+              </div>
+              <div class="blend-table-head" aria-hidden="true">
+                <span>Fragrance</span><span>Blend %</span><span></span>
+              </div>
+              <div id="blendRows"></div>
+
+              <div class="blend-builder-foot">
+                <button class="blend-add" id="addBlendRowBtn" type="button">+ Add Fragrance</button>
+                <div class="blend-total" id="blendTotal">Blend total: <strong>100%</strong></div>
+              </div>
             </div>
 
-            <div class="blend-table-head" aria-hidden="true">
-              <span>Fragrance</span><span>Blend %</span><span></span>
+            <div class="blend-section">
+              <div class="blend-section-heading">
+                <strong>Save This Blend</strong>
+                <span>Name it once and reuse it later.</span>
+              </div>
+              <div class="blend-save-row">
+                <input id="blendName" type="text" maxlength="60" placeholder="e.g. Hades" autocomplete="off" />
+                <button class="blend-mini-btn primary" id="saveBlendBtn" type="button">Save Blend</button>
+              </div>
+              <div class="blend-status" id="blendStatus" role="status"></div>
             </div>
-            <div id="blendRows"></div>
-
-            <div class="blend-builder-foot">
-              <button class="blend-add" id="addBlendRowBtn" type="button">+ Add Fragrance</button>
-              <div class="blend-total" id="blendTotal">Blend total: <strong>100%</strong></div>
-            </div>
-
-            <div class="blend-save-row">
-              <input id="blendName" type="text" maxlength="60" placeholder="e.g. Cedar + Vanilla" autocomplete="off" />
-              <button class="blend-mini-btn primary" id="saveBlendBtn" type="button">Save Blend</button>
-            </div>
-            <div class="blend-status" id="blendStatus" role="status"></div>
           </div>
 
           <div class="button-row">
@@ -1329,45 +1380,41 @@
         </div>
 
         <aside class="results" aria-live="polite">
-          <div>
-            <h2 class="section-title">Batch Totals</h2>
-            <div class="result-stack">
-              <div class="result-row">
-                <span class="result-label">Wax Needed</span>
-                <span class="result-value"><span id="waxResult">6.49</span><span class="result-unit" id="waxUnit">ounces</span></span>
-              </div>
-              <div class="result-row">
-                <span class="result-label">Fragrance Needed</span>
-                <span class="result-value"><span id="fragranceResult">0.39</span><span class="result-unit" id="fragranceUnit">ounces</span></span>
-              </div>
-              <div class="result-row total-row">
-                <span class="result-label">Finished Weight</span>
-                <span class="result-value"><span id="totalResult">6.88</span><span class="result-unit" id="totalUnit">ounces</span></span>
-              </div>
+          <h2 class="section-title">Batch Totals</h2>
+          <div class="result-stack">
+            <div class="result-row">
+              <span class="result-label">Wax Needed</span>
+              <span class="result-value"><span id="waxResult">6.49</span><span class="result-unit" id="waxUnit">ounces</span></span>
             </div>
-
-            <div class="per-candle" id="perCandleText">
-              Each candle: <strong>6.49 oz wax</strong> + <strong>0.39 oz fragrance</strong>.
+            <div class="result-row">
+              <span class="result-label">Fragrance Needed</span>
+              <span class="result-value"><span id="fragranceResult">0.39</span><span class="result-unit" id="fragranceUnit">ounces</span></span>
             </div>
-
-            <div class="blend-results" id="blendResults" hidden>
-              <div class="blend-results-title" id="blendResultsTitle">Fragrance Blend Breakdown</div>
-              <div id="blendBreakdownList"></div>
+            <div class="result-row total-row">
+              <span class="result-label">Finished Weight</span>
+              <span class="result-value"><span id="totalResult">6.88</span><span class="result-unit" id="totalUnit">ounces</span></span>
             </div>
           </div>
 
-          <div>
-            <button class="copy" id="copyBtn" type="button">Copy Batch Summary</button>
+          <div class="per-candle" id="perCandleText">
+            Each candle: <strong>6.49 oz wax</strong> + <strong>0.39 oz fragrance</strong>.
+          </div>
 
-            <div class="save-recipe-box">
-              <label class="save-recipe-label" for="recipeName">Save this formula</label>
-              <div class="save-recipe-row">
-                <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Golden Hour 8 oz" autocomplete="off" />
-                <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Recipe</button>
-              </div>
-              <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, unit, and your active fragrance blend. Your batch quantity stays separate.</div>
-              <div class="save-recipe-status" id="saveRecipeStatus" role="status"></div>
+          <div class="blend-results" id="blendResults" hidden>
+            <div class="blend-results-title" id="blendResultsTitle">Fragrance Blend Breakdown</div>
+            <div id="blendBreakdownList"></div>
+          </div>
+
+          <button class="copy" id="copyBtn" type="button">Copy Batch Summary</button>
+
+          <div class="save-recipe-box">
+            <label class="save-recipe-label" for="recipeName">Save this formula</label>
+            <div class="save-recipe-row">
+              <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Golden Hour 8 oz" autocomplete="off" />
+              <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Recipe</button>
             </div>
+            <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, unit, and your active fragrance blend. Your batch quantity stays separate.</div>
+            <div class="save-recipe-status" id="saveRecipeStatus" role="status"></div>
           </div>
         </aside>
       </div>
@@ -1423,43 +1470,67 @@
             <tr>
               <td>Soy Wax (464)</td>
               <td>10–12%</td>
-              <td>0.90</td>
+              <td>
+                0.90
+                <div class="gravity-actions"><button class="use-gravity-btn" type="button" data-gravity="0.90">Use 0.90</button></div>
+              </td>
               <td>Widely used for container candles; 10% is a common fragrance level to evaluate during testing.</td>
             </tr>
             <tr>
               <td>Paraffin</td>
               <td>6–10%</td>
-              <td>0.86–0.90</td>
+              <td>
+                0.86–0.90
+                <div class="gravity-actions">
+                  <button class="use-gravity-btn" type="button" data-gravity="0.86">Use 0.86</button>
+                  <button class="use-gravity-btn" type="button" data-gravity="0.90">Use 0.90</button>
+                </div>
+              </td>
               <td>Often chosen for a pronounced hot throw. Density can shift with the paraffin formulation and melt point.</td>
             </tr>
             <tr>
               <td>Coconut Wax</td>
               <td>10–12%</td>
-              <td>0.90</td>
+              <td>
+                0.90
+                <div class="gravity-actions"><button class="use-gravity-btn" type="button" data-gravity="0.90">Use 0.90</button></div>
+              </td>
               <td>Popular for its smooth burn characteristics and strong fragrance performance in properly tested formulas.</td>
             </tr>
             <tr>
               <td>Beeswax</td>
               <td>3–6%</td>
-              <td>0.95</td>
+              <td>
+                0.95
+                <div class="gravity-actions"><button class="use-gravity-btn" type="button" data-gravity="0.95">Use 0.95</button></div>
+              </td>
               <td>Usually accepts less added fragrance and naturally contributes a mild honey-like aroma of its own.</td>
             </tr>
             <tr>
               <td>Soy-Coconut Blend</td>
               <td>10–12%</td>
-              <td>0.90</td>
+              <td>
+                0.90
+                <div class="gravity-actions"><button class="use-gravity-btn" type="button" data-gravity="0.90">Use 0.90</button></div>
+              </td>
               <td>A frequently used blend when makers want to balance scent performance with clean-burning characteristics.</td>
             </tr>
             <tr>
               <td>Palm Wax</td>
               <td>6–8%</td>
-              <td>0.88</td>
+              <td>
+                0.88
+                <div class="gravity-actions"><button class="use-gravity-btn" type="button" data-gravity="0.88">Use 0.88</button></div>
+              </td>
               <td>Known for decorative crystal or feather-like finishes, depending on the particular palm-wax formulation.</td>
             </tr>
             <tr>
               <td>Gel Wax</td>
               <td>5–6%</td>
-              <td>0.97</td>
+              <td>
+                0.97
+                <div class="gravity-actions"><button class="use-gravity-btn" type="button" data-gravity="0.97">Use 0.97</button></div>
+              </td>
               <td>Used for transparent candles. Only use fragrance approved for gel applications and verify a flash point above 170°F with the supplier.</td>
             </tr>
           </tbody>
@@ -2014,6 +2085,27 @@
       setSavedRecipes(recipes.filter((r) => r.id !== id));
       renderRecipes();
     }
+
+    document.querySelector('.wax-table').addEventListener('click', (event) => {
+      const button = event.target.closest('.use-gravity-btn');
+      if (!button) return;
+
+      const gravity = Number(button.dataset.gravity);
+      if (!Number.isFinite(gravity)) return;
+
+      fields.waxGravity.value = gravity.toFixed(2);
+      calculate();
+
+      const originalText = button.textContent;
+      button.textContent = 'Applied ✓';
+      setTimeout(() => { button.textContent = originalText; }, 1200);
+
+      document.getElementById('calculator').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      setTimeout(() => {
+        fields.waxGravity.focus({ preventScroll: true });
+        fields.waxGravity.select();
+      }, 450);
+    });
 
     $('calculateBtn').addEventListener('click', calculate);
     $('resetBtn').addEventListener('click', reset);
