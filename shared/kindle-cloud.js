@@ -20,6 +20,151 @@
   let readyResolve;
   const ready = new Promise(resolve => { readyResolve = resolve; });
 
+
+  function installMobileHeaderStyles() {
+    if (document.getElementById('kindle-mobile-header-overrides')) return;
+    const style = document.createElement('style');
+    style.id = 'kindle-mobile-header-overrides';
+    style.textContent = `
+      /* Mobile-only header refinement. Desktop styles remain unchanged. */
+      @media (max-width: 820px) {
+        .announcement {
+          padding: 10px 14px !important;
+          font-size: 9px !important;
+          line-height: 1.35 !important;
+          letter-spacing: .18em !important;
+          text-align: center !important;
+          white-space: normal !important;
+        }
+
+        .site-header {
+          width: 100% !important;
+          min-height: 0 !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+          background: var(--paper, #f7f0e6) !important;
+        }
+
+        .header-inner {
+          width: 100% !important;
+          min-height: 0 !important;
+          margin: 0 !important;
+          padding: 12px 0 0 !important;
+          display: flex !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+        }
+
+        .site-header > .brand,
+        .header-inner .brand {
+          width: auto !important;
+          height: auto !important;
+          flex: 0 0 auto !important;
+          align-self: center !important;
+          justify-content: center !important;
+          margin: 0 auto 8px !important;
+          padding: 0 !important;
+        }
+
+        .site-header .brand-logo,
+        .header-inner .brand-logo {
+          display: block !important;
+          width: 116px !important;
+          height: auto !important;
+          max-width: 116px !important;
+          max-height: 68px !important;
+          object-fit: contain !important;
+        }
+
+        .site-header > .nav,
+        .header-inner .nav {
+          box-sizing: border-box !important;
+          width: 100% !important;
+          max-width: none !important;
+          margin: 0 !important;
+          padding: 0 18px 11px !important;
+          display: flex !important;
+          flex: 0 0 auto !important;
+          flex-direction: row !important;
+          flex-wrap: nowrap !important;
+          align-items: center !important;
+          justify-content: flex-start !important;
+          gap: 22px !important;
+          overflow-x: auto !important;
+          overflow-y: hidden !important;
+          white-space: nowrap !important;
+          -webkit-overflow-scrolling: touch !important;
+          scrollbar-width: none !important;
+          border: 0 !important;
+        }
+
+        .site-header .nav::-webkit-scrollbar,
+        .header-inner .nav::-webkit-scrollbar {
+          display: none !important;
+        }
+
+        .site-header .nav a,
+        .header-inner .nav a,
+        .site-header .kindle-account-btn,
+        .header-inner .kindle-account-btn {
+          width: auto !important;
+          max-width: none !important;
+          min-width: 0 !important;
+          flex: 0 0 auto !important;
+          margin: 0 !important;
+          padding: 8px 0 7px !important;
+          font-size: 10.5px !important;
+          line-height: 1.2 !important;
+          letter-spacing: .08em !important;
+          white-space: nowrap !important;
+          text-align: left !important;
+        }
+
+        .header-inner .kindle-account-btn,
+        .site-header .kindle-account-btn {
+          margin-left: 0 !important;
+        }
+      }
+
+      @media (max-width: 480px) {
+        .announcement {
+          padding: 9px 12px !important;
+          font-size: 8.5px !important;
+          letter-spacing: .15em !important;
+        }
+
+        .header-inner {
+          padding-top: 10px !important;
+        }
+
+        .site-header .brand-logo,
+        .header-inner .brand-logo {
+          width: 108px !important;
+          max-width: 108px !important;
+          max-height: 62px !important;
+        }
+
+        .site-header > .nav,
+        .header-inner .nav {
+          gap: 19px !important;
+          padding: 0 15px 10px !important;
+        }
+
+        .site-header .nav a,
+        .header-inner .nav a,
+        .site-header .kindle-account-btn,
+        .header-inner .kindle-account-btn {
+          font-size: 10px !important;
+          letter-spacing: .065em !important;
+        }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
   function safeParse(key) {
     try {
       const value = JSON.parse(localStorage.getItem(key) || '[]');
@@ -421,6 +566,9 @@
     syncCaches,
     signOut
   };
+
+
+  installMobileHeaderStyles();
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
