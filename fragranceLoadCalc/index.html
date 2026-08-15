@@ -656,6 +656,284 @@
 
 
 
+
+    /* Fragrance blend builder */
+    .blend-toggle-card {
+      grid-column: 1 / -1;
+      border: 1px solid var(--line);
+      background: rgba(234, 220, 201, .32);
+      padding: 16px 17px;
+    }
+
+    .blend-toggle-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 18px;
+    }
+
+    .blend-toggle-copy strong {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 12px;
+      letter-spacing: .06em;
+    }
+
+    .blend-toggle-copy span {
+      display: block;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    .blend-switch {
+      position: relative;
+      flex: 0 0 auto;
+      cursor: pointer;
+    }
+
+    .blend-switch input {
+      position: absolute;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .blend-switch-ui {
+      display: block;
+      width: 48px;
+      height: 27px;
+      border: 1px solid var(--ink);
+      background: var(--white);
+      position: relative;
+      transition: background .15s ease;
+    }
+
+    .blend-switch-ui::after {
+      content: "";
+      position: absolute;
+      top: 4px;
+      left: 4px;
+      width: 17px;
+      height: 17px;
+      background: var(--ink);
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .blend-switch input:checked + .blend-switch-ui {
+      background: var(--ink);
+    }
+
+    .blend-switch input:checked + .blend-switch-ui::after {
+      transform: translateX(21px);
+      background: var(--paper);
+    }
+
+    .blend-switch input:focus-visible + .blend-switch-ui {
+      box-shadow: 0 0 0 3px rgba(74, 52, 36, .16);
+    }
+
+    .blend-panel {
+      grid-column: 1 / -1;
+      border: 1px solid var(--ink);
+      background: rgba(255, 253, 248, .55);
+      padding: 19px 18px 18px;
+      margin-top: -10px;
+    }
+
+    .blend-panel[hidden],
+    .blend-results[hidden] { display: none; }
+
+    .blend-panel-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 15px;
+    }
+
+    .blend-panel-head strong {
+      display: block;
+      font-size: 12px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .blend-panel-head span {
+      display: block;
+      margin-top: 5px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .saved-blend-row,
+    .blend-save-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto auto;
+      gap: 7px;
+      margin-bottom: 15px;
+    }
+
+    .blend-save-row {
+      grid-template-columns: minmax(0, 1fr) auto;
+      margin: 15px 0 0;
+      padding-top: 15px;
+      border-top: 1px solid var(--line);
+    }
+
+    .saved-blend-row select,
+    .blend-save-row input {
+      min-height: 41px;
+      padding: 10px 11px;
+      font-size: 13px;
+    }
+
+    .blend-mini-btn {
+      padding: 9px 11px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .blend-mini-btn.primary {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .blend-table-head,
+    .blend-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(90px, .55fr) 34px;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .blend-table-head {
+      margin-bottom: 7px;
+      color: var(--muted);
+      font-size: 9px;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+    }
+
+    .blend-row { margin-bottom: 8px; }
+
+    .blend-row input {
+      min-height: 40px;
+      padding: 9px 10px;
+      font-size: 13px;
+    }
+
+    .blend-percent-wrap { position: relative; }
+    .blend-percent-wrap input { padding-right: 30px; }
+    .blend-percent-wrap span {
+      position: absolute;
+      right: 10px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--muted);
+      font-size: 11px;
+      pointer-events: none;
+    }
+
+    .blend-remove {
+      width: 34px;
+      height: 40px;
+      padding: 0;
+      background: transparent;
+      color: var(--ink);
+      font-size: 13px;
+    }
+
+    .blend-builder-foot {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      margin-top: 4px;
+    }
+
+    .blend-add {
+      padding: 9px 11px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 9px;
+    }
+
+    .blend-total {
+      font-size: 10px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+
+    .blend-total strong { font-size: 12px; }
+    .blend-total.invalid { color: #7a4136; }
+
+    .blend-status {
+      min-height: 16px;
+      margin-top: 7px;
+      color: var(--brown);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .blend-results {
+      margin-top: 14px;
+      padding: 14px 15px 12px;
+      border: 1px dashed rgba(33,26,20,.55);
+      background: rgba(255,255,255,.23);
+    }
+
+    .blend-results-title {
+      margin-bottom: 10px;
+      font-size: 10px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .blend-result-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 12px;
+      padding: 8px 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .blend-result-row:first-child { border-top: 0; }
+
+    .blend-result-name {
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .blend-result-name small {
+      display: block;
+      margin-top: 2px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10px;
+    }
+
+    .blend-result-amount {
+      text-align: right;
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+
+    .blend-result-amount small {
+      display: block;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 10px;
+      font-weight: 400;
+    }
+
     /* Saved recipe library */
     .save-recipe-box {
       margin-top: 14px;
@@ -848,6 +1126,15 @@
       .recipe-load, .recipe-delete { flex: 1; }
       .save-recipe-row { grid-template-columns: 1fr; }
       .save-recipe-btn { width: 100%; }
+      .blend-toggle-row { align-items: flex-start; }
+      .saved-blend-row { grid-template-columns: 1fr 1fr; }
+      .saved-blend-row select { grid-column: 1 / -1; }
+      .saved-blend-row .blend-mini-btn { width: 100%; }
+      .blend-save-row { grid-template-columns: 1fr; }
+      .blend-save-row .blend-mini-btn { width: 100%; }
+      .blend-table-head { display: none; }
+      .blend-row { grid-template-columns: minmax(0, 1fr) 92px 34px; }
+      .blend-builder-foot { align-items: flex-start; flex-direction: column; }
       .site-header { padding-inline: 18px; }
       main { padding: 44px 14px 70px; }
       .hero { margin-bottom: 32px; }
@@ -988,6 +1275,52 @@
             </div>
           </div>
 
+          <div class="blend-toggle-card" id="blendBuilder">
+            <div class="blend-toggle-row">
+              <div class="blend-toggle-copy">
+                <strong>Mixing more than one fragrance?</strong>
+                <span>Turn on Fragrance Blend to split the total fragrance weight across multiple oils.</span>
+              </div>
+              <label class="blend-switch" for="blendToggle" aria-label="Use a fragrance blend">
+                <input id="blendToggle" type="checkbox" />
+                <span class="blend-switch-ui" aria-hidden="true"></span>
+              </label>
+            </div>
+          </div>
+
+          <div class="blend-panel" id="blendPanel" hidden>
+            <div class="blend-panel-head">
+              <div>
+                <strong>Fragrance Blend</strong>
+                <span>Your blend percentages should add up to 100%. The calculator will split the total fragrance needed for you.</span>
+              </div>
+            </div>
+
+            <div class="saved-blend-row">
+              <select id="savedBlendSelect" aria-label="Saved fragrance blends">
+                <option value="">Choose a saved blend…</option>
+              </select>
+              <button class="blend-mini-btn primary" id="loadBlendBtn" type="button">Load</button>
+              <button class="blend-mini-btn" id="deleteBlendBtn" type="button">Delete</button>
+            </div>
+
+            <div class="blend-table-head" aria-hidden="true">
+              <span>Fragrance</span><span>Blend %</span><span></span>
+            </div>
+            <div id="blendRows"></div>
+
+            <div class="blend-builder-foot">
+              <button class="blend-add" id="addBlendRowBtn" type="button">+ Add Fragrance</button>
+              <div class="blend-total" id="blendTotal">Blend total: <strong>100%</strong></div>
+            </div>
+
+            <div class="blend-save-row">
+              <input id="blendName" type="text" maxlength="60" placeholder="e.g. Cedar + Vanilla" autocomplete="off" />
+              <button class="blend-mini-btn primary" id="saveBlendBtn" type="button">Save Blend</button>
+            </div>
+            <div class="blend-status" id="blendStatus" role="status"></div>
+          </div>
+
           <div class="button-row">
             <button class="calculate" id="calculateBtn" type="button">Get Batch Weights →</button>
             <button class="reset" id="resetBtn" type="button">Start Over</button>
@@ -1016,6 +1349,11 @@
             <div class="per-candle" id="perCandleText">
               Each candle: <strong>6.49 oz wax</strong> + <strong>0.39 oz fragrance</strong>.
             </div>
+
+            <div class="blend-results" id="blendResults" hidden>
+              <div class="blend-results-title" id="blendResultsTitle">Fragrance Blend Breakdown</div>
+              <div id="blendBreakdownList"></div>
+            </div>
           </div>
 
           <div>
@@ -1027,7 +1365,7 @@
                 <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Golden Hour 8 oz" autocomplete="off" />
                 <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Recipe</button>
               </div>
-              <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, and unit. Your batch quantity stays separate.</div>
+              <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, unit, and your active fragrance blend. Your batch quantity stays separate.</div>
               <div class="save-recipe-status" id="saveRecipeStatus" role="status"></div>
             </div>
           </div>
@@ -1205,6 +1543,177 @@
       unit: $('unit')
     };
 
+    const BLEND_STORAGE_KEY = 'kindleFragranceBlendsV1';
+    let blendComponents = [
+      { name: 'Fragrance 1', percent: 50 },
+      { name: 'Fragrance 2', percent: 50 }
+    ];
+    let activeBlendName = '';
+
+    function blendEnabled() {
+      return $('blendToggle').checked;
+    }
+
+    function getSavedBlends() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(BLEND_STORAGE_KEY) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setSavedBlends(blends) {
+      localStorage.setItem(BLEND_STORAGE_KEY, JSON.stringify(blends));
+    }
+
+    function normalizeBlendComponents(components) {
+      return (Array.isArray(components) ? components : [])
+        .map((item, index) => ({
+          name: String(item?.name || `Fragrance ${index + 1}`),
+          percent: Number(item?.percent || 0)
+        }))
+        .filter((item) => Number.isFinite(item.percent));
+    }
+
+    function blendTotalValue() {
+      return blendComponents.reduce((sum, item) => sum + (Number(item.percent) || 0), 0);
+    }
+
+    function validBlend() {
+      if (!blendEnabled()) return true;
+      if (blendComponents.length < 2) return false;
+      if (blendComponents.some((item) => !Number.isFinite(Number(item.percent)) || Number(item.percent) < 0)) return false;
+      return Math.abs(blendTotalValue() - 100) < 0.01;
+    }
+
+    function updateBlendTotal() {
+      const total = blendTotalValue();
+      const el = $('blendTotal');
+      el.innerHTML = `Blend total: <strong>${Number(total.toFixed(2))}%</strong>`;
+      el.classList.toggle('invalid', Math.abs(total - 100) >= 0.01);
+    }
+
+    function renderBlendRows() {
+      const rows = $('blendRows');
+      rows.innerHTML = blendComponents.map((item, index) => `
+        <div class="blend-row" data-index="${index}">
+          <input class="blend-component-name" type="text" maxlength="60" value="${escapeHtml(item.name)}" aria-label="Fragrance ${index + 1} name" />
+          <div class="blend-percent-wrap">
+            <input class="blend-component-percent" type="number" min="0" max="100" step="0.1" value="${Number(item.percent)}" inputmode="decimal" aria-label="Fragrance ${index + 1} blend percentage" />
+            <span>%</span>
+          </div>
+          <button class="blend-remove" type="button" data-remove-blend="${index}" aria-label="Remove fragrance">×</button>
+        </div>
+      `).join('');
+      updateBlendTotal();
+    }
+
+    function renderSavedBlendSelect(selectedId = '') {
+      const select = $('savedBlendSelect');
+      const blends = getSavedBlends();
+      select.innerHTML = '<option value="">Choose a saved blend…</option>' + blends.map((blend) =>
+        `<option value="${escapeHtml(blend.id)}"${blend.id === selectedId ? ' selected' : ''}>${escapeHtml(blend.name)}</option>`
+      ).join('');
+    }
+
+    function setBlendUiEnabled(enabled) {
+      $('blendToggle').checked = enabled;
+      $('blendPanel').hidden = !enabled;
+      if (!enabled) {
+        $('blendResults').hidden = true;
+      }
+    }
+
+    function flashBlendStatus(message) {
+      $('blendStatus').textContent = message;
+      clearTimeout(flashBlendStatus.timer);
+      flashBlendStatus.timer = setTimeout(() => {
+        $('blendStatus').textContent = '';
+      }, 2200);
+    }
+
+    function saveBlend() {
+      const name = $('blendName').value.trim();
+      if (!name) {
+        flashBlendStatus('Give the blend a name first.');
+        $('blendName').focus();
+        return;
+      }
+      if (!validBlend()) {
+        flashBlendStatus('Blend percentages must total 100%.');
+        return;
+      }
+
+      const blends = getSavedBlends();
+      const existingIndex = blends.findIndex((blend) => String(blend.name).toLowerCase() === name.toLowerCase());
+      const blend = {
+        id: existingIndex >= 0 ? blends[existingIndex].id : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name,
+        components: normalizeBlendComponents(blendComponents),
+        updatedAt: new Date().toISOString()
+      };
+
+      if (existingIndex >= 0) {
+        blends[existingIndex] = blend;
+        flashBlendStatus('Blend updated ✓');
+      } else {
+        blends.unshift(blend);
+        flashBlendStatus('Blend saved ✓');
+      }
+      activeBlendName = blend.name;
+      setSavedBlends(blends);
+      renderSavedBlendSelect(blend.id);
+      calculate();
+    }
+
+    function loadBlend(id) {
+      const blend = getSavedBlends().find((item) => item.id === id);
+      if (!blend) return;
+      blendComponents = normalizeBlendComponents(blend.components);
+      activeBlendName = blend.name;
+      $('blendName').value = blend.name;
+      setBlendUiEnabled(true);
+      renderBlendRows();
+      renderSavedBlendSelect(blend.id);
+      calculate();
+      flashBlendStatus(`Loaded “${blend.name}” ✓`);
+    }
+
+    function deleteBlend(id) {
+      const blends = getSavedBlends();
+      const blend = blends.find((item) => item.id === id);
+      if (!blend) return;
+      if (!window.confirm(`Delete fragrance blend “${blend.name}”?`)) return;
+      setSavedBlends(blends.filter((item) => item.id !== id));
+      if (activeBlendName === blend.name) activeBlendName = '';
+      renderSavedBlendSelect();
+      $('blendName').value = '';
+      flashBlendStatus('Blend deleted.');
+    }
+
+    function updateBlendBreakdown(totalFragrance, qty, unit) {
+      const box = $('blendResults');
+      if (!blendEnabled() || !validBlend()) {
+        box.hidden = true;
+        return;
+      }
+
+      const title = activeBlendName ? `Blend Breakdown — ${activeBlendName}` : 'Fragrance Blend Breakdown';
+      $('blendResultsTitle').textContent = title;
+      $('blendBreakdownList').innerHTML = blendComponents.map((item, index) => {
+        const amount = totalFragrance * (Number(item.percent) / 100);
+        const perCandle = qty > 0 ? amount / qty : 0;
+        const name = item.name.trim() || `Fragrance ${index + 1}`;
+        return `
+          <div class="blend-result-row">
+            <div class="blend-result-name">${escapeHtml(name)}<small>${Number(item.percent)}% of the fragrance blend</small></div>
+            <div class="blend-result-amount">${formatNumber(amount, unit)} ${escapeHtml(unit)}<small>${formatNumber(perCandle, unit)} ${escapeHtml(unit)} / candle</small></div>
+          </div>`;
+      }).join('');
+      box.hidden = false;
+    }
+
     const unitNames = {
       oz: ['ounce', 'ounces'],
       g: ['gram', 'grams'],
@@ -1248,12 +1757,17 @@
       const gravity = Number(fields.waxGravity.value);
       const unit = fields.unit.value;
 
-      const error = validate(qty, size, loadPct, gravity);
+      let error = validate(qty, size, loadPct, gravity);
       const errorBox = $('errorBox');
+
+      if (!error && blendEnabled() && !validBlend()) {
+        error = 'Your fragrance blend percentages must add up to 100% before calculating.';
+      }
 
       if (error) {
         errorBox.textContent = error;
         errorBox.style.display = 'block';
+        $('blendResults').hidden = true;
         return;
       }
       errorBox.style.display = 'none';
@@ -1280,6 +1794,8 @@
       $('perCandleText').innerHTML =
         `Each candle: <strong>${formatNumber(perCandleWax, unit)} ${shortUnit(unit)} wax</strong> + ` +
         `<strong>${formatNumber(perCandleFragrance, unit)} ${shortUnit(unit)} fragrance</strong>.`;
+
+      updateBlendBreakdown(fragrance, qty, unit);
     }
 
     function reset() {
@@ -1288,13 +1804,22 @@
       fields.fragranceLoad.value = 6;
       fields.waxGravity.value = 0.86;
       fields.unit.value = 'oz';
+      blendComponents = [
+        { name: 'Fragrance 1', percent: 50 },
+        { name: 'Fragrance 2', percent: 50 }
+      ];
+      activeBlendName = '';
+      setBlendUiEnabled(false);
+      renderBlendRows();
+      renderSavedBlendSelect();
+      $('blendName').value = '';
       $('errorBox').style.display = 'none';
       calculate();
     }
 
     async function copyResults() {
       const unit = fields.unit.value;
-      const text = [
+      const lines = [
         'Kindle Candle — Batch Weight Summary',
         `Candles: ${fields.quantity.value}`,
         `Vessel capacity: ${fields.containerSize.value} ${unit}`,
@@ -1303,7 +1828,19 @@
         `Wax needed: ${$('waxResult').textContent} ${unit}`,
         `Fragrance needed: ${$('fragranceResult').textContent} ${unit}`,
         `Finished batch weight: ${$('totalResult').textContent} ${unit}`
-      ].join('\n');
+      ];
+
+      if (blendEnabled() && validBlend()) {
+        const totalFragrance = Number(String($('fragranceResult').textContent).replace(/,/g, ''));
+        lines.push(`Fragrance blend: ${activeBlendName || 'Custom blend'}`);
+        blendComponents.forEach((item, index) => {
+          const name = item.name.trim() || `Fragrance ${index + 1}`;
+          const amount = totalFragrance * (Number(item.percent) / 100);
+          lines.push(`  ${name}: ${item.percent}% — ${formatNumber(amount, unit)} ${unit}`);
+        });
+      }
+
+      const text = lines.join('\n');
 
       try {
         await navigator.clipboard.writeText(text);
@@ -1369,7 +1906,7 @@
           <article class="recipe-card" data-recipe-id="${escapeHtml(recipe.id)}">
             <div>
               <div class="recipe-card-name">${escapeHtml(recipe.name)}</div>
-              <div class="recipe-card-meta">${escapeHtml(recipe.containerSize)} ${escapeHtml(unit)} vessel • ${escapeHtml(recipe.fragranceLoad)}% fragrance • SG ${escapeHtml(recipe.waxGravity)}</div>
+              <div class="recipe-card-meta">${escapeHtml(recipe.containerSize)} ${escapeHtml(unit)} vessel • ${escapeHtml(recipe.fragranceLoad)}% fragrance • SG ${escapeHtml(recipe.waxGravity)}${recipe.blendEnabled ? ` • Blend: ${escapeHtml(recipe.blendName || 'Custom blend')}` : ''}</div>
             </div>
             <div class="recipe-card-result">
               <strong>${formatNumber(per.wax, unit)} ${unit} wax + ${formatNumber(per.fragrance, unit)} ${unit} fragrance</strong>
@@ -1400,7 +1937,10 @@
       const size = Number(fields.containerSize.value);
       const load = Number(fields.fragranceLoad.value);
       const gravity = Number(fields.waxGravity.value);
-      const error = validate(qty, size, load, gravity);
+      let error = validate(qty, size, load, gravity);
+      if (!error && blendEnabled() && !validBlend()) {
+        error = 'Your fragrance blend percentages must add up to 100% before saving this recipe.';
+      }
 
       if (error) {
         $('errorBox').textContent = error;
@@ -1422,6 +1962,9 @@
         unit: fields.unit.value,
         fragranceLoad: fields.fragranceLoad.value,
         waxGravity: fields.waxGravity.value,
+        blendEnabled: blendEnabled(),
+        blendName: blendEnabled() ? activeBlendName : '',
+        blendComponents: blendEnabled() ? normalizeBlendComponents(blendComponents) : [],
         updatedAt: new Date().toISOString()
       };
 
@@ -1446,6 +1989,17 @@
       fields.unit.value = recipe.unit || 'oz';
       fields.fragranceLoad.value = recipe.fragranceLoad;
       fields.waxGravity.value = recipe.waxGravity;
+      if (recipe.blendEnabled && Array.isArray(recipe.blendComponents) && recipe.blendComponents.length >= 2) {
+        blendComponents = normalizeBlendComponents(recipe.blendComponents);
+        activeBlendName = recipe.blendName || '';
+        setBlendUiEnabled(true);
+        renderBlendRows();
+        $('blendName').value = activeBlendName;
+      } else {
+        activeBlendName = '';
+        setBlendUiEnabled(false);
+        $('blendName').value = '';
+      }
       calculate();
       $('recipeName').value = recipe.name;
       document.getElementById('calculator').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -1465,6 +2019,66 @@
     $('resetBtn').addEventListener('click', reset);
     $('copyBtn').addEventListener('click', copyResults);
     $('saveRecipeBtn').addEventListener('click', saveRecipe);
+    $('blendToggle').addEventListener('change', () => {
+      setBlendUiEnabled(blendEnabled());
+      if (blendEnabled()) {
+        renderBlendRows();
+        renderSavedBlendSelect();
+      }
+      calculate();
+    });
+    $('addBlendRowBtn').addEventListener('click', () => {
+      if (blendComponents.length >= 10) {
+        flashBlendStatus('You can add up to 10 fragrances to one blend.');
+        return;
+      }
+      blendComponents.push({ name: `Fragrance ${blendComponents.length + 1}`, percent: 0 });
+      activeBlendName = '';
+      renderBlendRows();
+    });
+    $('blendRows').addEventListener('input', (event) => {
+      const row = event.target.closest('.blend-row');
+      if (!row) return;
+      const index = Number(row.dataset.index);
+      if (!blendComponents[index]) return;
+      if (event.target.classList.contains('blend-component-name')) {
+        blendComponents[index].name = event.target.value;
+      }
+      if (event.target.classList.contains('blend-component-percent')) {
+        blendComponents[index].percent = Number(event.target.value || 0);
+      }
+      activeBlendName = '';
+      updateBlendTotal();
+      if (validBlend()) calculate();
+      else $('blendResults').hidden = true;
+    });
+    $('blendRows').addEventListener('click', (event) => {
+      const button = event.target.closest('[data-remove-blend]');
+      if (!button) return;
+      if (blendComponents.length <= 2) {
+        flashBlendStatus('A blend needs at least two fragrances.');
+        return;
+      }
+      blendComponents.splice(Number(button.dataset.removeBlend), 1);
+      activeBlendName = '';
+      renderBlendRows();
+      if (validBlend()) calculate();
+      else $('blendResults').hidden = true;
+    });
+    $('saveBlendBtn').addEventListener('click', saveBlend);
+    $('blendName').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') saveBlend();
+    });
+    $('loadBlendBtn').addEventListener('click', () => {
+      const id = $('savedBlendSelect').value;
+      if (!id) { flashBlendStatus('Choose a saved blend first.'); return; }
+      loadBlend(id);
+    });
+    $('deleteBlendBtn').addEventListener('click', () => {
+      const id = $('savedBlendSelect').value;
+      if (!id) { flashBlendStatus('Choose a saved blend first.'); return; }
+      deleteBlend(id);
+    });
     $('recipeName').addEventListener('keydown', (event) => {
       if (event.key === 'Enter') saveRecipe();
     });
@@ -1481,6 +2095,8 @@
       });
     });
 
+    renderBlendRows();
+    renderSavedBlendSelect();
     calculate();
     renderRecipes();
   </script>
