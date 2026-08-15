@@ -2031,8 +2031,10 @@
 
       const recipes = getSavedRecipes();
       const existingIndex = recipes.findIndex((r) => String(r.name).toLowerCase() === name.toLowerCase());
+      const existingRecipe = existingIndex >= 0 ? recipes[existingIndex] : {};
       const recipe = {
-        id: existingIndex >= 0 ? recipes[existingIndex].id : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        ...existingRecipe,
+        id: existingIndex >= 0 ? existingRecipe.id : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
         name,
         containerSize: fields.containerSize.value,
         unit: fields.unit.value,
