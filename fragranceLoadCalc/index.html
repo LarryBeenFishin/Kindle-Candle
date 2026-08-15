@@ -7,16 +7,19 @@
   <meta name="description" content="A free Kindle Candle batch-planning tool for calculating wax and fragrance amounts by vessel capacity, quantity, fragrance percentage, and wax density." />
   <style>
     :root {
-      --ink: #211a14;
-      --brown: #4a3424;
-      --brown-2: #6a4b32;
-      --paper: #f4ede2;
-      --paper-2: #eadcc9;
-      --kraft: #cfb896;
-      --line: rgba(33, 26, 20, 0.30);
-      --muted: #74685c;
-      --white: #fffdf8;
-      --shadow: 0 18px 50px rgba(60, 42, 28, .13);
+      --ink: #24170f;
+      --brown: #5a3826;
+      --brown-2: #7b5136;
+      --paper: #f7f0e6;
+      --paper-2: #ead7bf;
+      --kraft: #c9a77b;
+      --line: rgba(36, 23, 15, 0.25);
+      --muted: #66564a;
+      --white: #fffaf2;
+      --accent: #a15f43;
+      --accent-dark: #7f452f;
+      --accent-soft: #f0dfcf;
+      --shadow: 0 18px 50px rgba(60, 42, 28, .12);
       --radius: 2px;
     }
 
@@ -39,8 +42,8 @@
     a { color: inherit; }
 
     .announcement {
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--accent-dark);
+      color: var(--white);
       text-align: center;
       padding: 9px 16px 8px;
       font-size: 11px;
@@ -156,7 +159,7 @@
     .tool-shell {
       max-width: 1080px;
       margin: 0 auto;
-      background: rgba(255, 253, 248, .68);
+      background: #fffdf9;
       border: 1px solid var(--ink);
       box-shadow: var(--shadow);
       position: relative;
@@ -185,8 +188,12 @@
       padding: 42px;
     }
 
+    .inputs {
+      background: #fffdf9;
+    }
+
     .results {
-      background: var(--paper-2);
+      background: #f3e5d6;
       border-left: 1px solid var(--ink);
       align-self: stretch;
     }
@@ -197,6 +204,16 @@
       letter-spacing: .16em;
       text-transform: uppercase;
       font-weight: 700;
+    }
+
+    .inputs .section-title,
+    .results .section-title {
+      color: var(--brown);
+    }
+
+    .results .section-title {
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--brown);
     }
 
     .field-grid {
@@ -229,7 +246,7 @@
       width: 100%;
       border: 1px solid var(--ink);
       border-radius: 0;
-      background: var(--white);
+      background: #fffdf9;
       color: var(--ink);
       padding: 14px 13px;
       min-height: 48px;
@@ -241,7 +258,8 @@
 
     input:focus,
     select:focus {
-      box-shadow: 0 0 0 3px rgba(74, 52, 36, .13);
+      box-shadow: 0 0 0 3px rgba(161, 95, 67, .20);
+      border-color: var(--accent);
       background: #fff;
     }
 
@@ -287,8 +305,8 @@
 
     .calculate {
       flex: 1;
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--accent-dark);
+      color: var(--white);
       padding: 15px 18px;
       font-size: 12px;
       font-weight: 700;
@@ -320,9 +338,11 @@
     }
 
     .result-label {
+      color: var(--brown);
       font-size: 12px;
       letter-spacing: .12em;
       text-transform: uppercase;
+      font-weight: 700;
     }
 
     .result-value {
@@ -343,13 +363,13 @@
       font-weight: 400;
     }
 
-    .total-row .result-value { font-size: 42px; }
+    .total-row .result-value { color: var(--accent-dark); font-size: 42px; }
 
     .per-candle {
       margin: 20px 0 0;
       padding: 15px 16px;
       border: 1px dashed rgba(33,26,20,.55);
-      background: rgba(255,255,255,.23);
+      background: rgba(255, 250, 242, .62);
       font-family: Georgia, "Times New Roman", serif;
       font-size: 14px;
       line-height: 1.6;
@@ -364,7 +384,7 @@
       font-size: 10px;
     }
 
-    .copy:hover { background: rgba(255,255,255,.35); }
+    .copy:hover { background: rgba(255, 250, 242, .72); }
 
     .formula-note {
       max-width: 950px;
@@ -452,7 +472,7 @@
     }
 
     .wax-table th {
-      background: var(--paper-2);
+      background: #f3e5d6;
       font-size: 10px;
       line-height: 1.3;
       letter-spacing: .14em;
@@ -503,7 +523,7 @@
 
     .use-gravity-btn:hover,
     .use-gravity-btn:focus-visible {
-      background: var(--ink);
+      background: var(--accent-dark);
       color: var(--white);
       outline: none;
     }
@@ -557,7 +577,7 @@
     }
 
     .mistake-card {
-      background: rgba(255, 253, 248, .68);
+      background: #fffdf9;
       padding: 25px 24px 27px;
       min-height: 220px;
     }
@@ -606,7 +626,7 @@
     .throw-card {
       border: 1px solid var(--ink);
       padding: 25px 24px;
-      background: var(--paper-2);
+      background: #f3e5d6;
       box-shadow: 7px 7px 0 rgba(207, 184, 150, .45);
       position: sticky;
       top: 24px;
@@ -691,7 +711,7 @@
     .blend-toggle-card {
       margin-top: 26px;
       border: 1px solid var(--ink);
-      background: rgba(234, 220, 201, .38);
+      background: var(--accent-soft);
       padding: 17px 18px;
     }
 
@@ -735,7 +755,7 @@
       width: 52px;
       height: 30px;
       border: 1px solid var(--ink);
-      background: var(--white);
+      background: #fffdf9;
       position: relative;
       transition: background .15s ease;
     }
@@ -751,19 +771,19 @@
       transition: transform .15s ease, background .15s ease;
     }
 
-    .blend-switch input:checked + .blend-switch-ui { background: var(--ink); }
+    .blend-switch input:checked + .blend-switch-ui { background: var(--accent); border-color: var(--accent-dark); }
     .blend-switch input:checked + .blend-switch-ui::after {
       transform: translateX(22px);
       background: var(--paper);
     }
     .blend-switch input:focus-visible + .blend-switch-ui {
-      box-shadow: 0 0 0 3px rgba(74, 52, 36, .16);
+      box-shadow: 0 0 0 3px rgba(161, 95, 67, .22);
     }
 
     .blend-panel {
       border: 1px solid var(--ink);
       border-top: 0;
-      background: rgba(255, 253, 248, .62);
+      background: #fffaf4;
       padding: 22px;
     }
 
@@ -793,11 +813,13 @@
     }
 
     .blend-section {
-      padding: 18px 0;
-      border-bottom: 1px solid var(--line);
+      margin: 12px 0;
+      padding: 16px;
+      border: 1px solid var(--line);
+      background: var(--white);
     }
 
-    .blend-section:last-of-type { border-bottom: 0; padding-bottom: 4px; }
+    .blend-section:last-of-type { padding-bottom: 16px; }
 
     .blend-section-heading {
       display: flex;
@@ -846,7 +868,7 @@
       white-space: nowrap;
     }
 
-    .blend-mini-btn.primary { background: var(--ink); color: var(--paper); }
+    .blend-mini-btn.primary { background: var(--accent-dark); color: var(--white); border-color: var(--accent-dark); }
 
     .blend-table-head,
     .blend-row {
@@ -905,7 +927,7 @@
     .blend-total {
       padding: 9px 11px;
       border: 1px solid var(--line);
-      background: var(--paper-2);
+      background: #f3e5d6;
       font-size: 10px;
       letter-spacing: .08em;
       text-transform: uppercase;
@@ -927,7 +949,7 @@
       margin-top: 18px;
       padding: 16px 17px 13px;
       border: 1px solid rgba(33,26,20,.48);
-      background: rgba(255,255,255,.28);
+      background: rgba(255, 250, 242, .78);
     }
 
     .blend-results-title {
@@ -970,8 +992,9 @@
     /* Saved recipe library */
     .save-recipe-box {
       margin-top: 18px;
-      padding-top: 18px;
-      border-top: 1px solid var(--line);
+      padding: 17px;
+      border: 1px solid rgba(90,56,38,.34);
+      background: rgba(255, 250, 242, .72);
     }
 
     .save-recipe-label {
@@ -993,14 +1016,14 @@
       min-height: 43px;
       padding: 11px 12px;
       font-size: 14px;
-      background: rgba(255, 253, 248, .72);
+      background: #fffdf9;
     }
 
     .save-recipe-btn {
       min-width: 116px;
       padding: 11px 13px;
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--accent-dark);
+      color: var(--white);
       font-size: 10px;
       font-weight: 700;
     }
@@ -1030,7 +1053,7 @@
       margin: 34px auto 0;
       padding: 28px 30px 30px;
       border: 1px solid var(--ink);
-      background: rgba(255, 253, 248, .50);
+      background: #fffaf4;
     }
 
     .saved-recipes-head {
@@ -1089,7 +1112,7 @@
       gap: 18px;
       padding: 16px 17px;
       border: 1px solid var(--line);
-      background: rgba(244, 237, 226, .72);
+      background: #f5e9dc;
     }
 
     .recipe-card-name {
@@ -1132,8 +1155,8 @@
     }
 
     .recipe-load {
-      background: var(--ink);
-      color: var(--paper);
+      background: var(--accent-dark);
+      color: var(--white);
     }
 
     .recipe-load:hover { box-shadow: 3px 3px 0 var(--kraft); }
@@ -1201,7 +1224,7 @@
       .wax-table tr {
         margin-bottom: 13px;
         border: 1px solid var(--ink);
-        background: rgba(255, 253, 248, .62);
+        background: #fffaf4;
         box-shadow: 4px 4px 0 rgba(207, 184, 150, .45);
       }
       .wax-table td,
@@ -1365,7 +1388,7 @@
                 <span>Name it once and reuse it later.</span>
               </div>
               <div class="blend-save-row">
-                <input id="blendName" type="text" maxlength="60" placeholder="e.g. Hades" autocomplete="off" />
+                <input id="blendName" type="text" maxlength="60" placeholder="Blend Name" autocomplete="off" />
                 <button class="blend-mini-btn primary" id="saveBlendBtn" type="button">Save Blend</button>
               </div>
               <div class="blend-status" id="blendStatus" role="status"></div>
@@ -1410,7 +1433,7 @@
           <div class="save-recipe-box">
             <label class="save-recipe-label" for="recipeName">Save Candle</label>
             <div class="save-recipe-row">
-              <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Golden Hour 8 oz" autocomplete="off" />
+              <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Serafina 12oz Jar" autocomplete="off" />
               <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Candle</button>
             </div>
             <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, unit, and your active fragrance blend. Your batch quantity stays separate.</div>
