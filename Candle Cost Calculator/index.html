@@ -765,6 +765,9 @@
     <p class="note">For wax and fragrance, enter the package weight, what you paid, and the amount used in one candle. For the remaining materials, enter the cost of one piece or the amount used in one finished candle.</p>
   </main>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/shared/supabase-config.js"></script>
+  <script src="/shared/kindle-cloud.js"></script>
   <script>
     const $ = id => document.getElementById(id);
     const costIds = ["jarCost","lidCost","wickCost","wickStickerCost","labelCost","packagingCost","otherCost"];
@@ -913,7 +916,9 @@
       return data;
     }
 
-    function saveCostDataToCandle() {
+    async function saveCostDataToCandle() {
+      const user = await window.KindleCloud.requireUser('Create a free account to save candle cost data and access it across devices.');
+      if (!user) return;
       if (!activeSavedCandle) {
         $("costSaveStatus").textContent = "Load a saved candle first.";
         return;
@@ -933,6 +938,11 @@
       };
       setSavedCandles(candles);
       activeSavedCandle = candles[index];
+      const cloudResult = await window.KindleCloud.saveItem('candle', activeSavedCandle);
+      if (cloudResult.error) {
+        $("costSaveStatus").textContent = "Could not save cost data. Please try again.";
+        return;
+      }
       $("costSaveStatus").textContent = `Cost data saved to “${activeSavedCandle.name}” ✓`;
       refreshSavedCandleSelect(activeSavedCandle.id);
     }
@@ -943,9 +953,12 @@
       select.innerHTML = '<option value="">Choose a saved candle…</option>' + candles.map(candle =>
         `<option value="${escapeHtml(candle.id)}"${String(candle.id) === String(selectedId) ? " selected" : ""}>${escapeHtml(candle.name)}</option>`
       ).join("");
+      const signedIn = Boolean(window.KindleCloud?.currentUser);
       $("savedCandleStatus").textContent = candles.length
-        ? `${candles.length} saved ${candles.length === 1 ? "candle" : "candles"} found on this browser.`
-        : "No saved candles found yet. Save one in the Wax + Fragrance Calculator first.";
+        ? `${candles.length} saved ${candles.length === 1 ? "candle" : "candles"} found in your account.`
+        : signedIn
+          ? "No saved candles found yet. Save one in the Wax + Fragrance Calculator first."
+          : "Sign in to load saved candles, or use the calculator manually without an account.";
     }
 
     function clearLoadedCandleSummary() {
@@ -1151,6 +1164,11 @@
     });
     window.addEventListener("storage", event => {
       if (event.key === RECIPE_STORAGE_KEY) refreshSavedCandleSelect();
+    });
+    window.addEventListener("kindle-cloud-data-ready", () => {
+      const selected = $("savedCandleSelect").value;
+      refreshSavedCandleSelect(selected);
+      if (!window.KindleCloud?.currentUser) clearLoadedCandleSummary();
     });
 
     refreshSavedCandleSelect();

@@ -1609,6 +1609,9 @@
     <span>Batch math by Kindle Candle</span>
   </footer>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="/shared/supabase-config.js"></script>
+  <script src="/shared/kindle-cloud.js"></script>
   <script>
     const $ = (id) => document.getElementById(id);
 
@@ -1710,7 +1713,9 @@
       }, 2200);
     }
 
-    function saveBlend() {
+    async function saveBlend() {
+      const user = await window.KindleCloud.requireUser('Create a free account to save fragrance blends and use them on any device.');
+      if (!user) return;
       const name = $('blendName').value.trim();
       if (!name) {
         flashBlendStatus('Give the blend a name first.');
@@ -1740,6 +1745,11 @@
       }
       activeBlendName = blend.name;
       setSavedBlends(blends);
+      const cloudResult = await window.KindleCloud.saveItem('blend', blend);
+      if (cloudResult.error) {
+        flashBlendStatus('Could not save blend. Please try again.');
+        return;
+      }
       renderSavedBlendSelect(blend.id);
       calculate();
     }
@@ -1757,12 +1767,19 @@
       flashBlendStatus(`Loaded “${blend.name}” ✓`);
     }
 
-    function deleteBlend(id) {
+    async function deleteBlend(id) {
+      const user = await window.KindleCloud.requireUser('Sign in to manage your saved fragrance blends.');
+      if (!user) return;
       const blends = getSavedBlends();
       const blend = blends.find((item) => item.id === id);
       if (!blend) return;
       if (!window.confirm(`Delete fragrance blend “${blend.name}”?`)) return;
       setSavedBlends(blends.filter((item) => item.id !== id));
+      const cloudResult = await window.KindleCloud.deleteItem('blend', id);
+      if (cloudResult.error) {
+        flashBlendStatus('Could not delete blend. Please try again.');
+        return;
+      }
       if (activeBlendName === blend.name) activeBlendName = '';
       renderSavedBlendSelect();
       $('blendName').value = '';
@@ -1969,10 +1986,13 @@
       const recipes = getSavedRecipes();
       const list = $('recipeList');
       const count = $('recipeCount');
-      count.textContent = `${recipes.length} ${recipes.length === 1 ? 'candle' : 'candles'} saved`;
+      const signedIn = Boolean(window.KindleCloud?.currentUser);
+      count.textContent = signedIn ? `${recipes.length} ${recipes.length === 1 ? 'candle' : 'candles'} saved` : 'Sign in to save';
 
       if (!recipes.length) {
-        list.innerHTML = '<div class="recipe-empty">No saved candles yet. Build a batch above, give the candle a name, and choose <strong>Save Candle</strong>.</div>';
+        list.innerHTML = signedIn
+          ? '<div class="recipe-empty">No saved candles yet. Build a batch above, give the candle a name, and choose <strong>Save Candle</strong>.</div>'
+          : '<div class="recipe-empty">You can use the calculator without an account. <strong>Sign in or create a free account</strong> when you want to save candle profiles and access them on another device.</div>';
         return;
       }
 
@@ -2007,7 +2027,9 @@
       }, 2200);
     }
 
-    function saveRecipe() {
+    async function saveRecipe() {
+      const user = await window.KindleCloud.requireUser('Create a free account to save candle profiles and reuse them across Kindle Candle Maker Tools.');
+      if (!user) return;
       const nameInput = $('recipeName');
       const name = nameInput.value.trim();
       const qty = Number(fields.quantity.value);
@@ -2056,6 +2078,11 @@
       }
 
       setSavedRecipes(recipes);
+      const cloudResult = await window.KindleCloud.saveItem('candle', recipe);
+      if (cloudResult.error) {
+        flashRecipeStatus('Could not save candle. Please try again.');
+        return;
+      }
       renderRecipes();
       nameInput.value = '';
     }
@@ -2085,12 +2112,19 @@
       flashRecipeStatus(`Loaded “${recipe.name}” ✓`);
     }
 
-    function deleteRecipe(id) {
+    async function deleteRecipe(id) {
+      const user = await window.KindleCloud.requireUser('Sign in to manage your saved candles.');
+      if (!user) return;
       const recipes = getSavedRecipes();
       const recipe = recipes.find((r) => r.id === id);
       if (!recipe) return;
       if (!window.confirm(`Delete “${recipe.name}”?`)) return;
       setSavedRecipes(recipes.filter((r) => r.id !== id));
+      const cloudResult = await window.KindleCloud.deleteItem('candle', id);
+      if (cloudResult.error) {
+        flashRecipeStatus('Could not delete candle. Please try again.');
+        return;
+      }
       renderRecipes();
     }
 
@@ -2193,6 +2227,11 @@
       field.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') calculate();
       });
+    });
+
+    window.addEventListener('kindle-cloud-data-ready', () => {
+      renderSavedBlendSelect();
+      renderRecipes();
     });
 
     renderBlendRows();
