@@ -26,13 +26,16 @@
     const style = document.createElement('style');
     style.id = 'kindle-mobile-header-overrides';
     style.textContent = `
-      /* Mobile-only header refinement. Desktop styles remain unchanged. */
+      /* Mobile-only header: menu left, centered logo, account right. */
+      .kindle-mobile-menu-btn,
+      .kindle-mobile-account-btn { display:none; }
+
       @media (max-width: 820px) {
         .announcement {
-          padding: 10px 14px !important;
-          font-size: 9px !important;
+          padding: 9px 12px !important;
+          font-size: 8.5px !important;
           line-height: 1.35 !important;
-          letter-spacing: .18em !important;
+          letter-spacing: .16em !important;
           text-align: center !important;
           white-space: normal !important;
         }
@@ -40,129 +43,217 @@
         .site-header {
           width: 100% !important;
           min-height: 0 !important;
-          padding: 0 !important;
           margin: 0 !important;
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: stretch !important;
+          padding: 0 !important;
           background: var(--paper, #f7f0e6) !important;
+          border-bottom: 1px solid rgba(90,56,38,.14) !important;
+          position: relative !important;
+          z-index: 5000 !important;
         }
 
         .header-inner {
+          box-sizing: border-box !important;
           width: 100% !important;
-          min-height: 0 !important;
+          min-height: 84px !important;
           margin: 0 !important;
-          padding: 12px 0 0 !important;
-          display: flex !important;
-          flex-direction: column !important;
-          align-items: stretch !important;
+          padding: 10px 16px !important;
+          display: grid !important;
+          grid-template-columns: 48px 1fr 48px !important;
+          align-items: center !important;
+          gap: 8px !important;
+          position: relative !important;
         }
 
-        .site-header > .brand,
         .header-inner .brand {
+          grid-column: 2 !important;
           width: auto !important;
           height: auto !important;
-          flex: 0 0 auto !important;
-          align-self: center !important;
-          justify-content: center !important;
-          margin: 0 auto 8px !important;
+          margin: 0 auto !important;
           padding: 0 !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+          position: relative !important;
+          z-index: 2 !important;
         }
 
-        .site-header .brand-logo,
         .header-inner .brand-logo {
           display: block !important;
-          width: 116px !important;
+          width: 124px !important;
           height: auto !important;
-          max-width: 116px !important;
-          max-height: 68px !important;
+          max-width: 124px !important;
+          max-height: 66px !important;
           object-fit: contain !important;
         }
 
-        .site-header > .nav,
+        .kindle-mobile-menu-btn,
+        .kindle-mobile-account-btn {
+          appearance: none !important;
+          display: inline-flex !important;
+          width: 44px !important;
+          height: 44px !important;
+          align-items: center !important;
+          justify-content: center !important;
+          border: 0 !important;
+          background: transparent !important;
+          color: var(--ink, #2a1b14) !important;
+          padding: 0 !important;
+          margin: 0 !important;
+          cursor: pointer !important;
+          z-index: 4 !important;
+        }
+
+        .kindle-mobile-menu-btn { grid-column: 1 !important; grid-row: 1 !important; }
+        .kindle-mobile-account-btn { grid-column: 3 !important; grid-row: 1 !important; justify-self: end !important; }
+
+        .kindle-mobile-menu-btn svg,
+        .kindle-mobile-account-btn svg {
+          width: 24px !important;
+          height: 24px !important;
+          stroke: currentColor !important;
+          fill: none !important;
+          stroke-width: 1.7 !important;
+          stroke-linecap: round !important;
+          stroke-linejoin: round !important;
+        }
+
+        .kindle-mobile-account-btn svg {
+          width: 29px !important;
+          height: 29px !important;
+          stroke-width: 1.8 !important;
+        }
+
         .header-inner .nav {
           box-sizing: border-box !important;
+          position: absolute !important;
+          top: 100% !important;
+          left: 0 !important;
+          right: 0 !important;
           width: 100% !important;
           max-width: none !important;
           margin: 0 !important;
-          padding: 0 18px 11px !important;
-          display: flex !important;
-          flex: 0 0 auto !important;
-          flex-direction: row !important;
-          flex-wrap: nowrap !important;
-          align-items: center !important;
-          justify-content: flex-start !important;
-          gap: 22px !important;
-          overflow-x: auto !important;
-          overflow-y: hidden !important;
-          white-space: nowrap !important;
-          -webkit-overflow-scrolling: touch !important;
-          scrollbar-width: none !important;
-          border: 0 !important;
-        }
-
-        .site-header .nav::-webkit-scrollbar,
-        .header-inner .nav::-webkit-scrollbar {
+          padding: 8px 18px 18px !important;
           display: none !important;
+          flex-direction: column !important;
+          align-items: stretch !important;
+          justify-content: flex-start !important;
+          gap: 0 !important;
+          overflow: visible !important;
+          white-space: normal !important;
+          background: var(--paper, #f7f0e6) !important;
+          border-top: 1px solid rgba(90,56,38,.14) !important;
+          border-bottom: 1px solid rgba(90,56,38,.18) !important;
+          box-shadow: 0 12px 24px rgba(42,27,20,.10) !important;
+          z-index: 3 !important;
         }
 
-        .site-header .nav a,
-        .header-inner .nav a,
-        .site-header .kindle-account-btn,
-        .header-inner .kindle-account-btn {
-          width: auto !important;
-          max-width: none !important;
-          min-width: 0 !important;
-          flex: 0 0 auto !important;
+        .header-inner.kindle-mobile-menu-open .nav {
+          display: flex !important;
+        }
+
+        .header-inner .nav a {
+          box-sizing: border-box !important;
+          width: 100% !important;
           margin: 0 !important;
-          padding: 8px 0 7px !important;
-          font-size: 10.5px !important;
+          padding: 15px 2px !important;
+          border: 0 !important;
+          border-bottom: 1px solid rgba(90,56,38,.14) !important;
+          font-family: Arial, Helvetica, sans-serif !important;
+          font-size: 13px !important;
+          font-weight: 500 !important;
           line-height: 1.2 !important;
           letter-spacing: .08em !important;
-          white-space: nowrap !important;
+          text-transform: uppercase !important;
           text-align: left !important;
+          white-space: normal !important;
+          text-decoration: none !important;
         }
 
-        .header-inner .kindle-account-btn,
-        .site-header .kindle-account-btn {
-          margin-left: 0 !important;
-        }
+        .header-inner .nav a:last-of-type { border-bottom: 0 !important; }
+        .header-inner .nav a[aria-current="page"] { color: var(--accent-dark, #8d4a2f) !important; font-weight: 700 !important; }
+
+        /* The desktop account text button stays in the nav DOM, but mobile uses the icon at right. */
+        .header-inner .nav .kindle-account-btn { display: none !important; }
       }
 
       @media (max-width: 480px) {
-        .announcement {
-          padding: 9px 12px !important;
-          font-size: 8.5px !important;
-          letter-spacing: .15em !important;
-        }
-
-        .header-inner {
-          padding-top: 10px !important;
-        }
-
-        .site-header .brand-logo,
-        .header-inner .brand-logo {
-          width: 108px !important;
-          max-width: 108px !important;
-          max-height: 62px !important;
-        }
-
-        .site-header > .nav,
-        .header-inner .nav {
-          gap: 19px !important;
-          padding: 0 15px 10px !important;
-        }
-
-        .site-header .nav a,
-        .header-inner .nav a,
-        .site-header .kindle-account-btn,
-        .header-inner .kindle-account-btn {
-          font-size: 10px !important;
-          letter-spacing: .065em !important;
-        }
+        .announcement { font-size: 8px !important; letter-spacing: .14em !important; }
+        .header-inner { min-height: 78px !important; padding: 8px 12px !important; grid-template-columns: 44px 1fr 44px !important; }
+        .header-inner .brand-logo { width: 114px !important; max-width: 114px !important; max-height: 60px !important; }
+        .kindle-mobile-menu-btn,.kindle-mobile-account-btn { width: 40px !important; height: 40px !important; }
+        .kindle-mobile-menu-btn svg { width: 23px !important; height: 23px !important; }
+        .kindle-mobile-account-btn svg { width: 28px !important; height: 28px !important; }
+        .header-inner .nav { padding: 6px 16px 16px !important; }
+        .header-inner .nav a { padding: 14px 1px !important; font-size: 12.5px !important; }
       }
     `;
     document.head.appendChild(style);
+  }
+
+  function installMobileHeaderControls() {
+    const headerInner = document.querySelector('.site-header .header-inner');
+    const nav = headerInner?.querySelector('.nav');
+    const account = document.getElementById('kindleAccountBtn');
+    if (!headerInner || !nav) return;
+
+    if (!document.getElementById('kindleMobileMenuBtn')) {
+      const menu = document.createElement('button');
+      menu.id = 'kindleMobileMenuBtn';
+      menu.className = 'kindle-mobile-menu-btn';
+      menu.type = 'button';
+      menu.setAttribute('aria-label', 'Open navigation menu');
+      menu.setAttribute('aria-expanded', 'false');
+      menu.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+      headerInner.insertBefore(menu, headerInner.firstChild);
+
+      menu.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const open = headerInner.classList.toggle('kindle-mobile-menu-open');
+        menu.setAttribute('aria-expanded', String(open));
+        menu.setAttribute('aria-label', open ? 'Close navigation menu' : 'Open navigation menu');
+        menu.innerHTML = open
+          ? '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>'
+          : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+      });
+    }
+
+    if (!document.getElementById('kindleMobileAccountBtn')) {
+      const mobileAccount = document.createElement('button');
+      mobileAccount.id = 'kindleMobileAccountBtn';
+      mobileAccount.className = 'kindle-mobile-account-btn';
+      mobileAccount.type = 'button';
+      mobileAccount.setAttribute('aria-label', 'Account');
+      mobileAccount.innerHTML = '<svg viewBox="0 0 32 32" aria-hidden="true"><circle cx="16" cy="16" r="13"/><circle cx="16" cy="12" r="4.25"/><path d="M8.7 25c1.1-4.3 3.7-6.4 7.3-6.4s6.2 2.1 7.3 6.4"/></svg>';
+      headerInner.appendChild(mobileAccount);
+      mobileAccount.addEventListener('click', () => {
+        headerInner.classList.remove('kindle-mobile-menu-open');
+        const menu = document.getElementById('kindleMobileMenuBtn');
+        if (menu) {
+          menu.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-label', 'Open navigation menu');
+          menu.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+        }
+        if (account) account.click();
+        else openAuth(currentUser ? 'account' : 'signin');
+      });
+    }
+
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => headerInner.classList.remove('kindle-mobile-menu-open'));
+    });
+
+    document.addEventListener('click', (event) => {
+      if (!headerInner.classList.contains('kindle-mobile-menu-open')) return;
+      if (!headerInner.contains(event.target)) {
+        headerInner.classList.remove('kindle-mobile-menu-open');
+        const menu = document.getElementById('kindleMobileMenuBtn');
+        if (menu) {
+          menu.setAttribute('aria-expanded', 'false');
+          menu.setAttribute('aria-label', 'Open navigation menu');
+          menu.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>';
+        }
+      }
+    });
   }
 
   function safeParse(key) {
@@ -246,6 +337,8 @@
       button.addEventListener('click', () => openAuth(currentUser ? 'account' : 'signin'));
       nav.appendChild(button);
     }
+
+    installMobileHeaderControls();
 
     if (!document.getElementById('kindleAuthOverlay')) {
       const wrap = document.createElement('div');
