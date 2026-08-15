@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Candle Cost & Inventory | Kindle Candle Maker Tools</title>
-  <meta name="description" content="Import candle supply purchases, keep a simple materials inventory, build candle recipes, and calculate true candle costs with Kindle Candle Maker Tools." />
+  <title>Candle Cost, Inventory & Presets | Kindle Candle Maker Tools</title>
+  <meta name="description" content="Import candle supplies, save candle presets, and calculate current candle costs with Kindle Candle Maker Tools." />
   <style>
     :root{
       --ink:#211a14;--brown:#4a3424;--brown2:#6a4b32;--paper:#f4ede2;--paper2:#eadcc9;
@@ -101,10 +101,24 @@
 
     @media(max-width:900px){.nav{display:none}.workflow{grid-template-columns:1fr}.workflow div{border-right:0;border-bottom:1px solid var(--line)}.workflow div:last-child{border-bottom:0}.fields,.fields.three,.fields.two{grid-template-columns:1fr 1fr}.review-meta{grid-template-columns:repeat(2,1fr)}.check-grid{grid-template-columns:1fr}.stat-grid{grid-template-columns:1fr}.calc-layout{grid-template-columns:1fr}.calc-results{border-left:0;border-top:1px solid var(--ink);position:static}.recipe-head{display:none}.recipe-row{grid-template-columns:1fr 1fr}.recipe-row>*:first-child{grid-column:1/-1}.recipe-row .icon-btn{justify-self:end}.panel{padding:28px 22px}.panel-head{flex-direction:column}.guide-grid{grid-template-columns:1fr}}
     @media(max-width:600px){.site-header{padding:18px}.brand{font-size:12px}main{padding:44px 16px 72px}.hero p{font-size:15px}.app-tabs{display:grid;grid-template-columns:1fr 1fr}.app-tab:nth-child(2){border-right:0}.app-tab:nth-child(3){grid-column:1/-1;border-top:1px solid var(--ink);border-right:0}.fields,.fields.three,.fields.two{grid-template-columns:1fr}.review-meta{grid-template-columns:1fr 1fr}.inventory-tools{align-items:stretch;flex-direction:column}.search{max-width:none}.recipe-row{grid-template-columns:1fr}.recipe-row>*:first-child{grid-column:auto}.result-actions{grid-template-columns:1fr}.saved-row{flex-direction:column;align-items:stretch}.panel{padding:24px 16px}}
-  </style>
+  
+    .preset-builder{border:1px solid var(--ink);background:rgba(255,253,248,.5);padding:24px;margin-bottom:24px}
+    .preset-builder-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;margin-bottom:18px}
+    .preset-builder-head .field{flex:1;max-width:520px}.preset-builder-head .actions{flex:0 0 auto}
+    .preset-head{display:grid;grid-template-columns:1.65fr .8fr .55fr .8fr 42px;gap:8px;color:var(--muted);font-size:10px;letter-spacing:.07em;text-transform:uppercase;padding:0 0 7px}
+    .preset-row{display:grid;grid-template-columns:1.65fr .8fr .55fr .8fr 42px;gap:8px;align-items:center;padding:9px 0;border-top:1px solid var(--line2)}
+    .preset-cost{text-align:right;font-weight:700;font-size:13px}.preset-actions{display:flex;gap:7px;flex-wrap:wrap}
+    .calc-preset-card{border:1px solid var(--line);background:rgba(234,220,201,.2);padding:15px;margin-top:14px}.calc-preset-card strong{font-size:14px}.calc-preset-card p{margin:5px 0 0;color:var(--muted);font:13px/1.5 Georgia,serif}
+    .material-summary{border:1px solid var(--line2);overflow:auto}.material-summary table{min-width:720px}.material-summary .bad{color:var(--bad);font-weight:700}.material-summary .good{color:var(--good)}
+    .preset-name-cell strong{display:block}.preset-name-cell span{display:block;color:var(--muted);font:12px/1.4 Georgia,serif;margin-top:4px}
+    .section-intro{margin:0 0 18px;color:var(--muted);font:14px/1.55 Georgia,serif}
+    @media(max-width:900px){.preset-builder-head{align-items:stretch;flex-direction:column}.preset-builder-head .field{max-width:none}.preset-head{display:none}.preset-row{grid-template-columns:1fr 1fr}.preset-row>*:first-child{grid-column:1/-1}.preset-row .icon-btn{justify-self:end}}
+    @media(max-width:600px){.preset-row{grid-template-columns:1fr}.preset-row>*:first-child{grid-column:auto}}
+</style>
 </head>
+
 <body>
-  <div class="announcement">Free maker tools by Kindle Candle</div>
+  <div class="announcement">Free candle-making tools by Kindle Candle</div>
   <header class="site-header">
     <a class="brand" href="/"><span class="brand-mark" aria-hidden="true"></span><span>Kindle Candle<br>Maker Tools</span></a>
     <nav class="nav">
@@ -117,27 +131,27 @@
 
   <main>
     <section class="hero">
-      <span class="eyebrow">Materials → Recipe → Cost</span>
+      <span class="eyebrow">Materials → Presets → Cost</span>
       <h1>Know what every candle really costs.</h1>
-      <p>Keep your candle materials in one simple inventory, pull those materials into a recipe, and let the calculator do the costing. CandleScience orders can be imported from a PDF instead of typed in one item at a time.</p>
+      <p>Keep supply costs in one inventory, save the recipe for each candle once, then run cost calculations without re-entering material amounts every time.</p>
     </section>
 
     <section class="workflow" aria-label="How it works">
-      <div>01<strong>Import or add materials</strong></div>
-      <div>02<strong>Build your candle recipe</strong></div>
-      <div>03<strong>See cost, margin & profit</strong></div>
+      <div>01<strong>Add or import materials</strong></div>
+      <div>02<strong>Save candle presets</strong></div>
+      <div>03<strong>Calculate any batch</strong></div>
     </section>
 
     <section class="app">
       <div class="app-tabs" role="tablist">
-        <button class="app-tab active" data-tab="inventory" type="button">My Inventory</button>
-        <button class="app-tab" data-tab="calculator" type="button">Candle Calculator</button>
-        <button class="app-tab" data-tab="saved" type="button">Saved Candles</button>
+        <button class="app-tab active" data-tab="inventory" type="button">My Materials</button>
+        <button class="app-tab" data-tab="presets" type="button">Candle Presets</button>
+        <button class="app-tab" data-tab="calculator" type="button">Cost Calculator</button>
       </div>
 
       <section class="panel active" id="panel-inventory">
         <div class="panel-head">
-          <div><h2>My Materials</h2><p>Add materials manually or import a CandleScience order. Your materials are saved in this browser and become selectable inside the candle calculator.</p></div>
+          <div><h2>My Materials</h2><p>Add supplies manually or import a CandleScience invoice. Material quantities and current landed costs stay separate from your candle recipes.</p></div>
           <div class="actions"><button id="openImport" type="button">Import CandleScience Invoice</button><button id="openManual" class="secondary" type="button">+ Add Material</button></div>
         </div>
 
@@ -199,30 +213,55 @@
         <div id="inventoryArea"></div>
       </section>
 
-      <section class="panel" id="panel-calculator">
+      <section class="panel" id="panel-presets">
         <div class="panel-head">
-          <div><h2>Candle Cost Calculator</h2><p>Choose materials already saved in inventory, enter how much goes into one candle, then add labor and pricing. No need to re-enter purchase prices.</p></div>
-          <button id="goInventory" class="secondary" type="button">Manage Inventory</button>
+          <div><h2>Candle Presets</h2><p>Save what goes into one candle. Presets store the material and amount used — not a frozen price — so they always use the latest cost from My Materials.</p></div>
+          <button id="presetGoInventory" class="secondary" type="button">Manage Materials</button>
         </div>
 
-        <div id="noInventoryNotice" class="notice hidden"><strong>Your inventory is empty.</strong> Add a few materials first, then come back here to build a candle.</div>
+        <div id="presetNoInventory" class="notice hidden"><strong>Add materials first.</strong> Candle presets are built from items saved in My Materials.</div>
+
+        <div class="preset-builder">
+          <div class="preset-builder-head">
+            <div class="field"><label for="presetName">Preset name</label><input id="presetName" placeholder="True Ocean 5 oz"></div>
+            <div class="actions"><button id="savePreset" type="button">Save Preset</button><button id="clearPresetBuilder" class="secondary" type="button">Clear</button></div>
+          </div>
+          <p class="section-intro">Enter the amount used in <strong>one candle</strong>. Example: 4.185 oz of wax, 0.54 oz of fragrance, and 1 wick.</p>
+          <div class="preset-head"><div>Inventory material</div><div>Amount / candle</div><div>Unit</div><div>Current cost / candle</div><div></div></div>
+          <div id="presetRows"></div>
+          <div class="actions" style="margin-top:12px"><button id="addPresetMaterial" class="secondary small" type="button">+ Add Material</button></div>
+        </div>
+
+        <div class="panel-head" style="margin-top:30px;margin-bottom:15px">
+          <div><h2 style="font-size:24px">Saved Presets</h2><p>Load one into the calculator or edit its recipe here.</p></div>
+        </div>
+        <div id="presetsArea"></div>
+      </section>
+
+      <section class="panel" id="panel-calculator">
+        <div class="panel-head">
+          <div><h2>Candle Cost Calculator</h2><p>Choose a candle preset, enter the batch size and selling price, and the calculator pulls the latest cost of every material automatically.</p></div>
+          <button id="goPresets" class="secondary" type="button">Manage Presets</button>
+        </div>
+
+        <div id="noPresetNotice" class="notice hidden"><strong>No candle presets saved yet.</strong> Create a preset first, then return here to calculate a batch.</div>
 
         <div class="calc-layout">
           <div class="calc-form">
             <div class="step">
-              <div class="step-kicker">Step 01</div><h3>Candle details</h3>
+              <div class="step-kicker">Step 01</div><h3>Choose candle + batch</h3>
               <div class="fields three">
-                <div class="field"><label for="candleName">Candle name</label><input id="candleName" placeholder="8 oz Amber Jar Candle"></div>
+                <div class="field"><label for="calcPreset">Candle preset</label><select id="calcPreset"></select></div>
                 <div class="field"><label for="batchQty">Batch quantity</label><input id="batchQty" type="number" min="1" step="1" value="24"></div>
                 <div class="field"><label for="retailPrice">Retail price per candle ($)</label><input id="retailPrice" type="number" min="0" step="0.01" value="24.00" placeholder="24.00"></div>
               </div>
+              <div id="calcPresetInfo" class="calc-preset-card hidden"></div>
             </div>
 
             <div class="step">
-              <div class="step-kicker">Step 02</div><h3>Recipe materials</h3>
-              <div class="recipe-head"><div>Inventory material</div><div>Amount / one candle</div><div>Unit</div><div>Batch total</div><div>Cost / candle</div><div></div></div><div class="notice" style="margin:0 0 10px"><strong>Enter the amount used in a single candle.</strong> Example: if one candle uses 4.185 oz of wax, enter <strong>4.185</strong>. The batch total is calculated automatically.</div>
-              <div id="recipeRows"></div>
-              <div class="actions" style="margin-top:12px"><button id="addRecipeMaterial" class="secondary small" type="button">+ Add material</button></div>
+              <div class="step-kicker">Step 02</div><h3>Preset materials</h3>
+              <p class="section-intro">These amounts come from the selected preset. Batch totals and costs update automatically when the batch quantity or inventory prices change.</p>
+              <div id="calcMaterialSummary"></div>
             </div>
 
             <div class="step">
@@ -242,14 +281,14 @@
             <div class="step">
               <div class="step-kicker">Step 04</div><h3>Pricing targets</h3>
               <div class="fields three">
-                <div class="field"><label for="wholesalePrice">Wholesale price</label><input id="wholesalePrice" type="number" min="0" step="0.01" value="12.00"></div>
+                <div class="field"><label for="wholesalePrice">Wholesale price per candle</label><input id="wholesalePrice" type="number" min="0" step="0.01" value="12.00"></div>
                 <div class="field"><label for="targetRetail">Target retail margin</label><input id="targetRetail" type="number" min="1" max="95" step="1" value="65"></div>
                 <div class="field"><label for="targetWholesale">Target wholesale margin</label><input id="targetWholesale" type="number" min="1" max="95" step="1" value="45"></div>
               </div>
             </div>
 
-            <div class="actions"><button id="saveRecipe" type="button">Save candle recipe</button><button id="recordBatch" class="secondary" type="button">Record batch & deduct inventory</button></div>
-            <div class="notice"><strong>Inventory deduction is optional.</strong> Use it only when you actually make the batch. Saving a recipe does not change inventory quantities.</div>
+            <div class="actions"><button id="recordBatch" type="button">Record Batch & Deduct Inventory</button></div>
+            <div class="notice"><strong>Nothing is deducted automatically.</strong> Inventory changes only when you choose “Record Batch & Deduct Inventory.”</div>
           </div>
 
           <aside class="calc-results" aria-live="polite">
@@ -268,212 +307,193 @@
               <div class="price-card"><div>Your wholesale<small id="wholesaleDetail">0% margin</small></div><strong id="yourWholesale">$0.00</strong></div>
               <div class="price-card"><div>Suggested wholesale<small id="wholesaleTargetLabel">45% target margin</small></div><strong id="suggestWholesale">$0.00</strong></div>
             </div>
-            <div class="result-actions"><button id="copySummary" type="button">Copy summary</button><button id="resetRecipe" class="secondary" type="button">Reset recipe</button></div>
+            <div class="result-actions"><button id="copySummary" type="button">Copy Summary</button><button id="resetCalculator" class="secondary" type="button">Reset Calculator</button></div>
             <p class="fine">Costs are planning estimates based on the inventory values and settings you enter. Browser storage is local to this device and browser.</p>
           </aside>
         </div>
-      </section>
-
-      <section class="panel" id="panel-saved">
-        <div class="panel-head"><div><h2>Saved Candles</h2><p>Reuse a recipe whenever material prices change. Because recipes point to inventory items, updated material costs automatically flow into the calculation when you load the candle again.</p></div></div>
-        <div id="savedArea"></div>
       </section>
     </section>
 
     <section class="guide">
       <span class="eyebrow">Why this setup works</span>
       <div class="guide-grid">
-        <article class="guide-card"><h3>Buy once, use everywhere</h3><p>Store a wax, jar, wick, or fragrance cost once. Every candle recipe can reuse that material without typing the purchase price again.</p></article>
-        <article class="guide-card"><h3>Invoices feed inventory</h3><p>An invoice can contain supplies for several different products. Importing into inventory first keeps those purchases separate from any single candle recipe.</p></article>
-        <article class="guide-card"><h3>Reorders stay simple</h3><p>When an imported material matches something you already have, add the new quantity and update its current unit cost instead of creating duplicate costing entries.</p></article>
+        <article class="guide-card"><h3>Materials hold the prices</h3><p>Update a wax, jar, wick, or fragrance cost once. Every preset that uses it immediately reflects the new cost.</p></article>
+        <article class="guide-card"><h3>Presets hold the recipe</h3><p>A preset remembers only what goes into one candle, keeping recipes separate from changing purchase prices and batch sizes.</p></article>
+        <article class="guide-card"><h3>The calculator stays simple</h3><p>Select a preset, enter how many candles you are making, and get the current cost, batch requirements, margin, and projected profit.</p></article>
       </div>
     </section>
   </main>
   <div class="toast" id="toast">Saved</div>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
-  <script>
-  (function(){
-    const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
-    const money=n=>'$'+(Number(n)||0).toFixed(2);
-    const num=v=>{const n=parseFloat(v);return Number.isFinite(n)?Math.max(0,n):0};
-    const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
-    const massG={oz:28.349523125,lb:453.59237,g:1,kg:1000};
-    const STORE_INV='kindleTools.inventory.v2', STORE_REC='kindleTools.recipes.v2', STORE_META='kindleTools.meta.v2';
-    let inventory=load(STORE_INV,[]), recipes=load(STORE_REC,[]), meta=load(STORE_META,{lastInvoice:null});
-    let importData=null, recipeRowId=0;
 
-    function load(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
-    function saveAll(){localStorage.setItem(STORE_INV,JSON.stringify(inventory));localStorage.setItem(STORE_REC,JSON.stringify(recipes));localStorage.setItem(STORE_META,JSON.stringify(meta))}
-    function uid(prefix='x'){return prefix+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
-    function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-    function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
-    function compatible(a,b){return a===b || (a!=='each'&&b!=='each')}
-    function convertQty(q,from,to){q=num(q);if(from===to)return q;if(from==='each'||to==='each')return NaN;return q*massG[from]/massG[to]}
-    function unitCostConvert(costPerFrom,from,to){if(from===to)return costPerFrom;if(from==='each'||to==='each')return NaN;return costPerFrom/massG[from]*massG[to]}
-    function unitOptions(selected,eachOnly=false){const arr=eachOnly?['each']:['oz','lb','g','kg'];return arr.map(u=>`<option value="${u}" ${u===selected?'selected':''}>${u}</option>`).join('')}
-    function categoryGuess(name){const n=name.toLowerCase();if(n.includes('wax'))return'Wax';if(n.includes('wick'))return'Wick';if(n.includes('lid'))return'Lid';if(/jar|tumbler|vessel|container|tin\b/.test(n))return'Vessel';if(/label|sticker/.test(n))return'Label';if(/box|mailer|packing|packaging/.test(n))return'Packaging';if(/bottle|fragrance|scent|essential oil/.test(n))return'Fragrance';return'Other'}
-    function normalizeName(name){return String(name).toLowerCase().replace(/\b\d+(?:\.\d+)?\s*(?:lb|oz|kg|g)\b/gi,'').replace(/\b(case|bottle|pack|pk|count|ct|pcs?|each)\b/gi,'').replace(/[^a-z0-9]+/g,' ').trim()}
-    function packageInfo(name,invoiceQty){
-      const n=String(name), q=num(invoiceQty)||1;
-      let m=n.match(/(\d+(?:\.\d+)?)\s*(lb|oz|kg|g)\b/i);
-      if(m)return{qty:num(m[1])*q,unit:m[2].toLowerCase()};
-      m=n.match(/(?:case|pack|box)\s+of\s+(\d+)/i)||n.match(/(\d+)\s*(?:ct|count|pcs?|pk|pack)\b/i);
-      if(m)return{qty:num(m[1])*q,unit:'each'};
-      return{qty:q,unit:'each'};
-    }
-    function findMatch(name,unit){const norm=normalizeName(name);return inventory.find(x=>normalizeName(x.name)===norm&&compatible(x.unit,unit))||null}
+<script>
+(function(){
+  const $=s=>document.querySelector(s), $$=s=>Array.from(document.querySelectorAll(s));
+  const money=n=>'$'+(Number(n)||0).toFixed(2);
+  const num=v=>{const n=parseFloat(v);return Number.isFinite(n)?Math.max(0,n):0};
+  const clamp=(n,min,max)=>Math.min(max,Math.max(min,n));
+  const massG={oz:28.349523125,lb:453.59237,g:1,kg:1000};
+  const STORE_INV='kindleTools.inventory.v2', STORE_PRE='kindleTools.recipes.v2', STORE_META='kindleTools.meta.v2';
+  let inventory=load(STORE_INV,[]), presets=normalizePresets(load(STORE_PRE,[])), meta=load(STORE_META,{lastInvoice:null});
+  let importData=null, editingPresetId=null;
 
-    function setTab(name){$$('.app-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));$$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+name));if(name==='inventory')renderInventory();if(name==='calculator'){renderRecipeInventoryState();calculate()}if(name==='saved')renderSaved();window.scrollTo({top:document.querySelector('.app').offsetTop-15,behavior:'smooth'})}
-    $$('.app-tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
-    $('#goInventory').addEventListener('click',()=>setTab('inventory'));
+  function load(key,fallback){try{const v=localStorage.getItem(key);return v?JSON.parse(v):fallback}catch(e){return fallback}}
+  function normalizePresets(arr){return (Array.isArray(arr)?arr:[]).map(r=>({id:r.id||uid('preset'),name:r.name||'Untitled Candle',materials:Array.isArray(r.materials)?r.materials:[],updated:r.updated||new Date().toLocaleDateString()}))}
+  function saveAll(){localStorage.setItem(STORE_INV,JSON.stringify(inventory));localStorage.setItem(STORE_PRE,JSON.stringify(presets));localStorage.setItem(STORE_META,JSON.stringify(meta))}
+  function uid(prefix='x'){return prefix+'_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8)}
+  function esc(v){return String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+  function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800)}
+  function compatible(a,b){return a===b || (a!=='each'&&b!=='each')}
+  function convertQty(q,from,to){q=num(q);if(from===to)return q;if(from==='each'||to==='each')return NaN;return q*massG[from]/massG[to]}
+  function unitCostConvert(costPerFrom,from,to){if(from===to)return costPerFrom;if(from==='each'||to==='each')return NaN;return costPerFrom/massG[from]*massG[to]}
+  function unitOptions(selected,eachOnly=false){const arr=eachOnly?['each']:['oz','lb','g','kg'];return arr.map(u=>`<option value="${u}" ${u===selected?'selected':''}>${u}</option>`).join('')}
+  function categoryGuess(name){const n=name.toLowerCase();if(n.includes('wax'))return'Wax';if(n.includes('wick'))return'Wick';if(n.includes('lid'))return'Lid';if(/jar|tumbler|vessel|container|tin\b/.test(n))return'Vessel';if(/label|sticker/.test(n))return'Label';if(/box|mailer|packing|packaging/.test(n))return'Packaging';if(/bottle|fragrance|scent|essential oil/.test(n))return'Fragrance';return'Other'}
+  function normalizeName(name){return String(name).toLowerCase().replace(/\b\d+(?:\.\d+)?\s*(?:lb|oz|kg|g)\b/gi,'').replace(/\b(case|bottle|pack|pk|count|ct|pcs?|each)\b/gi,'').replace(/[^a-z0-9]+/g,' ').trim()}
+  function packageInfo(name,invoiceQty){const n=String(name),q=num(invoiceQty)||1;let m=n.match(/(\d+(?:\.\d+)?)\s*(lb|oz|kg|g)\b/i);if(m)return{qty:num(m[1])*q,unit:m[2].toLowerCase()};m=n.match(/(?:case|pack|box)\s+of\s+(\d+)/i)||n.match(/(\d+)\s*(?:ct|count|pcs?|pk|pack)\b/i);if(m)return{qty:num(m[1])*q,unit:'each'};return{qty:q,unit:'each'}}
+  function findMatch(name,unit){const norm=normalizeName(name);return inventory.find(x=>normalizeName(x.name)===norm&&compatible(x.unit,unit))||null}
+  function formatQty(v){const n=num(v);return n>=100?Math.round(n).toLocaleString():n.toFixed(n<10?3:1).replace(/\.0+$/,'').replace(/(\.\d*?)0+$/,'$1')}
 
-    function inventoryValue(){return inventory.reduce((s,x)=>s+num(x.qty)*num(x.unitCost),0)}
-    function renderStats(){$('#statCount').textContent=inventory.length;$('#statValue').textContent=money(inventoryValue());$('#statLast').textContent=meta.lastInvoice||'—'}
-    function renderInventory(){
-      renderStats();const area=$('#inventoryArea'), term=$('#inventorySearch').value.trim().toLowerCase();
-      const rows=inventory.filter(x=>!term||[x.name,x.category,x.supplier].join(' ').toLowerCase().includes(term));
-      if(!rows.length){area.innerHTML=`<div class="empty">${inventory.length?'No materials match your search.':'No materials yet. Add one manually or import a CandleScience invoice to get started.'}</div>`;return}
-      area.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Category</th><th>On hand</th><th>Current cost / unit</th><th>Inventory value</th><th>Supplier</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-id="${x.id}"><td class="td-name">${esc(x.name)}<span class="subtle">Updated ${esc(x.updated||'—')}</span></td><td><span class="category-pill">${esc(x.category)}</span></td><td class="${num(x.qty)<=0?'qty-low':'qty-ok'}">${formatQty(x.qty)} ${x.unit}</td><td>${money(x.unitCost)} / ${x.unit}</td><td>${money(num(x.qty)*num(x.unitCost))}</td><td>${esc(x.supplier||'—')}</td><td><div class="mini-actions"><button class="icon-btn edit-inv" type="button" title="Edit">✎</button><button class="icon-btn delete-inv" type="button" title="Delete">×</button></div></td></tr>`).join('')}</tbody></table></div>`;
-      $$('.edit-inv').forEach(b=>b.onclick=()=>editInventory(b.closest('tr').dataset.id));$$('.delete-inv').forEach(b=>b.onclick=()=>deleteInventory(b.closest('tr').dataset.id));
-    }
-    function formatQty(v){const n=num(v);return n>=100?Math.round(n).toLocaleString():n.toFixed(n<10?2:1).replace(/\.0$/,'').replace(/(\.\d)0$/,'$1')}
-    $('#inventorySearch').addEventListener('input',renderInventory);
-    function editInventory(id){const x=inventory.find(i=>i.id===id);if(!x)return;const name=prompt('Material name',x.name);if(name===null)return;const qty=prompt(`Quantity on hand (${x.unit})`,x.qty);if(qty===null)return;const cost=prompt(`Current cost per ${x.unit}`,x.unitCost);if(cost===null)return;x.name=name.trim()||x.name;x.qty=num(qty);x.unitCost=num(cost);x.updated=new Date().toLocaleDateString();saveAll();renderInventory();refreshRecipeSelects();toast('Material updated')}
-    function deleteInventory(id){const x=inventory.find(i=>i.id===id);if(!x||!confirm(`Delete “${x.name}” from inventory?`))return;inventory=inventory.filter(i=>i.id!==id);saveAll();renderInventory();refreshRecipeSelects();toast('Material deleted')}
-    $('#clearInventory').onclick=()=>{if(!inventory.length)return;if(confirm('Clear all saved inventory from this browser?')){inventory=[];saveAll();renderInventory();refreshRecipeSelects();toast('Inventory cleared')}};
+  function setTab(name){
+    $$('.app-tab').forEach(b=>b.classList.toggle('active',b.dataset.tab===name));
+    $$('.panel').forEach(p=>p.classList.toggle('active',p.id==='panel-'+name));
+    if(name==='inventory')renderInventory();
+    if(name==='presets'){renderPresetBuilderState();renderPresets()}
+    if(name==='calculator'){renderCalculatorPresetSelect();calculate()}
+    window.scrollTo({top:document.querySelector('.app').offsetTop-15,behavior:'smooth'});
+  }
+  $$('.app-tab').forEach(b=>b.addEventListener('click',()=>setTab(b.dataset.tab)));
+  $('#presetGoInventory').onclick=()=>setTab('inventory');
+  $('#goPresets').onclick=()=>setTab('presets');
 
-    $('#openManual').onclick=()=>{$('#manualPanel').classList.remove('hidden');$('#importPanel').classList.add('hidden')};
-    $('#cancelManual').onclick=()=>$('#manualPanel').classList.add('hidden');
-    function updateManualPreview(){const q=num($('#mQty').value),c=num($('#mCost').value);$('#mUnitPreview').value=money(q?c/q:0)+' / '+$('#mUnit').value}
-    ['mQty','mCost','mUnit'].forEach(id=>$('#'+id).addEventListener('input',updateManualPreview));
-    $('#saveManual').onclick=()=>{const name=$('#mName').value.trim(),qty=num($('#mQty').value),cost=num($('#mCost').value);if(!name||!qty){toast('Add a name and quantity');return}inventory.push({id:uid('mat'),name,category:$('#mCategory').value,qty,unit:$('#mUnit').value,unitCost:cost/qty,supplier:$('#mSupplier').value.trim(),updated:new Date().toLocaleDateString(),source:'Manual'});saveAll();['mName','mCost','mQty','mSupplier'].forEach(id=>$('#'+id).value='');updateManualPreview();$('#manualPanel').classList.add('hidden');renderInventory();refreshRecipeSelects();toast('Added to inventory')};
+  function inventoryValue(){return inventory.reduce((s,x)=>s+num(x.qty)*num(x.unitCost),0)}
+  function renderStats(){$('#statCount').textContent=inventory.length;$('#statValue').textContent=money(inventoryValue());$('#statLast').textContent=meta.lastInvoice||'—'}
+  function renderInventory(){
+    renderStats();const area=$('#inventoryArea'),term=$('#inventorySearch').value.trim().toLowerCase();
+    const rows=inventory.filter(x=>!term||[x.name,x.category,x.supplier].join(' ').toLowerCase().includes(term));
+    if(!rows.length){area.innerHTML=`<div class="empty">${inventory.length?'No materials match your search.':'No materials yet. Add one manually or import a CandleScience invoice to get started.'}</div>`;return}
+    area.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Material</th><th>Category</th><th>On hand</th><th>Landed cost / unit</th><th>Inventory value</th><th>Supplier</th><th></th></tr></thead><tbody>${rows.map(x=>`<tr data-id="${x.id}"><td class="td-name">${esc(x.name)}<span class="subtle">Updated ${esc(x.updated||'—')}</span></td><td><span class="category-pill">${esc(x.category)}</span></td><td class="${num(x.qty)<=0?'qty-low':'qty-ok'}">${formatQty(x.qty)} ${x.unit}</td><td>${money(x.unitCost)} / ${x.unit}</td><td>${money(num(x.qty)*num(x.unitCost))}</td><td>${esc(x.supplier||'—')}</td><td><div class="mini-actions"><button class="icon-btn edit-inv" type="button" title="Edit">✎</button><button class="icon-btn delete-inv" type="button" title="Delete">×</button></div></td></tr>`).join('')}</tbody></table></div>`;
+    $$('.edit-inv').forEach(b=>b.onclick=()=>editInventory(b.closest('tr').dataset.id));
+    $$('.delete-inv').forEach(b=>b.onclick=()=>deleteInventory(b.closest('tr').dataset.id));
+  }
+  $('#inventorySearch').addEventListener('input',renderInventory);
+  function editInventory(id){const x=inventory.find(i=>i.id===id);if(!x)return;const name=prompt('Material name',x.name);if(name===null)return;const qty=prompt(`Quantity on hand (${x.unit})`,x.qty);if(qty===null)return;const cost=prompt(`Current landed cost per ${x.unit}`,x.unitCost);if(cost===null)return;x.name=name.trim()||x.name;x.qty=num(qty);x.unitCost=num(cost);x.updated=new Date().toLocaleDateString();saveAll();refreshAfterInventory();toast('Material updated')}
+  function deleteInventory(id){const x=inventory.find(i=>i.id===id);if(!x)return;const used=presets.filter(p=>p.materials.some(m=>m.materialId===id));const extra=used.length?`\n\nThis material is used in ${used.length} candle preset${used.length===1?'':'s'}. Those presets will show the material as missing.`:'';if(!confirm(`Delete “${x.name}” from inventory?${extra}`))return;inventory=inventory.filter(i=>i.id!==id);saveAll();refreshAfterInventory();toast('Material deleted')}
+  $('#clearInventory').onclick=()=>{if(!inventory.length)return;if(confirm('Clear all saved inventory from this browser? Presets will remain but their materials will be unavailable.')){inventory=[];saveAll();refreshAfterInventory();toast('Inventory cleared')}};
 
-    $('#openImport').onclick=()=>{$('#importPanel').classList.remove('hidden');$('#manualPanel').classList.add('hidden')};
-    $('#cancelImport').onclick=()=>{$('#importPanel').classList.add('hidden');$('#reviewPanel').classList.add('hidden');importData=null};
-    $('#invoiceFile').addEventListener('change',e=>{if(e.target.files[0])handleInvoiceFile(e.target.files[0])});
-    const dz=$('#dropzone');['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.style.background='rgba(207,184,150,.32)'}));['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.style.background=''}));dz.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)handleInvoiceFile(f)});
-    function importStatus(msg,type=''){const el=$('#importStatus');el.textContent=msg;el.className='status '+(type||'')}
+  $('#openManual').onclick=()=>{$('#manualPanel').classList.remove('hidden');$('#importPanel').classList.add('hidden')};
+  $('#cancelManual').onclick=()=>$('#manualPanel').classList.add('hidden');
+  function updateManualPreview(){const q=num($('#mQty').value),c=num($('#mCost').value);$('#mUnitPreview').value=money(q?c/q:0)+' / '+$('#mUnit').value}
+  ['mQty','mCost','mUnit'].forEach(id=>$('#'+id).addEventListener('input',updateManualPreview));
+  $('#saveManual').onclick=()=>{const name=$('#mName').value.trim(),qty=num($('#mQty').value),cost=num($('#mCost').value);if(!name||!qty){toast('Add a name and quantity');return}inventory.push({id:uid('mat'),name,category:$('#mCategory').value,qty,unit:$('#mUnit').value,unitCost:cost/qty,supplier:$('#mSupplier').value.trim(),updated:new Date().toLocaleDateString(),source:'Manual'});saveAll();['mName','mCost','mQty','mSupplier'].forEach(id=>$('#'+id).value='');updateManualPreview();$('#manualPanel').classList.add('hidden');refreshAfterInventory();toast('Added to inventory')};
 
-    const sample={order:'R212153774',date:'August 11, 2026',subtotal:1100.16,tax:87.33,freight:49.99,total:1135.39,generalDiscount:50,items:[
-      {name:'Golden Brands 464 Soy Wax 45 lb Case',price:108.47,invoiceQty:10,subtotal:1084.70,specificDiscount:48.10},
-      {name:'Sirocco 1 oz Bottle',price:3.99,invoiceQty:1,subtotal:3.99,specificDiscount:3.99},
-      {name:'Pink Watermelon Lemonade 1 oz Bottle',price:3.49,invoiceQty:1,subtotal:3.49,specificDiscount:0},
-      {name:'Fleurette 1 oz Bottle',price:3.99,invoiceQty:1,subtotal:3.99,specificDiscount:0},
-      {name:'Tideglass 1 oz Bottle',price:3.99,invoiceQty:1,subtotal:3.99,specificDiscount:0}
-    ]};
-    $('#sampleInvoice').onclick=()=>{importData=JSON.parse(JSON.stringify(sample));prepareImport();importStatus('Sample CandleScience invoice loaded. Review the materials below.','good')};
+  $('#openImport').onclick=()=>{$('#importPanel').classList.remove('hidden');$('#manualPanel').classList.add('hidden')};
+  $('#cancelImport').onclick=()=>{$('#importPanel').classList.add('hidden');$('#reviewPanel').classList.add('hidden');importData=null};
+  $('#invoiceFile').addEventListener('change',e=>{if(e.target.files[0])handleInvoiceFile(e.target.files[0])});
+  const dz=$('#dropzone');['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.style.background='rgba(207,184,150,.32)'}));['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{e.preventDefault();dz.style.background=''}));dz.addEventListener('drop',e=>{const f=e.dataTransfer.files[0];if(f)handleInvoiceFile(f)});
+  function importStatus(msg,type=''){const el=$('#importStatus');el.textContent=msg;el.className='status '+(type||'')}
 
-    async function handleInvoiceFile(file){
-      importStatus('Reading invoice…');$('#reviewPanel').classList.add('hidden');
-      try{
-        if(file.name.toLowerCase().endsWith('.json')){const raw=JSON.parse(await file.text());importData=parseJsonOrder(raw)}
-        else{const lines=await extractPdfLines(await file.arrayBuffer());importData=parseCandleScienceLines(lines)}
-        if(!importData||!importData.items.length)throw new Error('No CandleScience line items were found.');
-        prepareImport();importStatus(`Found ${importData.items.length} order item${importData.items.length===1?'':'s'}. Review them before adding to inventory.`,'good')
-      }catch(err){console.error(err);importStatus('Could not read this invoice reliably. Make sure it is a CandleScience order PDF, or add the materials manually.','bad')}
-    }
-    async function extractPdfLines(buffer){
-      if(!window.pdfjsLib)throw new Error('PDF reader unavailable');
-      pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
-      const pdf=await pdfjsLib.getDocument({data:buffer}).promise, lines=[];
-      for(let p=1;p<=pdf.numPages;p++){
-        const page=await pdf.getPage(p), content=await page.getTextContent(), groups=[];
-        content.items.forEach(it=>{const y=Math.round(it.transform[5]);let g=groups.find(a=>Math.abs(a.y-y)<=2);if(!g){g={y,items:[]};groups.push(g)}g.items.push({x:it.transform[4],s:it.str})});
-        groups.sort((a,b)=>b.y-a.y).forEach(g=>lines.push(g.items.sort((a,b)=>a.x-b.x).map(i=>i.s).join(' ').replace(/\s+/g,' ').trim()))
-      }return lines.filter(Boolean)
-    }
-    function parseMoney(s){return num(String(s||'').replace(/[$,()]/g,''))}
-    function parseCandleScienceLines(lines){
-      const out={order:'',date:'',subtotal:0,tax:0,freight:0,total:0,generalDiscount:0,items:[]};
-      lines.forEach(line=>{
-        let m=line.match(/Order\s*#?([A-Z0-9]+)\s+from\s+(.+)/i);if(m){out.order=m[1];out.date=m[2];return}
-        m=line.match(/^(.+?)\s+\$([\d,.]+)\s+(\d+)\s+\$([\d,.]+)$/);if(m&&!/subtotal|total|tax|freight/i.test(m[1])){out.items.push({name:m[1].trim(),price:parseMoney(m[2]),invoiceQty:num(m[3]),subtotal:parseMoney(m[4]),specificDiscount:0});return}
-        m=line.match(/^Subtotal\s+\$([\d,.]+)/i);if(m){out.subtotal=parseMoney(m[1]);return}
-        m=line.match(/Sales Tax\s+\$([\d,.]+)/i);if(m){out.tax=parseMoney(m[1]);return}
-        m=line.match(/^Freight\s+\$([\d,.]+)/i);if(m){out.freight=parseMoney(m[1]);return}
-        m=line.match(/^Total\s+\$([\d,.]+)/i);if(m){out.total=parseMoney(m[1]);return}
-        m=line.match(/Reward:.*-\$([\d,.]+)/i);if(m){out.generalDiscount+=parseMoney(m[1]);return}
-        m=line.match(/^(.+?):.+-\$([\d,.]+)$/);if(m){const target=out.items.find(x=>normalizeName(x.name)===normalizeName(m[1])||x.name.toLowerCase().includes(m[1].toLowerCase()));if(target)target.specificDiscount+=parseMoney(m[2]);else out.generalDiscount+=parseMoney(m[2]);return}
-        m=line.match(/Free Sample Discount\s*\((.+?)\)\s*-\$([\d,.]+)/i);if(m){const target=out.items.find(x=>x.name.toLowerCase().includes(m[1].toLowerCase()));if(target)target.specificDiscount+=parseMoney(m[2]);else out.generalDiscount+=parseMoney(m[2])}
-      });
-      if(!out.subtotal)out.subtotal=out.items.reduce((s,x)=>s+x.subtotal,0);
-      return out
-    }
-    function parseJsonOrder(raw){
-      const out={order:raw.order_number||'',date:raw.order_date||'',subtotal:0,tax:0,freight:0,total:parseMoney(raw.total),generalDiscount:0,items:[]};
-      (raw.items||[]).forEach(x=>out.items.push({name:x.name||'Item',price:parseMoney(x.total)/(num(x.quantity)||1),invoiceQty:num(x.quantity)||1,subtotal:parseMoney(x.total),specificDiscount:0}));out.subtotal=out.items.reduce((s,x)=>s+x.subtotal,0);return out
-    }
+  const sample={order:'R212153774',date:'August 11, 2026',subtotal:1100.16,tax:87.33,freight:49.99,total:1135.39,generalDiscount:50,items:[
+    {name:'Golden Brands 464 Soy Wax 45 lb Case',price:108.47,invoiceQty:10,subtotal:1084.70,specificDiscount:48.10},
+    {name:'Sirocco 1 oz Bottle',price:3.99,invoiceQty:1,subtotal:3.99,specificDiscount:3.99},
+    {name:'Pink Watermelon Lemonade 1 oz Bottle',price:3.49,invoiceQty:1,subtotal:3.49,specificDiscount:0},
+    {name:'Fleurette 1 oz Bottle',price:3.99,invoiceQty:1,subtotal:3.99,specificDiscount:0},
+    {name:'Tideglass 1 oz Bottle',price:3.99,invoiceQty:1,subtotal:3.99,specificDiscount:0}
+  ]};
+  $('#sampleInvoice').onclick=()=>{importData=JSON.parse(JSON.stringify(sample));prepareImport();importStatus('Sample CandleScience invoice loaded. Review the materials below.','good')};
 
-    function prepareImport(){
-      $('#reviewPanel').classList.remove('hidden');$('#rOrder').textContent=importData.order||'—';$('#rSubtotal').textContent=money(importData.subtotal);$('#rFreight').textContent=money(importData.freight);$('#rTax').textContent=money(importData.tax);$('#rTotal').textContent=money(importData.total);renderReview()
-    }
-    ['includeFreight','includeTax','includeGeneralDiscount'].forEach(id=>$('#'+id).addEventListener('change',renderReview));
-    function allocatedItems(){
-      if(!importData)return[];const base=importData.items.map(it=>({...it,net:Math.max(0,it.subtotal-num(it.specificDiscount))}));const allocBase=base.reduce((s,x)=>s+x.net,0)||1;
-      const freight=$('#includeFreight').checked?num(importData.freight):0,tax=$('#includeTax').checked?num(importData.tax):0,disc=$('#includeGeneralDiscount').checked?num(importData.generalDiscount):0;
-      return base.map(it=>{const share=it.net/allocBase;const landed=Math.max(0,it.net+share*freight+share*tax-share*disc);const pkg=packageInfo(it.name,it.invoiceQty);return{...it,landed,totalQty:pkg.qty,unit:pkg.unit,unitCost:pkg.qty?landed/pkg.qty:0,category:categoryGuess(it.name)}})
-    }
-    function renderReview(){
-      if(!importData)return;const data=allocatedItems();
-      $('#reviewBody').innerHTML=data.map((it,i)=>{const match=findMatch(it.name,it.unit);return`<tr data-index="${i}"><td><input class="row-check import-check" type="checkbox" checked></td><td><input class="table-input import-name" value="${esc(it.name)}"><span class="subtle">Invoice qty ${it.invoiceQty} · ${money(it.subtotal)} line subtotal${it.specificDiscount?` · ${money(it.specificDiscount)} item discount`:''}</span></td><td><select class="table-select import-category">${['Wax','Fragrance','Vessel','Lid','Wick','Label','Packaging','Other'].map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></td><td>${formatQty(it.totalQty)} ${it.unit}</td><td class="money-cell">${money(it.landed)}</td><td class="money-cell">${money(it.unitCost)} / ${it.unit}</td><td><select class="table-select import-dest"><option value="new">Create new material</option>${inventory.filter(x=>compatible(x.unit,it.unit)).map(x=>`<option value="${x.id}" ${match&&match.id===x.id?'selected':''}>Update: ${esc(x.name)}</option>`).join('')}</select></td></tr>`}).join('');
-      const selectedTotal=data.reduce((s,x)=>s+x.landed,0);const parts=[];if($('#includeFreight').checked)parts.push(`${money(importData.freight)} freight`);if($('#includeTax').checked)parts.push(`${money(importData.tax)} tax`);if($('#includeGeneralDiscount').checked&&importData.generalDiscount)parts.push(`${money(importData.generalDiscount)} order discount`);$('#allocationNote').innerHTML=`<strong>Allocated material total: ${money(selectedTotal)}.</strong> ${parts.length?'This includes '+parts.join(', ')+' spread proportionally across paid line items.':'Only line-item costs and item-specific discounts are being used.'}`
-    }
-    $('#addImported').onclick=()=>{
-      const data=allocatedItems();let added=0,updated=0;
-      $$('#reviewBody tr').forEach(tr=>{if(!tr.querySelector('.import-check').checked)return;const i=num(tr.dataset.index),it=data[i],name=tr.querySelector('.import-name').value.trim()||it.name,category=tr.querySelector('.import-category').value,dest=tr.querySelector('.import-dest').value;
-        if(dest!=='new'){
-          const x=inventory.find(a=>a.id===dest);if(x){const addQty=convertQty(it.totalQty,it.unit,x.unit),newCost=unitCostConvert(it.unitCost,it.unit,x.unit);if(Number.isFinite(addQty)&&Number.isFinite(newCost)){x.qty=num(x.qty)+addQty;x.unitCost=newCost;x.updated=new Date().toLocaleDateString();x.supplier='CandleScience';updated++;return}}
-        }
-        inventory.push({id:uid('mat'),name,category,qty:it.totalQty,unit:it.unit,unitCost:it.unitCost,supplier:'CandleScience',updated:new Date().toLocaleDateString(),source:'Invoice '+(importData.order||'')});added++
-      });
-      meta.lastInvoice=importData.order||new Date().toLocaleDateString();saveAll();renderInventory();refreshRecipeSelects();$('#importPanel').classList.add('hidden');toast(`${added} added · ${updated} updated`)
-    };
+  async function handleInvoiceFile(file){
+    importStatus('Reading invoice…');$('#reviewPanel').classList.add('hidden');
+    try{
+      if(file.name.toLowerCase().endsWith('.json')){const raw=JSON.parse(await file.text());importData=parseJsonOrder(raw)}
+      else{const lines=await extractPdfLines(await file.arrayBuffer());importData=parseCandleScienceLines(lines)}
+      if(!importData||!importData.items.length)throw new Error('No CandleScience line items were found.');
+      prepareImport();importStatus(`Found ${importData.items.length} order item${importData.items.length===1?'':'s'}. Review them before adding to inventory.`,'good')
+    }catch(err){console.error(err);importStatus('Could not read this invoice reliably. Make sure it is a CandleScience order PDF, or add the materials manually.','bad')}
+  }
+  async function extractPdfLines(buffer){
+    if(!window.pdfjsLib)throw new Error('PDF reader unavailable');
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    const pdf=await pdfjsLib.getDocument({data:buffer}).promise,lines=[];
+    for(let p=1;p<=pdf.numPages;p++){
+      const page=await pdf.getPage(p),content=await page.getTextContent(),groups=[];
+      content.items.forEach(it=>{const y=Math.round(it.transform[5]);let g=groups.find(a=>Math.abs(a.y-y)<=2);if(!g){g={y,items:[]};groups.push(g)}g.items.push({x:it.transform[4],s:it.str})});
+      groups.sort((a,b)=>b.y-a.y).forEach(g=>lines.push(g.items.sort((a,b)=>a.x-b.x).map(i=>i.s).join(' ').replace(/\s+/g,' ').trim()))
+    }return lines.filter(Boolean)
+  }
+  function parseMoney(s){return num(String(s||'').replace(/[$,()]/g,''))}
+  function parseCandleScienceLines(lines){
+    const out={order:'',date:'',subtotal:0,tax:0,freight:0,total:0,generalDiscount:0,items:[]};
+    lines.forEach(line=>{
+      let m=line.match(/Order\s*#?([A-Z0-9]+)\s+from\s+(.+)/i);if(m){out.order=m[1];out.date=m[2];return}
+      m=line.match(/^(.+?)\s+\$([\d,.]+)\s+(\d+)\s+\$([\d,.]+)$/);if(m&&!/subtotal|total|tax|freight/i.test(m[1])){out.items.push({name:m[1].trim(),price:parseMoney(m[2]),invoiceQty:num(m[3]),subtotal:parseMoney(m[4]),specificDiscount:0});return}
+      m=line.match(/^Subtotal\s+\$([\d,.]+)/i);if(m){out.subtotal=parseMoney(m[1]);return}
+      m=line.match(/Sales Tax\s+\$([\d,.]+)/i);if(m){out.tax=parseMoney(m[1]);return}
+      m=line.match(/^Freight\s+\$([\d,.]+)/i);if(m){out.freight=parseMoney(m[1]);return}
+      m=line.match(/^Total\s+\$([\d,.]+)/i);if(m){out.total=parseMoney(m[1]);return}
+      m=line.match(/Reward:.*-\$([\d,.]+)/i);if(m){out.generalDiscount+=parseMoney(m[1]);return}
+      m=line.match(/^(.+?):.+-\$([\d,.]+)$/);if(m){const target=out.items.find(x=>normalizeName(x.name)===normalizeName(m[1])||x.name.toLowerCase().includes(m[1].toLowerCase()));if(target)target.specificDiscount+=parseMoney(m[2]);else out.generalDiscount+=parseMoney(m[2]);return}
+      m=line.match(/Free Sample Discount\s*\((.+?)\)\s*-\$([\d,.]+)/i);if(m){const target=out.items.find(x=>x.name.toLowerCase().includes(m[1].toLowerCase()));if(target)target.specificDiscount+=parseMoney(m[2]);else out.generalDiscount+=parseMoney(m[2])}
+    });
+    if(!out.subtotal)out.subtotal=out.items.reduce((s,x)=>s+x.subtotal,0);
+    return out
+  }
+  function parseJsonOrder(raw){const out={order:raw.order_number||'',date:raw.order_date||'',subtotal:0,tax:0,freight:0,total:parseMoney(raw.total),generalDiscount:0,items:[]};(raw.items||[]).forEach(x=>out.items.push({name:x.name||'Item',price:parseMoney(x.total)/(num(x.quantity)||1),invoiceQty:num(x.quantity)||1,subtotal:parseMoney(x.total),specificDiscount:0}));out.subtotal=out.items.reduce((s,x)=>s+x.subtotal,0);return out}
+  function prepareImport(){$('#reviewPanel').classList.remove('hidden');$('#rOrder').textContent=importData.order||'—';$('#rSubtotal').textContent=money(importData.subtotal);$('#rFreight').textContent=money(importData.freight);$('#rTax').textContent=money(importData.tax);$('#rTotal').textContent=money(importData.total);renderReview()}
+  ['includeFreight','includeTax','includeGeneralDiscount'].forEach(id=>$('#'+id).addEventListener('change',renderReview));
+  function allocatedItems(){if(!importData)return[];const base=importData.items.map(it=>({...it,net:Math.max(0,it.subtotal-num(it.specificDiscount))}));const allocBase=base.reduce((s,x)=>s+x.net,0)||1;const freight=$('#includeFreight').checked?num(importData.freight):0,tax=$('#includeTax').checked?num(importData.tax):0,disc=$('#includeGeneralDiscount').checked?num(importData.generalDiscount):0;return base.map(it=>{const share=it.net/allocBase;const landed=Math.max(0,it.net+share*freight+share*tax-share*disc);const pkg=packageInfo(it.name,it.invoiceQty);return{...it,landed,totalQty:pkg.qty,unit:pkg.unit,unitCost:pkg.qty?landed/pkg.qty:0,category:categoryGuess(it.name)}})}
+  function renderReview(){if(!importData)return;const data=allocatedItems();$('#reviewBody').innerHTML=data.map((it,i)=>{const match=findMatch(it.name,it.unit);return`<tr data-index="${i}"><td><input class="row-check import-check" type="checkbox" checked></td><td><input class="table-input import-name" value="${esc(it.name)}"><span class="subtle">Invoice qty ${it.invoiceQty} · ${money(it.subtotal)} line subtotal${it.specificDiscount?` · ${money(it.specificDiscount)} item discount`:''}</span></td><td><select class="table-select import-category">${['Wax','Fragrance','Vessel','Lid','Wick','Label','Packaging','Other'].map(c=>`<option ${c===it.category?'selected':''}>${c}</option>`).join('')}</select></td><td>${formatQty(it.totalQty)} ${it.unit}</td><td class="money-cell">${money(it.landed)}</td><td class="money-cell">${money(it.unitCost)} / ${it.unit}</td><td><select class="table-select import-dest"><option value="new">Create new material</option>${inventory.filter(x=>compatible(x.unit,it.unit)).map(x=>`<option value="${x.id}" ${match&&match.id===x.id?'selected':''}>Update: ${esc(x.name)}</option>`).join('')}</select></td></tr>`}).join('');const selectedTotal=data.reduce((s,x)=>s+x.landed,0);const parts=[];if($('#includeFreight').checked)parts.push(`${money(importData.freight)} freight`);if($('#includeTax').checked)parts.push(`${money(importData.tax)} tax`);if($('#includeGeneralDiscount').checked&&importData.generalDiscount)parts.push(`${money(importData.generalDiscount)} order discount`);$('#allocationNote').innerHTML=`<strong>Allocated material total: ${money(selectedTotal)}.</strong> ${parts.length?'This includes '+parts.join(', ')+' spread proportionally across paid line items.':'Only line-item costs and item-specific discounts are being used.'}`}
+  $('#addImported').onclick=()=>{const data=allocatedItems();let added=0,updated=0;$$('#reviewBody tr').forEach(tr=>{if(!tr.querySelector('.import-check').checked)return;const i=num(tr.dataset.index),it=data[i],name=tr.querySelector('.import-name').value.trim()||it.name,category=tr.querySelector('.import-category').value,dest=tr.querySelector('.import-dest').value;if(dest!=='new'){const x=inventory.find(a=>a.id===dest);if(x){const addQty=convertQty(it.totalQty,it.unit,x.unit),newCost=unitCostConvert(it.unitCost,it.unit,x.unit);if(Number.isFinite(addQty)&&Number.isFinite(newCost)){x.qty=num(x.qty)+addQty;x.unitCost=newCost;x.updated=new Date().toLocaleDateString();x.supplier='CandleScience';updated++;return}}}inventory.push({id:uid('mat'),name,category,qty:it.totalQty,unit:it.unit,unitCost:it.unitCost,supplier:'CandleScience',updated:new Date().toLocaleDateString(),source:'Invoice '+(importData.order||'')});added++});meta.lastInvoice=importData.order||new Date().toLocaleDateString();saveAll();$('#importPanel').classList.add('hidden');refreshAfterInventory();toast(`${added} added · ${updated} updated`)};
 
-    function materialOptionHtml(selected=''){return `<option value="">Choose material…</option>`+inventory.map(x=>`<option value="${x.id}" ${x.id===selected?'selected':''}>${esc(x.name)} — ${money(x.unitCost)}/${x.unit}</option>`).join('')}
-    function addRecipeRow(data={}){const id=uid('row');const wrap=document.createElement('div');wrap.className='recipe-row';wrap.dataset.row=id;wrap.innerHTML=`<select class="recipe-material">${materialOptionHtml(data.materialId||'')}</select><input class="recipe-qty" type="number" min="0" step="0.0001" inputmode="decimal" placeholder="e.g. 4.185" title="Amount used in one candle, not the whole batch" value="${data.qty??1}"><select class="recipe-unit"></select><div class="availability">—</div><div class="recipe-cost">$0.00</div><button class="icon-btn remove-recipe" type="button">×</button>`;$('#recipeRows').appendChild(wrap);const sel=wrap.querySelector('.recipe-material'),unit=wrap.querySelector('.recipe-unit');function syncUnit(){const x=inventory.find(i=>i.id===sel.value);if(!x){unit.innerHTML=unitOptions('each',true);return}unit.innerHTML=unitOptions(data.unit&&compatible(data.unit,x.unit)?data.unit:x.unit,x.unit==='each');calculate()}sel.addEventListener('change',syncUnit);wrap.querySelector('.recipe-qty').addEventListener('input',calculate);unit.addEventListener('change',calculate);wrap.querySelector('.remove-recipe').onclick=()=>{wrap.remove();calculate()};syncUnit();calculate()}
-    $('#addRecipeMaterial').onclick=()=>addRecipeRow({qty:1});
-    function refreshRecipeSelects(){$$('.recipe-material').forEach(sel=>{const cur=sel.value;sel.innerHTML=materialOptionHtml(cur);if(!inventory.some(x=>x.id===cur))sel.value=''});renderRecipeInventoryState();calculate()}
-    function renderRecipeInventoryState(){$('#noInventoryNotice').classList.toggle('hidden',inventory.length>0);$('#addRecipeMaterial').disabled=!inventory.length}
-    function recipeMaterialCost(row,batch){const mat=inventory.find(x=>x.id===row.querySelector('.recipe-material').value);if(!mat)return{cost:0,need:0,needUnit:'',mat:null,enough:true};const q=num(row.querySelector('.recipe-qty').value),u=row.querySelector('.recipe-unit').value;const costPerUse=unitCostConvert(mat.unitCost,mat.unit,u);const useCost=Number.isFinite(costPerUse)?q*costPerUse:0;const needInInv=convertQty(q*batch,u,mat.unit);const enough=Number.isFinite(needInInv)&&needInInv<=num(mat.qty)+1e-9;return{cost:useCost,need:q*batch,needUnit:u,needInInv,mat,enough}}
-    function batchNeedText(r){
-      const need=formatQty(r.need);
-      let converted='';
-      if(r.needUnit==='oz' && r.need>=16) converted=` (${formatQty(r.need/16)} lb)`;
-      else if(r.needUnit==='lb') converted=` (${formatQty(r.need*16)} oz)`;
-      else if(r.needUnit==='g' && r.need>=1000) converted=` (${formatQty(r.need/1000)} kg)`;
-      else if(r.needUnit==='kg') converted=` (${formatQty(r.need*1000)} g)`;
-      return `${need} ${r.needUnit}${converted} needed · ${formatQty(r.mat.qty)} ${r.mat.unit} on hand`;
-    }
-    function looksLikeBatchAmount(row){
-      const q=num(row.querySelector('.recipe-qty').value),u=row.querySelector('.recipe-unit').value;
-      if(u==='each') return q>25;
-      const oz=convertQty(q,u,'oz');
-      return Number.isFinite(oz) && oz>64;
-    }
-    function calculate(){
-      const batch=Math.max(1,Math.round(num($('#batchQty').value)||1));let materials=0;
-      $$('.recipe-row').forEach(row=>{const r=recipeMaterialCost(row,batch);materials+=r.cost;row.querySelector('.recipe-cost').textContent=money(r.cost);const a=row.querySelector('.availability');if(!r.mat){a.textContent='—';a.className='availability';return}if(looksLikeBatchAmount(row)){a.textContent='Check amount — enter what ONE candle uses, not the whole batch.';a.className='availability warn';return}a.textContent=batchNeedText(r);a.className='availability '+(r.enough?'good':'bad')});
-      const labor=(num($('#laborMinutes').value)/60*num($('#hourlyRate').value))/batch;$('#laborPer').value=money(labor);const other=num($('#overhead').value)+num($('#fulfillment').value);const retail=num($('#retailPrice').value),fee=retail*num($('#sellingFee').value)/100;const trueCost=materials+labor+other+fee;const batchCost=trueCost*batch;
-      $('#trueCost').textContent=money(trueCost);$('#batchCostText').textContent=`${money(batchCost)} total for ${batch} candle${batch===1?'':'s'}`;$('#resMaterials').textContent=money(materials);$('#resLabor').textContent=money(labor);$('#resOther').textContent=money(other);$('#resFee').textContent=money(fee);
-      const profit=retail-trueCost,margin=retail?profit/retail*100:0;$('#retailProfit').textContent=money(profit);$('#marginCopy').textContent=`${margin.toFixed(1)}% gross margin · ${money(profit*batch)} projected batch profit`;$('#marginBar').style.width=clamp(margin,0,100)+'%';
-      const wholesale=num($('#wholesalePrice').value),wm=wholesale?(wholesale-(materials+labor+other))/wholesale*100:0;const tr=clamp(num($('#targetRetail').value),1,95),tw=clamp(num($('#targetWholesale').value),1,95);const baseNoFee=materials+labor+other;const feeRate=num($('#sellingFee').value)/100;const suggestedRetail=baseNoFee/Math.max(.01,1-feeRate-tr/100),suggestedWholesale=baseNoFee/Math.max(.01,1-tw/100);
-      $('#yourRetail').textContent=money(retail);$('#retailDetail').textContent=`${margin.toFixed(1)}% margin`;$('#suggestRetail').textContent=money(suggestedRetail);$('#retailTargetLabel').textContent=`${tr}% target margin`;$('#yourWholesale').textContent=money(wholesale);$('#wholesaleDetail').textContent=`${wm.toFixed(1)}% margin`;$('#suggestWholesale').textContent=money(suggestedWholesale);$('#wholesaleTargetLabel').textContent=`${tw}% target margin`;
-      return{batch,materials,labor,other,fee,trueCost,batchCost,retail,profit,margin,wholesale}
-    }
-    ['batchQty','retailPrice','laborMinutes','hourlyRate','overhead','fulfillment','sellingFee','wholesalePrice','targetRetail','targetWholesale'].forEach(id=>$('#'+id).addEventListener('input',calculate));
+  function materialOptionHtml(selected=''){return `<option value="">Choose material…</option>`+inventory.map(x=>`<option value="${x.id}" ${x.id===selected?'selected':''}>${esc(x.name)} — ${money(x.unitCost)}/${x.unit}</option>`).join('')}
+  function addPresetRow(data={}){
+    const wrap=document.createElement('div');wrap.className='preset-row';
+    wrap.innerHTML=`<select class="preset-material">${materialOptionHtml(data.materialId||'')}</select><input class="preset-qty" type="number" min="0" step="0.0001" inputmode="decimal" placeholder="e.g. 4.185" value="${data.qty??1}"><select class="preset-unit"></select><div class="preset-cost">$0.00</div><button class="icon-btn remove-preset-row" type="button">×</button>`;
+    $('#presetRows').appendChild(wrap);const sel=wrap.querySelector('.preset-material'),unit=wrap.querySelector('.preset-unit');
+    function sync(){const mat=inventory.find(i=>i.id===sel.value);if(!mat){unit.innerHTML=unitOptions('each',true);updatePresetRowCost(wrap);return}const wanted=data.unit&&compatible(data.unit,mat.unit)?data.unit:mat.unit;unit.innerHTML=unitOptions(wanted,mat.unit==='each');updatePresetRowCost(wrap)}
+    sel.addEventListener('change',sync);wrap.querySelector('.preset-qty').addEventListener('input',()=>updatePresetRowCost(wrap));unit.addEventListener('change',()=>updatePresetRowCost(wrap));wrap.querySelector('.remove-preset-row').onclick=()=>wrap.remove();sync()
+  }
+  function updatePresetRowCost(row){const mat=inventory.find(x=>x.id===row.querySelector('.preset-material').value),q=num(row.querySelector('.preset-qty').value),u=row.querySelector('.preset-unit').value;let cost=0;if(mat){const c=unitCostConvert(mat.unitCost,mat.unit,u);if(Number.isFinite(c))cost=q*c}row.querySelector('.preset-cost').textContent=money(cost)}
+  $('#addPresetMaterial').onclick=()=>{if(!inventory.length){toast('Add materials first');return}addPresetRow({qty:1})};
+  function clearPresetBuilder(force=false){if(!force&&($('#presetName').value.trim()||$('#presetRows').children.length)&&!confirm('Clear the preset builder?'))return;editingPresetId=null;$('#presetName').value='';$('#presetRows').innerHTML='';$('#savePreset').textContent='Save Preset';if(inventory.length)addPresetRow({qty:1})}
+  $('#clearPresetBuilder').onclick=()=>clearPresetBuilder(false);
+  function currentPresetFromBuilder(){return{id:editingPresetId||uid('preset'),name:$('#presetName').value.trim()||'Untitled Candle',materials:$$('#presetRows .preset-row').map(row=>{const id=row.querySelector('.preset-material').value,mat=inventory.find(x=>x.id===id);return{materialId:id,materialName:mat?.name||'',qty:num(row.querySelector('.preset-qty').value),unit:row.querySelector('.preset-unit').value}}).filter(x=>x.materialId&&x.qty>0),updated:new Date().toLocaleDateString()}}
+  $('#savePreset').onclick=()=>{const p=currentPresetFromBuilder();if(!$('#presetName').value.trim()){toast('Name the candle preset');return}if(!p.materials.length){toast('Add at least one material');return}const duplicate=presets.find(x=>x.name.toLowerCase()===p.name.toLowerCase()&&x.id!==p.id);if(duplicate&&!confirm(`A preset named “${p.name}” already exists. Replace it?`))return;if(duplicate){presets=presets.filter(x=>x.id!==duplicate.id)}const idx=presets.findIndex(x=>x.id===p.id);if(idx>=0)presets[idx]=p;else presets.push(p);saveAll();renderPresets();renderCalculatorPresetSelect(p.id);editingPresetId=null;$('#savePreset').textContent='Save Preset';toast(idx>=0?'Preset updated':'Preset saved')};
+  function presetMaterialCost(spec){const mat=inventory.find(x=>x.id===spec.materialId);if(!mat)return{mat:null,cost:0};const c=unitCostConvert(mat.unitCost,mat.unit,spec.unit);return{mat,cost:Number.isFinite(c)?num(spec.qty)*c:0}}
+  function presetCost(p){return (p?.materials||[]).reduce((s,m)=>s+presetMaterialCost(m).cost,0)}
+  function renderPresets(){const area=$('#presetsArea');if(!presets.length){area.innerHTML='<div class="empty">No candle presets yet. Build your first recipe above and save it.</div>';return}area.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Candle preset</th><th>Materials</th><th>Current materials cost</th><th>Last updated</th><th></th></tr></thead><tbody>${presets.map(p=>{const missing=p.materials.filter(m=>!inventory.some(i=>i.id===m.materialId)).length;return`<tr data-id="${p.id}"><td class="preset-name-cell"><strong>${esc(p.name)}</strong>${missing?`<span>${missing} missing material${missing===1?'':'s'}</span>`:''}</td><td>${p.materials.length}</td><td>${money(presetCost(p))} / candle</td><td>${esc(p.updated||'—')}</td><td><div class="mini-actions"><button class="small use-preset" type="button">Use in Calculator</button><button class="small secondary edit-preset" type="button">Edit</button><button class="icon-btn delete-preset" type="button">×</button></div></td></tr>`}).join('')}</tbody></table></div>`;$$('.use-preset').forEach(b=>b.onclick=()=>usePreset(b.closest('tr').dataset.id));$$('.edit-preset').forEach(b=>b.onclick=()=>editPreset(b.closest('tr').dataset.id));$$('.delete-preset').forEach(b=>b.onclick=()=>deletePreset(b.closest('tr').dataset.id))}
+  function editPreset(id){const p=presets.find(x=>x.id===id);if(!p)return;editingPresetId=id;$('#presetName').value=p.name;$('#presetRows').innerHTML='';p.materials.forEach(m=>addPresetRow(m));$('#savePreset').textContent='Update Preset';setTab('presets');toast('Preset loaded for editing')}
+  function deletePreset(id){const p=presets.find(x=>x.id===id);if(!p||!confirm(`Delete preset “${p.name}”?`))return;presets=presets.filter(x=>x.id!==id);if(editingPresetId===id)clearPresetBuilder(true);saveAll();renderPresets();renderCalculatorPresetSelect();calculate();toast('Preset deleted')}
+  function usePreset(id){renderCalculatorPresetSelect(id);setTab('calculator');toast('Preset selected')}
+  function renderPresetBuilderState(){$('#presetNoInventory').classList.toggle('hidden',inventory.length>0);$('#addPresetMaterial').disabled=!inventory.length;if(!$('#presetRows').children.length&&inventory.length)addPresetRow({qty:1})}
+  function refreshPresetBuilderSelects(){$$('#presetRows .preset-material').forEach(sel=>{const cur=sel.value;sel.innerHTML=materialOptionHtml(cur);if(!inventory.some(x=>x.id===cur))sel.value='';const row=sel.closest('.preset-row'),mat=inventory.find(x=>x.id===sel.value),unit=row.querySelector('.preset-unit');if(mat)unit.innerHTML=unitOptions(compatible(unit.value,mat.unit)?unit.value:mat.unit,mat.unit==='each');updatePresetRowCost(row)})}
 
-    function currentRecipe(){return{id:uid('recipe'),name:$('#candleName').value.trim()||'Untitled Candle',batchQty:Math.max(1,Math.round(num($('#batchQty').value)||1)),retail:num($('#retailPrice').value),wholesale:num($('#wholesalePrice').value),laborMinutes:num($('#laborMinutes').value),hourlyRate:num($('#hourlyRate').value),overhead:num($('#overhead').value),fulfillment:num($('#fulfillment').value),sellingFee:num($('#sellingFee').value),targetRetail:num($('#targetRetail').value),targetWholesale:num($('#targetWholesale').value),materials:$$('.recipe-row').map(row=>({materialId:row.querySelector('.recipe-material').value,qty:num(row.querySelector('.recipe-qty').value),unit:row.querySelector('.recipe-unit').value})).filter(x=>x.materialId),updated:new Date().toLocaleDateString()}}
-    $('#saveRecipe').onclick=()=>{const r=currentRecipe();if(!r.materials.length){toast('Add at least one material');return}const existing=recipes.find(x=>x.name.toLowerCase()===r.name.toLowerCase());if(existing){Object.assign(existing,r,{id:existing.id})}else recipes.push(r);saveAll();renderSaved();toast(existing?'Recipe updated':'Recipe saved')};
-    $('#recordBatch').onclick=()=>{const batch=Math.max(1,Math.round(num($('#batchQty').value)||1)),uses=[];let short=[];$$('.recipe-row').forEach(row=>{const r=recipeMaterialCost(row,batch);if(r.mat){uses.push(r);if(!r.enough)short.push(r.mat.name)}});if(!uses.length){toast('Add recipe materials first');return}if(short.length){alert('Not enough inventory for: '+short.join(', '));return}if(!confirm(`Deduct materials for a ${batch}-candle batch from inventory?`))return;uses.forEach(r=>r.mat.qty=Math.max(0,num(r.mat.qty)-r.needInInv));saveAll();renderInventory();calculate();toast('Batch deducted from inventory')};
-    $('#resetRecipe').onclick=()=>{if(!confirm('Reset the current candle recipe?'))return;$('#candleName').value='';$('#batchQty').value=24;$('#retailPrice').value=24;$('#wholesalePrice').value=12;$('#laborMinutes').value=90;$('#hourlyRate').value=20;$('#overhead').value=.5;$('#fulfillment').value=0;$('#sellingFee').value=3.5;$('#targetRetail').value=65;$('#targetWholesale').value=45;$('#recipeRows').innerHTML='';if(inventory.length)addRecipeRow({qty:1});calculate()};
-    $('#copySummary').onclick=async()=>{const r=calculate(),name=$('#candleName').value.trim()||'Candle';const lines=[`${name} — Kindle Candle Cost Summary`,`True cost: ${money(r.trueCost)} / candle`,`Materials: ${money(r.materials)}`,`Labor: ${money(r.labor)}`,`Other: ${money(r.other)}`,`Retail: ${money(r.retail)}`,`Profit: ${money(r.profit)} / candle`,`Gross margin: ${r.margin.toFixed(1)}%`,`Batch (${r.batch}): ${money(r.batchCost)} cost`];try{await navigator.clipboard.writeText(lines.join('\n'));toast('Summary copied')}catch(e){toast('Copy unavailable')}};
+  function renderCalculatorPresetSelect(preferred){const select=$('#calcPreset'),cur=preferred||select.value;select.innerHTML='<option value="">Choose a candle preset…</option>'+presets.map(p=>`<option value="${p.id}" ${p.id===cur?'selected':''}>${esc(p.name)}</option>`).join('');if(cur&&presets.some(p=>p.id===cur))select.value=cur;else if(presets.length&& !select.value)select.value=presets[0].id;$('#noPresetNotice').classList.toggle('hidden',presets.length>0)}
+  $('#calcPreset').addEventListener('change',calculate);
+  function selectedPreset(){return presets.find(p=>p.id===$('#calcPreset').value)||null}
+  function batchNeedDisplay(q,u){let out=`${formatQty(q)} ${u}`;if(u==='oz'&&q>=16)out+=` (${formatQty(q/16)} lb)`;else if(u==='lb')out+=` (${formatQty(q*16)} oz)`;else if(u==='g'&&q>=1000)out+=` (${formatQty(q/1000)} kg)`;else if(u==='kg')out+=` (${formatQty(q*1000)} g)`;return out}
+  function presetUsage(spec,batch){const mat=inventory.find(x=>x.id===spec.materialId);if(!mat)return{spec,mat:null,cost:0,need:0,needInv:NaN,enough:false};const c=unitCostConvert(mat.unitCost,mat.unit,spec.unit),cost=Number.isFinite(c)?num(spec.qty)*c:0,need=num(spec.qty)*batch,needInv=convertQty(need,spec.unit,mat.unit),enough=Number.isFinite(needInv)&&needInv<=num(mat.qty)+1e-9;return{spec,mat,cost,need,needInv,enough}}
+  function renderCalcMaterials(p,batch){const area=$('#calcMaterialSummary'),info=$('#calcPresetInfo');if(!p){info.classList.add('hidden');area.innerHTML='<div class="empty">Choose a candle preset above to see its materials.</div>';return[]}const usages=p.materials.map(m=>presetUsage(m,batch));info.classList.remove('hidden');info.innerHTML=`<strong>${esc(p.name)}</strong><p>${p.materials.length} material${p.materials.length===1?'':'s'} saved in this preset · current materials cost ${money(usages.reduce((s,u)=>s+u.cost,0))} per candle</p>`;area.innerHTML=`<div class="material-summary"><table><thead><tr><th>Material</th><th>Per candle</th><th>Batch total</th><th>On hand</th><th>Cost / candle</th></tr></thead><tbody>${usages.map(u=>u.mat?`<tr><td class="td-name">${esc(u.mat.name)}</td><td>${formatQty(u.spec.qty)} ${u.spec.unit}</td><td>${batchNeedDisplay(u.need,u.spec.unit)}</td><td class="${u.enough?'good':'bad'}">${formatQty(u.mat.qty)} ${u.mat.unit}${u.enough?'':' — short'}</td><td class="money-cell">${money(u.cost)}</td></tr>`:`<tr><td class="td-name">${esc(u.spec.materialName||'Missing material')}</td><td>${formatQty(u.spec.qty)} ${u.spec.unit}</td><td>${batchNeedDisplay(u.need,u.spec.unit)}</td><td class="bad">Missing from inventory</td><td class="money-cell">—</td></tr>`).join('')}</tbody></table></div>`;return usages}
 
-    function renderSaved(){const area=$('#savedArea');if(!recipes.length){area.innerHTML='<div class="empty">No saved candle recipes yet. Build a candle in the calculator and choose “Save candle recipe.”</div>';return}area.innerHTML=`<div class="table-wrap"><table><thead><tr><th>Candle</th><th>Materials</th><th>Saved batch</th><th>Last updated</th><th></th></tr></thead><tbody>${recipes.map(r=>`<tr data-id="${r.id}"><td class="td-name">${esc(r.name)}</td><td>${r.materials.length}</td><td>${r.batchQty||1}</td><td>${esc(r.updated||'—')}</td><td><div class="mini-actions"><button class="small load-recipe" type="button">Load</button><button class="icon-btn delete-recipe" type="button">×</button></div></td></tr>`).join('')}</tbody></table></div>`;$$('.load-recipe').forEach(b=>b.onclick=()=>loadRecipe(b.closest('tr').dataset.id));$$('.delete-recipe').forEach(b=>b.onclick=()=>{const id=b.closest('tr').dataset.id,r=recipes.find(x=>x.id===id);if(r&&confirm(`Delete “${r.name}”?`)){recipes=recipes.filter(x=>x.id!==id);saveAll();renderSaved();toast('Recipe deleted')}})}
-    function loadRecipe(id){const r=recipes.find(x=>x.id===id);if(!r)return;$('#candleName').value=r.name;$('#batchQty').value=r.batchQty||24;$('#retailPrice').value=r.retail??24;$('#wholesalePrice').value=r.wholesale??12;$('#laborMinutes').value=r.laborMinutes??90;$('#hourlyRate').value=r.hourlyRate??20;$('#overhead').value=r.overhead??.5;$('#fulfillment').value=r.fulfillment??0;$('#sellingFee').value=r.sellingFee??3.5;$('#targetRetail').value=r.targetRetail??65;$('#targetWholesale').value=r.targetWholesale??45;$('#recipeRows').innerHTML='';(r.materials||[]).forEach(m=>addRecipeRow(m));setTab('calculator');calculate();toast('Recipe loaded')}
+  function calculate(){
+    const p=selectedPreset(),batch=Math.max(1,Math.round(num($('#batchQty').value)||1)),usages=renderCalcMaterials(p,batch),materials=usages.reduce((s,u)=>s+u.cost,0);
+    const labor=(num($('#laborMinutes').value)/60*num($('#hourlyRate').value))/batch;$('#laborPer').value=money(labor);
+    const other=num($('#overhead').value)+num($('#fulfillment').value),retail=num($('#retailPrice').value),fee=retail*num($('#sellingFee').value)/100,trueCost=materials+labor+other+fee,batchCost=trueCost*batch;
+    $('#trueCost').textContent=money(trueCost);$('#batchCostText').textContent=`${money(batchCost)} total for ${batch} candle${batch===1?'':'s'}`;$('#resMaterials').textContent=money(materials);$('#resLabor').textContent=money(labor);$('#resOther').textContent=money(other);$('#resFee').textContent=money(fee);
+    const profit=retail-trueCost,margin=retail?profit/retail*100:0;$('#retailProfit').textContent=money(profit);$('#marginCopy').textContent=`${margin.toFixed(1)}% gross margin · ${money(profit*batch)} projected batch profit`;$('#marginBar').style.width=clamp(margin,0,100)+'%';
+    const wholesale=num($('#wholesalePrice').value),wm=wholesale?(wholesale-(materials+labor+other))/wholesale*100:0,tr=clamp(num($('#targetRetail').value),1,95),tw=clamp(num($('#targetWholesale').value),1,95),baseNoFee=materials+labor+other,feeRate=num($('#sellingFee').value)/100,suggestedRetail=baseNoFee/Math.max(.01,1-feeRate-tr/100),suggestedWholesale=baseNoFee/Math.max(.01,1-tw/100);
+    $('#yourRetail').textContent=money(retail);$('#retailDetail').textContent=`${margin.toFixed(1)}% margin`;$('#suggestRetail').textContent=money(suggestedRetail);$('#retailTargetLabel').textContent=`${tr}% target margin`;$('#yourWholesale').textContent=money(wholesale);$('#wholesaleDetail').textContent=`${wm.toFixed(1)}% margin`;$('#suggestWholesale').textContent=money(suggestedWholesale);$('#wholesaleTargetLabel').textContent=`${tw}% target margin`;
+    return{p,batch,usages,materials,labor,other,fee,trueCost,batchCost,retail,profit,margin,wholesale}
+  }
+  ['batchQty','retailPrice','laborMinutes','hourlyRate','overhead','fulfillment','sellingFee','wholesalePrice','targetRetail','targetWholesale'].forEach(id=>$('#'+id).addEventListener('input',calculate));
+  $('#recordBatch').onclick=()=>{const r=calculate();if(!r.p){toast('Choose a candle preset');return}const missing=r.usages.filter(u=>!u.mat);if(missing.length){alert('This preset has materials that are no longer in inventory. Edit the preset first.');return}const short=r.usages.filter(u=>!u.enough);if(short.length){alert('Not enough inventory for: '+short.map(u=>u.mat.name).join(', '));return}if(!confirm(`Deduct materials for ${r.batch} × “${r.p.name}” from inventory?`))return;r.usages.forEach(u=>u.mat.qty=Math.max(0,num(u.mat.qty)-u.needInv));saveAll();refreshAfterInventory();calculate();toast('Batch deducted from inventory')};
+  $('#resetCalculator').onclick=()=>{if(!confirm('Reset the calculator settings?'))return;$('#batchQty').value=24;$('#retailPrice').value=24;$('#wholesalePrice').value=12;$('#laborMinutes').value=90;$('#hourlyRate').value=20;$('#overhead').value=.5;$('#fulfillment').value=0;$('#sellingFee').value=3.5;$('#targetRetail').value=65;$('#targetWholesale').value=45;calculate()};
+  $('#copySummary').onclick=async()=>{const r=calculate(),name=r.p?.name||'Candle';const lines=[`${name} — Kindle Candle Cost Summary`,`True cost: ${money(r.trueCost)} / candle`,`Materials: ${money(r.materials)}`,`Labor: ${money(r.labor)}`,`Other: ${money(r.other)}`,`Retail: ${money(r.retail)}`,`Profit: ${money(r.profit)} / candle`,`Gross margin: ${r.margin.toFixed(1)}%`,`Batch (${r.batch}): ${money(r.batchCost)} cost`];try{await navigator.clipboard.writeText(lines.join('\n'));toast('Summary copied')}catch(e){toast('Copy unavailable')}};
 
-    renderInventory();renderSaved();renderRecipeInventoryState();if(!$('#recipeRows').children.length&&inventory.length)addRecipeRow({qty:1});calculate();
-  })();
-  </script>
+  function refreshAfterInventory(){renderInventory();refreshPresetBuilderSelects();renderPresets();renderCalculatorPresetSelect();calculate()}
+
+  renderInventory();renderPresetBuilderState();renderPresets();renderCalculatorPresetSelect();calculate();
+})();
+</script>
 </body>
 </html>
