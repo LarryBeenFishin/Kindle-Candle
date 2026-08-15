@@ -1266,6 +1266,7 @@
       <a href="/">Home</a>
       <a href="/fragranceLoadCalc/" aria-current="page">Wax + Fragrance Calculator</a>
       <a href="/Candle%20Cost%20Calculator/">Candle Cost Calculator</a>
+      <a href="/my-candles/">My Candles</a>
     </nav>
   </header>
 
@@ -2229,9 +2230,19 @@
       });
     });
 
+    function loadRequestedCandleFromUrl() {
+      const id = new URLSearchParams(window.location.search).get('candle');
+      if (!id) return;
+      const exists = getSavedRecipes().some((recipe) => String(recipe.id) === String(id));
+      if (!exists) return;
+      loadRecipe(id);
+      document.getElementById('calculator')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
     window.addEventListener('kindle-cloud-data-ready', () => {
       renderSavedBlendSelect();
       renderRecipes();
+      loadRequestedCandleFromUrl();
     });
 
     renderBlendRows();

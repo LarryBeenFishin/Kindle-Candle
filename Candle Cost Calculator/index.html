@@ -561,6 +561,7 @@
       <a href="/">Home</a>
       <a href="/fragranceLoadCalc/">Wax + Fragrance Calculator</a>
       <a href="/Candle%20Cost%20Calculator/" aria-current="page">Candle Cost Calculator</a>
+      <a href="/my-candles/">My Candles</a>
     </nav>
   </header>
 
@@ -1165,10 +1166,22 @@
     window.addEventListener("storage", event => {
       if (event.key === RECIPE_STORAGE_KEY) refreshSavedCandleSelect();
     });
+    function loadRequestedCandleFromUrl() {
+      const id = new URLSearchParams(window.location.search).get("candle");
+      if (!id) return;
+      const exists = getSavedCandles().some(candle => String(candle.id) === String(id));
+      if (!exists) return;
+      refreshSavedCandleSelect(id);
+      $("savedCandleSelect").value = id;
+      loadSavedCandle();
+      document.querySelector("main")?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+
     window.addEventListener("kindle-cloud-data-ready", () => {
       const selected = $("savedCandleSelect").value;
       refreshSavedCandleSelect(selected);
       if (!window.KindleCloud?.currentUser) clearLoadedCandleSummary();
+      else loadRequestedCandleFromUrl();
     });
 
     refreshSavedCandleSelect();
