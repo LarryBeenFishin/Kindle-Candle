@@ -1044,7 +1044,7 @@
         <div class="recipe-count" id="recipeCount">0 recipes saved</div>
       </div>
       <div class="saved-recipes-head" style="margin-top:-6px; margin-bottom:18px;">
-        <p>Save the formula once, then load it whenever you pour again. Loading a recipe leaves the current batch quantity alone so you can scale the same candle to any production run.</p>
+        <p>Save the formula once, then load it whenever you pour again. When a recipe is loaded, the batch quantity starts at 1 so you can enter exactly how many candles you want to make.</p>
       </div>
       <div class="recipe-list" id="recipeList"></div>
     </section>
@@ -1441,6 +1441,7 @@
     function loadRecipe(id) {
       const recipe = getSavedRecipes().find((r) => r.id === id);
       if (!recipe) return;
+      fields.quantity.value = 1;
       fields.containerSize.value = recipe.containerSize;
       fields.unit.value = recipe.unit || 'oz';
       fields.fragranceLoad.value = recipe.fragranceLoad;
