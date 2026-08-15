@@ -278,6 +278,43 @@
       .header-inner .kindle-account-btn { width: max-content; max-width: 100%; }
     }
 
+
+    /* Accessibility typography pass — larger, easier-to-read type without changing tool logic */
+    html { -webkit-text-size-adjust: 100%; }
+    body { font-size: 17px; }
+    .announcement { font-size: 12px !important; line-height: 1.45; }
+    .header-inner .nav, .nav { font-size: 12px !important; line-height: 1.35; }
+    .header-inner .nav a, .nav a { font-size: 12px !important; }
+    .header-inner .kindle-account-btn, .kindle-account-btn { font-size: 12px !important; line-height: 1.25 !important; }
+    input, select, textarea, button { font-size: 16px; }
+    input, select, textarea { line-height: 1.35; }
+    button, .btn { line-height: 1.25; }
+
+    .eyebrow { font-size: 12px !important; }
+    .signed-out h2 { font-size: 30px !important; }
+    .signed-out p, .section-intro p, .empty-state, .account-chip, .account-chip strong { font-size: 16px !important; line-height: 1.55; }
+    .btn, .tab { font-size: 12px !important; min-height: 44px; }
+    .search-wrap label { font-size: 12px !important; }
+    .search-wrap input { font-size: 17px !important; min-height: 46px; }
+    .section-intro h2 { font-size: 28px !important; }
+    .candle-title h3, .blend-head h3 { font-size: 21px !important; }
+    .status, .blend-total { font-size: 11px !important; }
+    .summary-item span { font-size: 11px !important; }
+    .summary-item strong, .summary-item div { font-size: 15px !important; line-height: 1.45; }
+    details.card-details summary { font-size: 12px !important; padding-top: 12px; padding-bottom: 12px; }
+    .detail-title { font-size: 12px !important; }
+    .detail-grid, .detail-row, .detail-copy, .component { font-size: 15px !important; line-height: 1.5; }
+    .text-btn { font-size: 12px !important; }
+    .component strong { font-size: 15px !important; }
+    footer { font-size: 12px !important; line-height: 1.5; }
+
+    @media (max-width: 760px) {
+      body { font-size: 16px; }
+      .announcement { font-size: 11px !important; }
+      .header-inner .nav, .nav, .header-inner .nav a, .nav a, .header-inner .kindle-account-btn, .kindle-account-btn { font-size: 11px !important; }
+      input, select, textarea { font-size: 16px !important; }
+    }
+
   </style>
 </head>
 <body>

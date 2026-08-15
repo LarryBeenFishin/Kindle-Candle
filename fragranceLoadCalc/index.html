@@ -1399,6 +1399,42 @@
       .header-inner .kindle-account-btn { width: max-content; max-width: 100%; }
     }
 
+
+    /* Accessibility typography pass — larger, easier-to-read type without changing tool logic */
+    html { -webkit-text-size-adjust: 100%; }
+    body { font-size: 17px; }
+    .announcement { font-size: 12px !important; line-height: 1.45; }
+    .header-inner .nav, .nav { font-size: 12px !important; line-height: 1.35; }
+    .header-inner .nav a, .nav a { font-size: 12px !important; }
+    .header-inner .kindle-account-btn, .kindle-account-btn { font-size: 12px !important; line-height: 1.25 !important; }
+    input, select, textarea, button { font-size: 16px; }
+    input, select, textarea { line-height: 1.35; }
+    button, .btn { line-height: 1.25; }
+
+    .hero p { font-size: 18px !important; line-height: 1.65; }
+    label, .field-label, .blend-label, .result-label, .section-label, .save-label { font-size: 13px !important; line-height: 1.4; }
+    .field-help, .helper, .help, .note, .microcopy, .blend-help, .recipe-help, .save-help { font-size: 15px !important; line-height: 1.5 !important; }
+    .calc-panel input, .calc-panel select, .blend-row input, .blend-row select { font-size: 17px !important; min-height: 48px; }
+    .btn, button, .blend-actions button, .save-actions button { font-size: 12px !important; min-height: 44px; }
+    .result-value { font-size: 39px !important; }
+    .total-row .result-value { font-size: 46px !important; }
+    .result-unit, .per-candle, .batch-note { font-size: 14px !important; }
+    .blend-result-name { font-size: 14px !important; }
+    .blend-result-amount { font-size: 16px !important; }
+    .blend-result-detail, .blend-total, .saved-blend-meta, .recipe-meta { font-size: 13px !important; }
+    .wax-table, table { font-size: 15px !important; }
+    .wax-table th, table th { font-size: 12px !important; }
+    .wax-table td, table td { line-height: 1.5; }
+    .wax-table button, table button { font-size: 12px !important; }
+    .content-section p, .content-section li, .tips p, .tips li, .maker-tip p, .maker-tip li { font-size: 16px !important; line-height: 1.65 !important; }
+
+    @media (max-width: 760px) {
+      body { font-size: 16px; }
+      .announcement { font-size: 11px !important; }
+      .header-inner .nav, .nav, .header-inner .nav a, .nav a, .header-inner .kindle-account-btn, .kindle-account-btn { font-size: 11px !important; }
+      input, select, textarea { font-size: 16px !important; }
+    }
+
   </style>
 </head>
 <body>
