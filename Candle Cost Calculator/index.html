@@ -286,6 +286,18 @@
       font: 12px/1.45 Georgia, "Times New Roman", serif;
     }
 
+    .cost-save-status {
+      min-height: 20px;
+      margin-top: 10px;
+      color: var(--brown);
+      font: 13px/1.45 Georgia, "Times New Roman", serif;
+    }
+
+    #saveCostProfileBtn:disabled {
+      opacity: .45;
+      cursor: not-allowed;
+    }
+
     .loaded-candle-summary {
       display: none;
       margin-top: 12px;
@@ -701,8 +713,10 @@
           </div>
 
           <div class="button-row">
+            <button id="saveCostProfileBtn" type="button" disabled>Save Cost Data to Candle</button>
             <button id="resetBtn" class="secondary" type="button">Start Over</button>
           </div>
+          <div class="cost-save-status" id="costSaveStatus">Load a saved candle above to attach these costs to its profile.</div>
         </section>
 
         <aside class="results" aria-live="polite">
@@ -812,6 +826,116 @@
       }
     }
 
+    function setSavedCandles(candles) {
+      localStorage.setItem(RECIPE_STORAGE_KEY, JSON.stringify(candles));
+    }
+
+    function inputValue(id) {
+      const el = $(id);
+      return el ? el.value : "";
+    }
+
+    function clearCostInputsForProfile() {
+      [
+        "waxWeight","waxPrice",
+        "fragranceWeight","fragrancePrice",
+        ...costIds
+      ].forEach(id => { if ($(id)) $(id).value = ""; });
+      $("waxWeightUnit").value = "lb";
+      $("fragranceWeightUnit").value = "oz";
+      $("sellPrice").value = "24.00";
+      $("feePct").value = "0";
+    }
+
+    function applySavedCostData(recipe) {
+      const data = recipe && recipe.costData && typeof recipe.costData === "object" ? recipe.costData : null;
+      if (!data) return false;
+
+      if (data.sellPrice !== undefined && data.sellPrice !== "") $("sellPrice").value = data.sellPrice;
+      if (data.feePct !== undefined && data.feePct !== "") $("feePct").value = data.feePct;
+
+      if (data.wax) {
+        $("waxWeight").value = data.wax.purchaseWeight ?? "";
+        $("waxWeightUnit").value = data.wax.purchaseUnit || "lb";
+        $("waxPrice").value = data.wax.pricePaid ?? "";
+      }
+
+      if (data.fragrance) {
+        $("fragranceWeight").value = data.fragrance.purchaseWeight ?? "";
+        $("fragranceWeightUnit").value = data.fragrance.purchaseUnit || "oz";
+        $("fragrancePrice").value = data.fragrance.pricePaid ?? "";
+      }
+
+      const other = data.otherMaterials || {};
+      costIds.forEach(id => {
+        if (Object.prototype.hasOwnProperty.call(other, id)) $(id).value = other[id] ?? "";
+      });
+
+      if (Array.isArray(data.blendPurchases) && activeBlendComponents.length >= 2) {
+        activeBlendComponents.forEach((component, index) => {
+          const normalized = String(component.name || "").trim().toLowerCase();
+          const saved = data.blendPurchases.find(item => String(item?.name || "").trim().toLowerCase() === normalized)
+            || data.blendPurchases[index];
+          if (!saved) return;
+          if ($(`blendWeight${index}`)) $(`blendWeight${index}`).value = saved.purchaseWeight ?? "";
+          if ($(`blendWeightUnit${index}`)) $(`blendWeightUnit${index}`).value = saved.purchaseUnit || "oz";
+          if ($(`blendPrice${index}`)) $(`blendPrice${index}`).value = saved.pricePaid ?? "";
+        });
+      }
+
+      return true;
+    }
+
+    function collectCostData() {
+      const data = {
+        sellPrice: inputValue("sellPrice"),
+        feePct: inputValue("feePct"),
+        wax: {
+          purchaseWeight: inputValue("waxWeight"),
+          purchaseUnit: inputValue("waxWeightUnit"),
+          pricePaid: inputValue("waxPrice")
+        },
+        fragrance: {
+          purchaseWeight: inputValue("fragranceWeight"),
+          purchaseUnit: inputValue("fragranceWeightUnit"),
+          pricePaid: inputValue("fragrancePrice")
+        },
+        otherMaterials: Object.fromEntries(costIds.map(id => [id, inputValue(id)])),
+        blendPurchases: activeBlendComponents.map((component, index) => ({
+          name: component.name,
+          purchaseWeight: inputValue(`blendWeight${index}`),
+          purchaseUnit: inputValue(`blendWeightUnit${index}`) || "oz",
+          pricePaid: inputValue(`blendPrice${index}`)
+        })),
+        updatedAt: new Date().toISOString()
+      };
+      return data;
+    }
+
+    function saveCostDataToCandle() {
+      if (!activeSavedCandle) {
+        $("costSaveStatus").textContent = "Load a saved candle first.";
+        return;
+      }
+
+      const candles = getSavedCandles();
+      const index = candles.findIndex(candle => String(candle.id) === String(activeSavedCandle.id));
+      if (index < 0) {
+        $("costSaveStatus").textContent = "That candle could not be found. Reload it and try again.";
+        return;
+      }
+
+      candles[index] = {
+        ...candles[index],
+        costData: collectCostData(),
+        updatedAt: new Date().toISOString()
+      };
+      setSavedCandles(candles);
+      activeSavedCandle = candles[index];
+      $("costSaveStatus").textContent = `Cost data saved to “${activeSavedCandle.name}” ✓`;
+      refreshSavedCandleSelect(activeSavedCandle.id);
+    }
+
     function refreshSavedCandleSelect(selectedId = "") {
       const select = $("savedCandleSelect");
       const candles = getSavedCandles();
@@ -832,6 +956,8 @@
       $("blendCostRows").innerHTML = "";
       $("fragranceCostLabel").textContent = "Fragrance cost / candle";
       $("singleFragranceFields").style.display = "grid";
+      $("saveCostProfileBtn").disabled = true;
+      $("costSaveStatus").textContent = "Load a saved candle above to attach these costs to its profile.";
       document.querySelectorAll("#fragranceWeight, #fragranceWeightUnit, #fragrancePrice, #fragranceUsed, #fragranceUsedUnit").forEach(el => {
         el.disabled = false;
       });
@@ -915,6 +1041,7 @@
       }
 
       activeSavedCandle = recipe;
+      clearCostInputsForProfile();
       const waxOz = toOunces(per.wax, per.unit);
       const fragranceOz = toOunces(per.fragrance, per.unit);
 
@@ -932,9 +1059,16 @@
       const blendText = hasBlend
         ? ` • ${escapeHtml(recipe.blendName || "Saved fragrance blend")}`
         : "";
+      const restoredCosts = applySavedCostData(recipe);
       $("loadedCandleSummary").innerHTML = `<strong>${escapeHtml(recipe.name)}</strong><br>${waxOz.toFixed(3)} oz wax + ${fragranceOz.toFixed(3)} oz total fragrance per candle${blendText}.`;
       $("loadedCandleSummary").classList.add("show");
-      $("savedCandleStatus").textContent = `Loaded “${recipe.name}”. Enter what you paid for your materials below.`;
+      $("saveCostProfileBtn").disabled = false;
+      $("costSaveStatus").textContent = restoredCosts
+        ? `Saved cost data for “${recipe.name}” has been restored. Make changes, then save again anytime.`
+        : `No cost data saved yet for “${recipe.name}”. Fill in the costs below, then save them to this candle.`;
+      $("savedCandleStatus").textContent = restoredCosts
+        ? `Loaded “${recipe.name}” with its saved cost data.`
+        : `Loaded “${recipe.name}”. Enter what you paid for your materials below.`;
       calculate();
     }
 
@@ -989,6 +1123,7 @@
 
     $("loadSavedCandleBtn").addEventListener("click", loadSavedCandle);
     $("savedCandleSelect").addEventListener("dblclick", loadSavedCandle);
+    $("saveCostProfileBtn").addEventListener("click", saveCostDataToCandle);
 
     $("resetBtn").addEventListener("click", () => {
       $("sellPrice").value = "24.00";
