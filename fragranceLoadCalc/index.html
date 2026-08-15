@@ -654,6 +654,180 @@
       line-height: 1.5;
     }
 
+
+
+    /* Saved recipe library */
+    .save-recipe-box {
+      margin-top: 14px;
+      padding-top: 16px;
+      border-top: 1px solid var(--line);
+    }
+
+    .save-recipe-label {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 10px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+
+    .save-recipe-row {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+    }
+
+    .save-recipe-row input {
+      min-height: 43px;
+      padding: 11px 12px;
+      font-size: 14px;
+      background: rgba(255, 253, 248, .72);
+    }
+
+    .save-recipe-btn {
+      min-width: 116px;
+      padding: 11px 13px;
+      background: var(--ink);
+      color: var(--paper);
+      font-size: 10px;
+      font-weight: 700;
+    }
+
+    .save-recipe-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 3px 3px 0 var(--kraft);
+    }
+
+    .save-recipe-note,
+    .save-recipe-status {
+      margin-top: 8px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .save-recipe-status {
+      display: none;
+      color: var(--brown);
+      font-weight: 700;
+    }
+
+    .saved-recipes {
+      max-width: 950px;
+      margin: 34px auto 0;
+      padding: 28px 30px 30px;
+      border: 1px solid var(--ink);
+      background: rgba(255, 253, 248, .50);
+    }
+
+    .saved-recipes-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+
+    .saved-recipes-head h2 {
+      margin: 4px 0 0;
+      font-size: 26px;
+      line-height: 1;
+      letter-spacing: -.03em;
+      font-weight: 500;
+    }
+
+    .saved-recipes-head p {
+      max-width: 520px;
+      margin: 0;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 12px;
+      line-height: 1.5;
+    }
+
+    .recipe-count {
+      flex: 0 0 auto;
+      border: 1px solid var(--line);
+      padding: 8px 10px;
+      font-size: 9px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .recipe-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .recipe-empty {
+      padding: 24px;
+      border: 1px dashed var(--line);
+      color: var(--muted);
+      text-align: center;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .recipe-card {
+      display: grid;
+      grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr) auto;
+      align-items: center;
+      gap: 18px;
+      padding: 16px 17px;
+      border: 1px solid var(--line);
+      background: rgba(244, 237, 226, .72);
+    }
+
+    .recipe-card-name {
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+
+    .recipe-card-meta {
+      margin-top: 5px;
+      color: var(--muted);
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 11px;
+      line-height: 1.4;
+    }
+
+    .recipe-card-result {
+      font-size: 11px;
+      line-height: 1.45;
+    }
+
+    .recipe-card-result strong {
+      display: block;
+      margin-bottom: 2px;
+      font-size: 12px;
+    }
+
+    .recipe-actions {
+      display: flex;
+      gap: 7px;
+    }
+
+    .recipe-load,
+    .recipe-delete {
+      padding: 9px 11px;
+      background: transparent;
+      color: var(--ink);
+      font-size: 9px;
+      white-space: nowrap;
+    }
+
+    .recipe-load {
+      background: var(--ink);
+      color: var(--paper);
+    }
+
+    .recipe-load:hover { box-shadow: 3px 3px 0 var(--kraft); }
+    .recipe-delete:hover { background: rgba(122, 65, 54, .08); }
+
     @media (max-width: 820px) {
       .nav { display: none; }
       main { padding-top: 56px; }
@@ -667,6 +841,13 @@
     }
 
     @media (max-width: 560px) {
+      .saved-recipes { padding: 23px 18px; }
+      .saved-recipes-head { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .recipe-card { grid-template-columns: 1fr; gap: 11px; }
+      .recipe-actions { width: 100%; }
+      .recipe-load, .recipe-delete { flex: 1; }
+      .save-recipe-row { grid-template-columns: 1fr; }
+      .save-recipe-btn { width: 100%; }
       .site-header { padding-inline: 18px; }
       main { padding: 44px 14px 70px; }
       .hero { margin-bottom: 32px; }
@@ -752,6 +933,7 @@
     <nav class="nav" aria-label="Main navigation">
       <a href="https://kindlecandle.com/">Home</a>
       <a href="#calculator">Batch Tool</a>
+      <a href="#saved-recipes">Saved Recipes</a>
       <a href="#wax-guide">Wax Reference</a>
       <a href="#maker-tips">Pouring Tips</a>
       <a href="https://kindlecandle.com/collections/candles">Candles</a>
@@ -836,9 +1018,35 @@
             </div>
           </div>
 
-          <button class="copy" id="copyBtn" type="button">Copy Batch Summary</button>
+          <div>
+            <button class="copy" id="copyBtn" type="button">Copy Batch Summary</button>
+
+            <div class="save-recipe-box">
+              <label class="save-recipe-label" for="recipeName">Save this formula</label>
+              <div class="save-recipe-row">
+                <input id="recipeName" type="text" maxlength="60" placeholder="e.g. Golden Hour 8 oz" autocomplete="off" />
+                <button class="save-recipe-btn" id="saveRecipeBtn" type="button">Save Recipe</button>
+              </div>
+              <div class="save-recipe-note">Saves vessel size, fragrance percentage, wax gravity, and unit. Your batch quantity stays separate.</div>
+              <div class="save-recipe-status" id="saveRecipeStatus" role="status"></div>
+            </div>
+          </div>
         </aside>
       </div>
+    </section>
+
+    <section class="saved-recipes" id="saved-recipes" aria-labelledby="savedRecipesTitle">
+      <div class="saved-recipes-head">
+        <div>
+          <span class="eyebrow" style="margin-bottom:10px;">Your Formula Library</span>
+          <h2 id="savedRecipesTitle">Saved Recipes</h2>
+        </div>
+        <div class="recipe-count" id="recipeCount">0 recipes saved</div>
+      </div>
+      <div class="saved-recipes-head" style="margin-top:-6px; margin-bottom:18px;">
+        <p>Save the formula once, then load it whenever you pour again. Loading a recipe leaves the current batch quantity alone so you can scale the same candle to any production run.</p>
+      </div>
+      <div class="recipe-list" id="recipeList"></div>
     </section>
 
     <section class="formula-note" aria-label="Calculator notes">
@@ -1108,9 +1316,163 @@
       }
     }
 
+    const RECIPE_STORAGE_KEY = 'kindleFragranceRecipesV1';
+
+    function getSavedRecipes() {
+      try {
+        const parsed = JSON.parse(localStorage.getItem(RECIPE_STORAGE_KEY) || '[]');
+        return Array.isArray(parsed) ? parsed : [];
+      } catch {
+        return [];
+      }
+    }
+
+    function setSavedRecipes(recipes) {
+      localStorage.setItem(RECIPE_STORAGE_KEY, JSON.stringify(recipes));
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;');
+    }
+
+    function recipePerCandle(recipe) {
+      const size = Number(recipe.containerSize);
+      const loadPct = Number(recipe.fragranceLoad);
+      const gravity = Number(recipe.waxGravity);
+      const finishedWeight = size * gravity;
+      const load = loadPct / 100;
+      const wax = finishedWeight / (1 + load);
+      const fragrance = wax * load;
+      return { wax, fragrance, finishedWeight };
+    }
+
+    function renderRecipes() {
+      const recipes = getSavedRecipes();
+      const list = $('recipeList');
+      const count = $('recipeCount');
+      count.textContent = `${recipes.length} ${recipes.length === 1 ? 'recipe' : 'recipes'} saved`;
+
+      if (!recipes.length) {
+        list.innerHTML = '<div class="recipe-empty">No saved recipes yet. Build a batch above, give the formula a name, and choose <strong>Save Recipe</strong>.</div>';
+        return;
+      }
+
+      list.innerHTML = recipes.map((recipe) => {
+        const unit = recipe.unit || 'oz';
+        const per = recipePerCandle(recipe);
+        return `
+          <article class="recipe-card" data-recipe-id="${escapeHtml(recipe.id)}">
+            <div>
+              <div class="recipe-card-name">${escapeHtml(recipe.name)}</div>
+              <div class="recipe-card-meta">${escapeHtml(recipe.containerSize)} ${escapeHtml(unit)} vessel • ${escapeHtml(recipe.fragranceLoad)}% fragrance • SG ${escapeHtml(recipe.waxGravity)}</div>
+            </div>
+            <div class="recipe-card-result">
+              <strong>${formatNumber(per.wax, unit)} ${unit} wax + ${formatNumber(per.fragrance, unit)} ${unit} fragrance</strong>
+              per candle at this saved formula
+            </div>
+            <div class="recipe-actions">
+              <button class="recipe-load" type="button" data-action="load" data-id="${escapeHtml(recipe.id)}">Load</button>
+              <button class="recipe-delete" type="button" data-action="delete" data-id="${escapeHtml(recipe.id)}">Delete</button>
+            </div>
+          </article>`;
+      }).join('');
+    }
+
+    function flashRecipeStatus(message) {
+      const status = $('saveRecipeStatus');
+      status.textContent = message;
+      status.style.display = 'block';
+      clearTimeout(flashRecipeStatus.timer);
+      flashRecipeStatus.timer = setTimeout(() => {
+        status.style.display = 'none';
+      }, 2200);
+    }
+
+    function saveRecipe() {
+      const nameInput = $('recipeName');
+      const name = nameInput.value.trim();
+      const qty = Number(fields.quantity.value);
+      const size = Number(fields.containerSize.value);
+      const load = Number(fields.fragranceLoad.value);
+      const gravity = Number(fields.waxGravity.value);
+      const error = validate(qty, size, load, gravity);
+
+      if (error) {
+        $('errorBox').textContent = error;
+        $('errorBox').style.display = 'block';
+        return;
+      }
+      if (!name) {
+        flashRecipeStatus('Give the recipe a name first.');
+        nameInput.focus();
+        return;
+      }
+
+      const recipes = getSavedRecipes();
+      const existingIndex = recipes.findIndex((r) => String(r.name).toLowerCase() === name.toLowerCase());
+      const recipe = {
+        id: existingIndex >= 0 ? recipes[existingIndex].id : `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+        name,
+        containerSize: fields.containerSize.value,
+        unit: fields.unit.value,
+        fragranceLoad: fields.fragranceLoad.value,
+        waxGravity: fields.waxGravity.value,
+        updatedAt: new Date().toISOString()
+      };
+
+      if (existingIndex >= 0) {
+        recipes[existingIndex] = recipe;
+        flashRecipeStatus('Recipe updated ✓');
+      } else {
+        recipes.unshift(recipe);
+        flashRecipeStatus('Recipe saved ✓');
+      }
+
+      setSavedRecipes(recipes);
+      renderRecipes();
+      nameInput.value = '';
+    }
+
+    function loadRecipe(id) {
+      const recipe = getSavedRecipes().find((r) => r.id === id);
+      if (!recipe) return;
+      fields.containerSize.value = recipe.containerSize;
+      fields.unit.value = recipe.unit || 'oz';
+      fields.fragranceLoad.value = recipe.fragranceLoad;
+      fields.waxGravity.value = recipe.waxGravity;
+      calculate();
+      $('recipeName').value = recipe.name;
+      document.getElementById('calculator').scrollIntoView({ behavior: 'smooth', block: 'start' });
+      flashRecipeStatus(`Loaded “${recipe.name}” ✓`);
+    }
+
+    function deleteRecipe(id) {
+      const recipes = getSavedRecipes();
+      const recipe = recipes.find((r) => r.id === id);
+      if (!recipe) return;
+      if (!window.confirm(`Delete “${recipe.name}”?`)) return;
+      setSavedRecipes(recipes.filter((r) => r.id !== id));
+      renderRecipes();
+    }
+
     $('calculateBtn').addEventListener('click', calculate);
     $('resetBtn').addEventListener('click', reset);
     $('copyBtn').addEventListener('click', copyResults);
+    $('saveRecipeBtn').addEventListener('click', saveRecipe);
+    $('recipeName').addEventListener('keydown', (event) => {
+      if (event.key === 'Enter') saveRecipe();
+    });
+    $('recipeList').addEventListener('click', (event) => {
+      const button = event.target.closest('button[data-action]');
+      if (!button) return;
+      if (button.dataset.action === 'load') loadRecipe(button.dataset.id);
+      if (button.dataset.action === 'delete') deleteRecipe(button.dataset.id);
+    });
 
     Object.values(fields).forEach((field) => {
       field.addEventListener('keydown', (event) => {
@@ -1119,6 +1481,7 @@
     });
 
     calculate();
+    renderRecipes();
   </script>
 </body>
 </html>
