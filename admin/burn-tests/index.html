@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Burn Test Moderation | Kindle Candle</title>
+  <style>
+    :root{--bg:#f7f1e9;--surface:#fffaf4;--ink:#211d19;--muted:#776b61;--line:#e5d6c8;--accent:#ad5d3d;--green:#356a46;--red:#984b42}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,serif}
+    .wrap{width:min(1100px,92%);margin:auto}.top{padding:28px 0;border-bottom:1px solid var(--line);background:rgba(255,250,244,.85)}
+    .top .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-size:1.3rem;font-weight:700}
+    a{color:inherit}.back{text-decoration:none;font-family:Arial,sans-serif;font-size:.9rem}
+    main{padding:42px 0 70px} h1{font-size:clamp(2rem,5vw,3.5rem);margin:0 0 10px} .lead{color:var(--muted);font-family:Arial,sans-serif;margin:0 0 28px}
+    .status{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--surface);font-family:Arial,sans-serif;color:var(--muted)}
+    .tabs{display:flex;gap:8px;margin:24px 0;flex-wrap:wrap}.tab{border:1px solid var(--line);background:var(--surface);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700}
+    .tab.active{background:var(--ink);color:white;border-color:var(--ink)}
+    .cards{display:grid;gap:16px}.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
+    .card-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.card h2{font-size:1.15rem;margin:0 0 5px}.meta{font-family:Arial,sans-serif;color:var(--muted);font-size:.88rem;line-height:1.65}
+    .details{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.chip{font-family:Arial,sans-serif;border:1px solid var(--line);padding:7px 9px;border-radius:999px;font-size:.82rem;background:white}
+    .notes{font-family:Arial,sans-serif;background:white;border:1px solid var(--line);padding:14px;border-radius:12px;line-height:1.55;margin-top:12px}
+    .actions{display:flex;gap:10px;margin-top:18px}.actions button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
+    .approve{background:var(--green);color:white}.reject{background:var(--red);color:white}.pending{color:#8a6124}.approved{color:var(--green)}.rejected{color:var(--red)}
+    .empty{text-align:center;padding:45px 20px;background:var(--surface);border:1px dashed var(--line);border-radius:18px;color:var(--muted);font-family:Arial,sans-serif}
+    @media(max-width:650px){.card-head{display:block}.top .wrap{align-items:flex-start}}
+  </style>
+</head>
+<body>
+<header class="top"><div class="wrap"><div class="brand">Kindle Candle · Admin</div><a class="back" href="../../jar-library/">← Jar Library</a></div></header>
+<main class="wrap">
+  <h1>Burn Test Moderation</h1>
+  <p class="lead">Review community submissions before they appear publicly.</p>
+  <div id="gate" class="status">Checking your admin access…</div>
+  <section id="app" hidden>
+    <div class="tabs">
+      <button class="tab active" data-status="pending">Pending</button>
+      <button class="tab" data-status="approved">Approved</button>
+      <button class="tab" data-status="rejected">Rejected</button>
+    </div>
+    <div id="cards" class="cards"></div>
+  </section>
+</main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../shared/supabase-config.js"></script>
+<script src="../../shared/kindle-cloud.js"></script>
+<script>
+let client, currentStatus="pending";
+const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+async function init(){
+  try{
+    if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+    const user=window.KindleCloud?.currentUser;
+    if(!user){
+      document.getElementById("gate").innerHTML='Please <a href="../../">sign in</a> with your Kindle Candle admin account first.';
+      return;
+    }
+    const cfg=window.KINDLE_SUPABASE_CONFIG||{};
+    client=window.KindleCloud?.client||window.supabase.createClient(cfg.url,cfg.key);
+    const {data,error}=await client.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
+    if(error) throw error;
+    if(!data){
+      document.getElementById("gate").textContent="This account does not have administrator access.";
+      return;
+    }
+    document.getElementById("gate").hidden=true;
+    document.getElementById("app").hidden=false;
+    loadTests();
+  }catch(e){document.getElementById("gate").textContent="Could not verify admin access: "+(e.message||e)}
+}
+
+async function loadTests(){
+  const cards=document.getElementById("cards");
+  cards.innerHTML='<div class="status">Loading '+esc(currentStatus)+' tests…</div>';
+  const {data:tests,error}=await client.from("burn_tests")
+    .select("id,user_id,jar_id,wax_id,wick_id,fragrance_load_percent,fill_weight_oz,hours_tested,result,notes,status,created_at")
+    .eq("status",currentStatus).order("created_at",{ascending:false});
+  if(error){cards.innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}
+  if(!tests.length){cards.innerHTML='<div class="empty">No '+esc(currentStatus)+' burn tests.</div>';return}
+
+  const jarIds=[...new Set(tests.map(x=>x.jar_id))], waxIds=[...new Set(tests.map(x=>x.wax_id))], wickIds=[...new Set(tests.map(x=>x.wick_id))];
+  const [jr,wr,kr]=await Promise.all([
+    client.from("jars").select("id,name").in("id",jarIds),
+    client.from("waxes").select("id,name").in("id",waxIds),
+    client.from("wicks").select("id,series,size").in("id",wickIds)
+  ]);
+  const jm=new Map((jr.data||[]).map(x=>[x.id,x.name])), wm=new Map((wr.data||[]).map(x=>[x.id,x.name])), km=new Map((kr.data||[]).map(x=>[x.id,`${x.series} ${x.size}`]));
+  cards.innerHTML=tests.map(t=>`
+    <article class="card" id="test-${esc(t.id)}">
+      <div class="card-head">
+        <div><h2>${esc(jm.get(t.jar_id)||"Unknown jar")}</h2><div class="meta">${new Date(t.created_at).toLocaleString()}</div></div>
+        <strong class="${esc(t.status)}">${esc(t.status.toUpperCase())}</strong>
+      </div>
+      <div class="details">
+        <span class="chip">Wax: <b>${esc(wm.get(t.wax_id)||"Unknown")}</b></span>
+        <span class="chip">Wick: <b>${esc(km.get(t.wick_id)||"Unknown")}</b></span>
+        <span class="chip">Fragrance: <b>${esc(t.fragrance_load_percent)}%</b></span>
+        <span class="chip">Fill: <b>${esc(t.fill_weight_oz)} oz</b></span>
+        <span class="chip">Tested: <b>${esc(t.hours_tested??"—")} hrs</b></span>
+        <span class="chip">Result: <b>${esc(t.result)}</b></span>
+      </div>
+      <div class="notes">${esc(t.notes||"No notes provided.")}</div>
+      ${t.status==="pending"?`<div class="actions"><button class="approve" onclick="moderate('${esc(t.id)}','approved')">Approve</button><button class="reject" onclick="moderate('${esc(t.id)}','rejected')">Reject</button></div>`:""}
+    </article>`).join("");
+}
+
+async function moderate(id,status){
+  const {error}=await client.from("burn_tests").update({status}).eq("id",id);
+  if(error){alert("Could not update test: "+error.message);return}
+  loadTests();
+}
+document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
+  currentStatus=b.dataset.status;
+  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
+  loadTests();
+});
+init();
+</script>
+</body></html>
