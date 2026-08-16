@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Kindle Candle Jar Library — compare vessels, waxes, wicks, and community burn tests." />
+  <title>Jar Library | Kindle Candle</title>
+  <style>
+    :root{
+      --bg:#f7f3ed;
+      --surface:#fffdf9;
+      --surface-2:#f0e8de;
+      --ink:#231f1b;
+      --muted:#71685f;
+      --line:#ded5ca;
+      --accent:#a85f3f;
+      --accent-dark:#7c452e;
+      --success:#2e6b43;
+      --success-bg:#e7f3ea;
+      --warn:#8a651a;
+      --warn-bg:#fff2d9;
+      --danger:#8e3a34;
+      --danger-bg:#f9e7e5;
+      --shadow:0 16px 40px rgba(52,42,33,.08);
+      --radius:20px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+    }
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    a{color:inherit;text-decoration:none}
+
+    .container{width:min(1180px,92%);margin-inline:auto}
+
+    header{
+      position:sticky;top:0;z-index:50;
+      background:rgba(255,253,249,.92);
+      backdrop-filter:blur(14px);
+      border-bottom:1px solid rgba(222,213,202,.9);
+    }
+    .nav{
+      min-height:72px;
+      display:flex;align-items:center;justify-content:space-between;gap:24px
+    }
+    .brand{
+      display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:.06em
+    }
+    .brand-mark{
+      width:34px;height:34px;border-radius:50% 50% 46% 46%;
+      background:linear-gradient(180deg,#d79062,#a85f3f);
+      display:grid;place-items:center;color:white;font-size:17px
+    }
+    .nav-links{display:flex;gap:22px;color:#5f574f;font-size:.94rem}
+    .nav-links a.active{color:var(--ink);font-weight:750}
+    .nav-cta{
+      border:1px solid var(--line);background:var(--surface);padding:10px 14px;border-radius:12px;font-weight:700
+    }
+
+    .hero{padding:78px 0 42px}
+    .eyebrow{
+      display:inline-flex;align-items:center;gap:8px;
+      padding:7px 11px;border-radius:999px;background:#efe4d9;color:#75472f;
+      font-size:.82rem;font-weight:800;letter-spacing:.03em;margin-bottom:18px
+    }
+    .hero-grid{display:grid;grid-template-columns:1.3fr .7fr;gap:46px;align-items:end}
+    .hero h1{
+      margin:0 0 16px;font-size:clamp(2.7rem,6vw,5.6rem);line-height:.94;letter-spacing:-.055em;
+      max-width:850px
+    }
+    .hero p{margin:0;color:var(--muted);font-size:1.08rem;max-width:680px;line-height:1.7}
+    .hero-stat{
+      background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);
+      padding:24px;box-shadow:var(--shadow)
+    }
+    .hero-stat strong{display:block;font-size:2rem;margin-bottom:6px}
+    .hero-stat span{color:var(--muted);font-size:.94rem}
+
+    .search-panel{
+      margin-top:34px;background:var(--surface);border:1px solid var(--line);border-radius:22px;
+      padding:14px;box-shadow:var(--shadow)
+    }
+    .search-row{display:grid;grid-template-columns:1.6fr .7fr .7fr auto;gap:10px}
+    .field{
+      display:flex;align-items:center;gap:10px;border:1px solid var(--line);background:white;border-radius:14px;padding:0 14px
+    }
+    .field input,.field select{
+      width:100%;border:0;background:transparent;outline:0;padding:14px 0;color:var(--ink)
+    }
+    .search-btn{
+      border:0;background:var(--ink);color:#fff;border-radius:14px;padding:0 20px;font-weight:800
+    }
+
+    .supplier-strip{display:flex;gap:10px;flex-wrap:wrap;margin:26px 0 44px}
+    .pill{
+      border:1px solid var(--line);background:var(--surface);padding:10px 15px;border-radius:999px;color:#5c544c
+    }
+    .pill.active{background:var(--ink);color:white;border-color:var(--ink)}
+
+    .section-head{
+      display:flex;align-items:end;justify-content:space-between;gap:20px;margin:0 0 22px
+    }
+    .section-head h2{margin:0;font-size:2rem;letter-spacing:-.03em}
+    .section-head p{margin:6px 0 0;color:var(--muted)}
+    .result-count{color:var(--muted);font-size:.9rem}
+
+    .jar-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;padding-bottom:80px}
+    .jar-card{
+      background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;
+      transition:.22s ease;display:flex;flex-direction:column
+    }
+    .jar-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+    .jar-visual{
+      aspect-ratio:16/10;display:grid;place-items:center;position:relative;overflow:hidden;
+      background:
+      radial-gradient(circle at 75% 18%,rgba(255,255,255,.75),transparent 28%),
+      linear-gradient(135deg,#d9c6b6,#f2e9df);
+    }
+    .jar-shape{
+      width:92px;height:118px;border:5px solid rgba(61,48,38,.36);border-radius:12px 12px 18px 18px;
+      background:rgba(255,255,255,.38);position:relative;box-shadow:0 18px 28px rgba(58,45,35,.12)
+    }
+    .jar-shape:before{
+      content:"";position:absolute;left:12px;right:12px;top:-12px;height:9px;border-radius:6px 6px 2px 2px;background:rgba(61,48,38,.38)
+    }
+    .badge{
+      position:absolute;top:14px;left:14px;background:rgba(255,253,249,.92);backdrop-filter:blur(8px);
+      padding:7px 10px;border-radius:999px;font-size:.75rem;font-weight:800
+    }
+    .jar-body{padding:20px;display:flex;flex-direction:column;flex:1}
+    .supplier{font-size:.75rem;text-transform:uppercase;letter-spacing:.11em;color:#8b7f73;font-weight:800}
+    .jar-card h3{margin:7px 0 8px;font-size:1.28rem}
+    .meta{color:var(--muted);font-size:.9rem;line-height:1.55}
+    .mini-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+    .mini-stat{background:#f5efe8;border-radius:12px;padding:11px}
+    .mini-stat span{display:block;color:#8c8176;font-size:.7rem;margin-bottom:3px}
+    .mini-stat strong{font-size:.9rem}
+    .card-actions{display:flex;gap:10px;margin-top:auto}
+    .primary,.secondary{
+      border-radius:12px;padding:11px 14px;font-weight:800;border:1px solid var(--line);flex:1
+    }
+    .primary{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .secondary{background:white;color:var(--ink)}
+
+    .empty{
+      grid-column:1/-1;background:var(--surface);border:1px dashed var(--line);border-radius:18px;padding:46px;text-align:center;color:var(--muted)
+    }
+
+    .modal{
+      position:fixed;inset:0;background:rgba(28,23,19,.54);display:none;align-items:center;justify-content:center;
+      z-index:100;padding:20px
+    }
+    .modal.open{display:flex}
+    .modal-card{
+      width:min(980px,100%);max-height:90vh;overflow:auto;background:var(--surface);border-radius:24px;
+      border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.22)
+    }
+    .modal-top{display:flex;justify-content:space-between;align-items:center;padding:18px 20px;border-bottom:1px solid var(--line)}
+    .modal-top strong{font-size:1.05rem}
+    .close{
+      width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:white;font-size:1.1rem
+    }
+    .detail{padding:26px}
+    .detail-grid{display:grid;grid-template-columns:300px 1fr;gap:28px}
+    .detail-visual{
+      min-height:340px;border-radius:18px;background:linear-gradient(135deg,#d6c1b0,#f5ece2);display:grid;place-items:center
+    }
+    .detail-visual .jar-shape{width:120px;height:150px}
+    .detail h2{font-size:2.3rem;margin:6px 0 10px;letter-spacing:-.04em}
+    .detail p{color:var(--muted);line-height:1.65}
+    .spec-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:18px 0}
+    .spec{background:#f5efe8;border-radius:12px;padding:12px}
+    .spec span{display:block;color:#8c8176;font-size:.72rem}
+    .spec strong{font-size:.95rem}
+    .summary-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin:26px 0}
+    .summary{background:#efe6dc;border-radius:14px;padding:16px}
+    .summary span{display:block;color:#7d7166;font-size:.75rem;margin-bottom:5px}
+    .summary strong{font-size:1rem}
+    .tests-head{display:flex;justify-content:space-between;align-items:center;margin-top:22px}
+    .tests-head h3{margin:0}
+    .test{
+      border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px;background:#fff
+    }
+    .test-top{display:flex;justify-content:space-between;gap:12px;align-items:center}
+    .status{font-size:.72rem;font-weight:900;padding:6px 9px;border-radius:999px}
+    .status.success{background:var(--success-bg);color:var(--success)}
+    .status.adjust{background:var(--warn-bg);color:var(--warn)}
+    .status.fail{background:var(--danger-bg);color:var(--danger)}
+    .test-meta{display:flex;gap:12px;flex-wrap:wrap;color:#5f574f;font-size:.86rem;margin:10px 0}
+    .test p{margin:0;color:#6a625a;font-size:.93rem}
+    .buy-link{
+      display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:white;border:0;border-radius:12px;padding:12px 15px;font-weight:800
+    }
+
+    .submit-modal .modal-card{width:min(680px,100%)}
+    form{padding:24px}
+    .form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+    .form-group{display:flex;flex-direction:column;gap:7px}
+    .form-group.full{grid-column:1/-1}
+    label{font-size:.82rem;font-weight:800}
+    .form-group input,.form-group select,.form-group textarea{
+      border:1px solid var(--line);background:white;border-radius:12px;padding:12px 13px;outline:none
+    }
+    textarea{min-height:110px;resize:vertical}
+    .form-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+    .form-actions button{border-radius:12px;padding:11px 16px;font-weight:800}
+    .cancel{background:white;border:1px solid var(--line)}
+    .submit{background:var(--ink);color:white;border:1px solid var(--ink)}
+
+    footer{border-top:1px solid var(--line);padding:34px 0 50px;color:var(--muted);font-size:.9rem}
+
+    @media(max-width:900px){
+      .nav-links{display:none}
+      .hero-grid,.detail-grid{grid-template-columns:1fr}
+      .hero-stat{display:none}
+      .search-row{grid-template-columns:1fr 1fr}
+      .search-row .field:first-child{grid-column:1/-1}
+      .search-btn{min-height:48px}
+      .jar-grid{grid-template-columns:repeat(2,1fr)}
+    }
+    @media(max-width:640px){
+      .hero{padding-top:50px}
+      .search-row,.jar-grid,.summary-grid,.form-grid,.spec-grid{grid-template-columns:1fr}
+      .search-row .field:first-child,.form-group.full{grid-column:auto}
+      .section-head{align-items:flex-start;flex-direction:column}
+      .detail{padding:18px}
+      .detail-visual{min-height:240px}
+      .modal{padding:8px}
+      .modal-card{border-radius:18px}
+      .nav-cta{display:none}
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="brand" href="/" aria-label="Kindle Candle home">
+        <span class="brand-mark">✦</span>
+        <span>KINDLE CANDLE</span>
+      </a>
+      <nav class="nav-links" aria-label="Main navigation">
+        <a href="/">Home</a>
+        <a href="/fragranceLoadCalc/">Wax + Fragrance</a>
+        <a href="/Candle%20Cost%20Calculator/">Cost Calculator</a>
+        <a class="active" href="/jar-library/" aria-current="page">Jar Library</a>
+        <a href="/my-candles/">My Candles</a>
+      </nav>
+      <button class="nav-cta" onclick="openSubmit()">+ Add a Test</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="container">
+        <div class="eyebrow">COMMUNITY-POWERED CANDLE DATA</div>
+        <div class="hero-grid">
+          <div>
+            <h1>Find the jar. See what works.</h1>
+            <p>
+              Browse candle vessels and compare real community burn tests—wax, wick, fragrance load,
+              fill weight, and performance—all in one searchable library.
+            </p>
+          </div>
+          <div class="hero-stat">
+            <strong id="totalTests">136</strong>
+            <span>community burn tests across the jars in this prototype</span>
+          </div>
+        </div>
+
+        <div class="search-panel">
+          <div class="search-row">
+            <div class="field">
+              <span>⌕</span>
+              <input id="searchInput" type="search" placeholder="Search jars, suppliers, waxes or wicks…" />
+            </div>
+            <div class="field">
+              <select id="supplierFilter" aria-label="Supplier">
+                <option value="">All suppliers</option>
+              </select>
+            </div>
+            <div class="field">
+              <select id="waxFilter" aria-label="Wax">
+                <option value="">All waxes</option>
+              </select>
+            </div>
+            <button class="search-btn" onclick="renderJars()">Search</button>
+          </div>
+        </div>
+
+        <div class="supplier-strip" id="supplierPills"></div>
+      </div>
+    </section>
+
+    <section class="container">
+      <div class="section-head">
+        <div>
+          <h2>Jar Library</h2>
+          <p>Start with the vessel, then learn from everyone who tested it before you.</p>
+        </div>
+        <div class="result-count" id="resultCount"></div>
+      </div>
+
+      <div class="jar-grid" id="jarGrid"></div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      Kindle Candle · Jar Library prototype · Community data shown here is sample content for demonstration.
+    </div>
+  </footer>
+
+  <div class="modal" id="detailModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <strong>Jar Details</strong>
+        <button class="close" onclick="closeModal('detailModal')" aria-label="Close">×</button>
+      </div>
+      <div class="detail" id="detailContent"></div>
+    </div>
+  </div>
+
+  <div class="modal submit-modal" id="submitModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <strong>Add a Community Burn Test</strong>
+        <button class="close" onclick="closeModal('submitModal')" aria-label="Close">×</button>
+      </div>
+      <form id="testForm">
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="testJar">Jar</label>
+            <select id="testJar" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="testWax">Wax</label>
+            <select id="testWax" required>
+              <option>Golden Brands 464</option>
+              <option>Coconut Apricot</option>
+              <option>ProBlend 600</option>
+              <option>IGI 6006</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="testWick">Wick</label>
+            <input id="testWick" placeholder="e.g. CD 12" required />
+          </div>
+
+          <div class="form-group">
+            <label for="testFragrance">Fragrance Load (%)</label>
+            <input id="testFragrance" type="number" min="0" max="20" step=".1" placeholder="8.5" required />
+          </div>
+
+          <div class="form-group">
+            <label for="testFill">Fill Weight (oz)</label>
+            <input id="testFill" type="number" min="0" step=".1" placeholder="11" required />
+          </div>
+
+          <div class="form-group">
+            <label for="testResult">Result</label>
+            <select id="testResult" required>
+              <option value="success">Works Great</option>
+              <option value="adjust">Needs Adjustment</option>
+              <option value="fail">Didn't Work</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="testHours">Hours Tested</label>
+            <input id="testHours" type="number" min="0" step="1" placeholder="20" />
+          </div>
+
+          <div class="form-group full">
+            <label for="testNotes">Notes</label>
+            <textarea id="testNotes" placeholder="What did you notice about flame height, melt pool, soot, mushrooming, tunneling, or hot throw?"></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="button" class="cancel" onclick="closeModal('submitModal')">Cancel</button>
+          <button type="submit" class="submit">Submit Test</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    const jars = [
+      {
+        id:1,name:"Serafina Jar",supplier:"Dulceria Candles",price:3.42,diameter:'3.50"',height:'4.10"',fill:"12 oz",
+        tests:42,successRate:82,topWax:"Golden Brands 464",topWick:"CD 12",
+        description:"A clean, modern vessel with a wide opening and strong community interest.",
+        community:[
+          {status:"success",wax:"Golden Brands 464",wick:"CD 12",load:"8%",fill:"11 oz",hours:20,notes:"Great melt pool after about 2.5 hours. Good flame height and very little mushrooming."},
+          {status:"adjust",wax:"Golden Brands 464",wick:"CD 10",load:"9%",fill:"11 oz",hours:16,notes:"Slight tunneling late in the burn. I would wick up one size next time."},
+          {status:"success",wax:"Coconut Apricot",wick:"Premier 735",load:"9%",fill:"11.5 oz",hours:24,notes:"Even melt pool and steady flame with strong hot throw."}
+        ]
+      },
+      {
+        id:2,name:"Medium Straight Sided Jar",supplier:"CandleScience",price:2.10,diameter:'3.06"',height:'3.52"',fill:"8.5 oz",
+        tests:67,successRate:79,topWax:"Golden Brands 464",topWick:"ECO 8",
+        description:"A familiar workhorse vessel that gives makers a large pool of community data to compare.",
+        community:[
+          {status:"success",wax:"Golden Brands 464",wick:"ECO 8",load:"8%",fill:"8 oz",hours:22,notes:"Consistent melt pool and clean burn through the middle of the candle."},
+          {status:"success",wax:"IGI 6006",wick:"CD 8",load:"9%",fill:"8 oz",hours:18,notes:"Good throw and stable flame."}
+        ]
+      },
+      {
+        id:3,name:"Aura Tumbler",supplier:"Makesy",price:2.85,diameter:'3.10"',height:'3.90"',fill:"10 oz",
+        tests:27,successRate:85,topWax:"Coconut Apricot",topWick:"Premier 735",
+        description:"A premium tumbler profile that pairs especially well with softer wax blends.",
+        community:[
+          {status:"success",wax:"Coconut Apricot",wick:"Premier 735",load:"9%",fill:"9.5 oz",hours:25,notes:"Very steady flame and beautiful melt pool."},
+          {status:"adjust",wax:"Golden Brands 464",wick:"CD 10",load:"8%",fill:"9.5 oz",hours:14,notes:"Burned a little cooler than expected."}
+        ]
+      },
+      {
+        id:4,name:"Classic Apothecary",supplier:"Fillmore Container",price:2.36,diameter:'3.00"',height:'4.00"',fill:"9 oz",
+        tests:18,successRate:76,topWax:"ProBlend 600",topWick:"CD 8",
+        description:"Traditional apothecary styling with enough test data to get a useful starting point.",
+        community:[
+          {status:"success",wax:"ProBlend 600",wick:"CD 8",load:"8%",fill:"8.5 oz",hours:19,notes:"Clean sides after the third burn and a nice medium flame."}
+        ]
+      },
+      {
+        id:5,name:"Modern Ceramic",supplier:"Makesy",price:4.80,diameter:'3.40"',height:'3.60"',fill:"11 oz",
+        tests:11,successRate:73,topWax:"Coconut Apricot",topWick:"LX 18",
+        description:"A heavier ceramic vessel where community notes can be especially helpful for heat management.",
+        community:[
+          {status:"adjust",wax:"Coconut Apricot",wick:"LX 18",load:"9%",fill:"10.5 oz",hours:15,notes:"Good throw, but I would test one size down for a calmer flame."}
+        ]
+      },
+      {
+        id:6,name:"Studio Tumbler",supplier:"Dulceria Candles",price:3.10,diameter:'3.20"',height:'4.00"',fill:"10.5 oz",
+        tests:31,successRate:81,topWax:"Golden Brands 464",topWick:"CD 10",
+        description:"A versatile straight-sided tumbler with enough room for multiple common wick families.",
+        community:[
+          {status:"success",wax:"Golden Brands 464",wick:"CD 10",load:"8.5%",fill:"10 oz",hours:21,notes:"Balanced flame, full melt pool and minimal soot."}
+        ]
+      }
+    ];
+
+    const state = { supplier:"" };
+
+    const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+
+    function setupFilters(){
+      const suppliers = [...new Set(jars.map(j=>j.supplier))].sort();
+      const waxes = [...new Set(jars.map(j=>j.topWax))].sort();
+      const supplierFilter = document.getElementById("supplierFilter");
+      const waxFilter = document.getElementById("waxFilter");
+
+      suppliers.forEach(s=>{
+        supplierFilter.insertAdjacentHTML("beforeend", `<option value="${esc(s)}">${esc(s)}</option>`);
+      });
+      waxes.forEach(w=>{
+        waxFilter.insertAdjacentHTML("beforeend", `<option value="${esc(w)}">${esc(w)}</option>`);
+      });
+
+      document.getElementById("supplierPills").innerHTML =
+        `<button class="pill active" data-supplier="">All suppliers</button>` +
+        suppliers.map(s=>`<button class="pill" data-supplier="${esc(s)}">${esc(s)}</button>`).join("");
+
+      document.querySelectorAll(".pill").forEach(btn=>{
+        btn.addEventListener("click", ()=>{
+          state.supplier = btn.dataset.supplier || "";
+          supplierFilter.value = state.supplier;
+          document.querySelectorAll(".pill").forEach(x=>x.classList.toggle("active", x===btn));
+          renderJars();
+        });
+      });
+
+      const testJar = document.getElementById("testJar");
+      testJar.innerHTML = jars.map(j=>`<option value="${j.id}">${esc(j.name)} — ${esc(j.supplier)}</option>`).join("");
+    }
+
+    function renderJars(){
+      const q = document.getElementById("searchInput").value.trim().toLowerCase();
+      const supplier = document.getElementById("supplierFilter").value;
+      const wax = document.getElementById("waxFilter").value;
+
+      const filtered = jars.filter(j=>{
+        const haystack = [j.name,j.supplier,j.topWax,j.topWick].join(" ").toLowerCase();
+        return (!q || haystack.includes(q))
+          && (!supplier || j.supplier===supplier)
+          && (!wax || j.topWax===wax);
+      });
+
+      document.getElementById("resultCount").textContent = `${filtered.length} jar${filtered.length===1?"":"s"} shown`;
+
+      const grid = document.getElementById("jarGrid");
+      if(!filtered.length){
+        grid.innerHTML = `<div class="empty"><strong>No jars found.</strong><br>Try a different supplier, wax, or search term.</div>`;
+        return;
+      }
+
+      grid.innerHTML = filtered.map(j=>`
+        <article class="jar-card">
+          <div class="jar-visual">
+            <span class="badge">${j.tests} community tests</span>
+            <div class="jar-shape" aria-hidden="true"></div>
+          </div>
+          <div class="jar-body">
+            <div class="supplier">${esc(j.supplier)}</div>
+            <h3>${esc(j.name)}</h3>
+            <div class="meta">${esc(j.diameter)} diameter · ${esc(j.fill)} fill · $${j.price.toFixed(2)} each</div>
+
+            <div class="mini-stats">
+              <div class="mini-stat"><span>Top Wax</span><strong>${esc(j.topWax)}</strong></div>
+              <div class="mini-stat"><span>Top Wick</span><strong>${esc(j.topWick)}</strong></div>
+              <div class="mini-stat"><span>Success Rate</span><strong>${j.successRate}%</strong></div>
+              <div class="mini-stat"><span>Tests</span><strong>${j.tests}</strong></div>
+            </div>
+
+            <div class="card-actions">
+              <button class="primary" onclick="openDetail(${j.id})">View Jar</button>
+              <button class="secondary" onclick="openSubmit(${j.id})">Add Test</button>
+            </div>
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function openDetail(id){
+      const j = jars.find(x=>x.id===id);
+      if(!j) return;
+
+      const statusLabel = {success:"SUCCESSFUL",adjust:"NEEDS ADJUSTMENT",fail:"DIDN'T WORK"};
+
+      document.getElementById("detailContent").innerHTML = `
+        <div class="detail-grid">
+          <div class="detail-visual"><div class="jar-shape"></div></div>
+          <div>
+            <div class="supplier">${esc(j.supplier)}</div>
+            <h2>${esc(j.name)}</h2>
+            <p>${esc(j.description)}</p>
+
+            <div class="spec-grid">
+              <div class="spec"><span>Current Price</span><strong>$${j.price.toFixed(2)} each</strong></div>
+              <div class="spec"><span>Diameter</span><strong>${esc(j.diameter)}</strong></div>
+              <div class="spec"><span>Height</span><strong>${esc(j.height)}</strong></div>
+              <div class="spec"><span>Recommended Fill</span><strong>${esc(j.fill)}</strong></div>
+            </div>
+
+            <button class="buy-link" type="button" title="Supplier links will be connected when product data is added">View at Supplier ↗</button>
+          </div>
+        </div>
+
+        <div class="summary-grid">
+          <div class="summary"><span>Most Used Wax</span><strong>${esc(j.topWax)}</strong></div>
+          <div class="summary"><span>Most Successful Wick</span><strong>${esc(j.topWick)}</strong></div>
+          <div class="summary"><span>Community Success Rate</span><strong>${j.successRate}%</strong></div>
+        </div>
+
+        <div class="tests-head">
+          <div>
+            <h3>Community Burn Tests</h3>
+            <p>${j.tests} total tests submitted for this jar.</p>
+          </div>
+          <button class="primary" style="flex:0 0 auto" onclick="closeModal('detailModal');openSubmit(${j.id})">+ Add Your Test</button>
+        </div>
+
+        ${j.community.map(t=>`
+          <article class="test">
+            <div class="test-top">
+              <strong>${esc(t.wax)} + ${esc(t.wick)}</strong>
+              <span class="status ${t.status}">${statusLabel[t.status]}</span>
+            </div>
+            <div class="test-meta">
+              <span>Wax: <b>${esc(t.wax)}</b></span>
+              <span>Wick: <b>${esc(t.wick)}</b></span>
+              <span>Fragrance: <b>${esc(t.load)}</b></span>
+              <span>Fill: <b>${esc(t.fill)}</b></span>
+              <span>Tested: <b>${t.hours} hrs</b></span>
+            </div>
+            <p>${esc(t.notes)}</p>
+          </article>
+        `).join("")}
+      `;
+
+      document.getElementById("detailModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function openSubmit(id){
+      if(id) document.getElementById("testJar").value = String(id);
+      document.getElementById("submitModal").classList.add("open");
+      document.body.style.overflow = "hidden";
+    }
+
+    function closeModal(id){
+      document.getElementById(id).classList.remove("open");
+      if(!document.querySelector(".modal.open")) document.body.style.overflow = "";
+    }
+
+    document.getElementById("testForm").addEventListener("submit", e=>{
+      e.preventDefault();
+      const jarId = Number(document.getElementById("testJar").value);
+      const jar = jars.find(j=>j.id===jarId);
+      if(!jar) return;
+
+      const status = document.getElementById("testResult").value;
+      const newTest = {
+        status,
+        wax:document.getElementById("testWax").value,
+        wick:document.getElementById("testWick").value.trim(),
+        load:document.getElementById("testFragrance").value + "%",
+        fill:document.getElementById("testFill").value + " oz",
+        hours:Number(document.getElementById("testHours").value || 0),
+        notes:document.getElementById("testNotes").value.trim() || "No notes added."
+      };
+
+      jar.community.unshift(newTest);
+      jar.tests += 1;
+      document.getElementById("totalTests").textContent = jars.reduce((a,b)=>a+b.tests,0);
+
+      e.target.reset();
+      closeModal("submitModal");
+      renderJars();
+      openDetail(jarId);
+    });
+
+    document.getElementById("searchInput").addEventListener("input", renderJars);
+    document.getElementById("supplierFilter").addEventListener("change", ()=>{
+      state.supplier = document.getElementById("supplierFilter").value;
+      document.querySelectorAll(".pill").forEach(x=>x.classList.toggle("active", (x.dataset.supplier||"")===state.supplier));
+      renderJars();
+    });
+    document.getElementById("waxFilter").addEventListener("change", renderJars);
+
+    document.querySelectorAll(".modal").forEach(modal=>{
+      modal.addEventListener("click", e=>{
+        if(e.target===modal) closeModal(modal.id);
+      });
+    });
+
+    document.addEventListener("keydown", e=>{
+      if(e.key==="Escape"){
+        document.querySelectorAll(".modal.open").forEach(m=>closeModal(m.id));
+      }
+    });
+
+    setupFilters();
+    document.getElementById("totalTests").textContent = jars.reduce((a,b)=>a+b.tests,0);
+    renderJars();
+  </script>
+</body>
+</html>
