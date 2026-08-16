@@ -151,6 +151,21 @@
     .empty{
       grid-column:1/-1;background:var(--surface);border:1px dashed var(--line);border-radius:18px;padding:46px;text-align:center;color:var(--muted)
     }
+    .loading-note{
+      grid-column:1/-1;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:36px;text-align:center;color:var(--muted)
+    }
+    .variant-block{margin-top:24px}
+    .variant-block h3{margin:0 0 10px;font-size:1rem}
+    .variant-chips{display:flex;flex-wrap:wrap;gap:8px}
+    .variant-chip{
+      display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid var(--line);
+      border-radius:999px;background:#fff;font-size:.82rem;color:#5f574f
+    }
+    .variant-chip b{color:var(--ink)}
+    .db-note{
+      background:#efe6dc;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
+      color:#665d55;font-size:.9rem;line-height:1.55;margin-bottom:18px
+    }
 
     .modal{
       position:fixed;inset:0;background:rgba(28,23,19,.54);display:none;align-items:center;justify-content:center;
@@ -268,8 +283,8 @@
             </p>
           </div>
           <div class="hero-stat">
-            <strong id="totalTests">136</strong>
-            <span>community burn tests across the jars in this prototype</span>
+            <strong id="totalTests">—</strong>
+            <span>approved community burn tests in the live Jar Library</span>
           </div>
         </div>
 
@@ -277,7 +292,7 @@
           <div class="search-row">
             <div class="field">
               <span>⌕</span>
-              <input id="searchInput" type="search" placeholder="Search jars, suppliers, waxes or wicks…" />
+              <input id="searchInput" type="search" placeholder="Search jars, suppliers, colors, waxes or wicks…" />
             </div>
             <div class="field">
               <select id="supplierFilter" aria-label="Supplier">
@@ -312,7 +327,7 @@
 
   <footer>
     <div class="container">
-      Kindle Candle · Jar Library prototype · Community data shown here is sample content for demonstration.
+      Kindle Candle · Jar Library · Vessel data loaded from the Kindle Candle database.
     </div>
   </footer>
 
@@ -333,257 +348,374 @@
         <button class="close" onclick="closeModal('submitModal')" aria-label="Close">×</button>
       </div>
       <form id="testForm">
+        <div class="db-note">
+          The Jar Library is now connected to Supabase. Burn-test submissions will turn on after we add the wax and wick libraries so every submission uses clean, standardized data.
+        </div>
         <div class="form-grid">
           <div class="form-group full">
             <label for="testJar">Jar</label>
             <select id="testJar" required></select>
           </div>
-
           <div class="form-group">
-            <label for="testWax">Wax</label>
-            <select id="testWax" required>
-              <option>Golden Brands 464</option>
-              <option>Coconut Apricot</option>
-              <option>ProBlend 600</option>
-              <option>IGI 6006</option>
-            </select>
+            <label>Wax</label>
+            <input value="Wax library coming next" disabled />
           </div>
-
           <div class="form-group">
-            <label for="testWick">Wick</label>
-            <input id="testWick" placeholder="e.g. CD 12" required />
-          </div>
-
-          <div class="form-group">
-            <label for="testFragrance">Fragrance Load (%)</label>
-            <input id="testFragrance" type="number" min="0" max="20" step=".1" placeholder="8.5" required />
-          </div>
-
-          <div class="form-group">
-            <label for="testFill">Fill Weight (oz)</label>
-            <input id="testFill" type="number" min="0" step=".1" placeholder="11" required />
-          </div>
-
-          <div class="form-group">
-            <label for="testResult">Result</label>
-            <select id="testResult" required>
-              <option value="success">Works Great</option>
-              <option value="adjust">Needs Adjustment</option>
-              <option value="fail">Didn't Work</option>
-            </select>
-          </div>
-
-          <div class="form-group">
-            <label for="testHours">Hours Tested</label>
-            <input id="testHours" type="number" min="0" step="1" placeholder="20" />
-          </div>
-
-          <div class="form-group full">
-            <label for="testNotes">Notes</label>
-            <textarea id="testNotes" placeholder="What did you notice about flame height, melt pool, soot, mushrooming, tunneling, or hot throw?"></textarea>
+            <label>Wick</label>
+            <input value="Wick library coming next" disabled />
           </div>
         </div>
-
         <div class="form-actions">
-          <button type="button" class="cancel" onclick="closeModal('submitModal')">Cancel</button>
-          <button type="submit" class="submit">Submit Test</button>
+          <button type="button" class="cancel" onclick="closeModal('submitModal')">Close</button>
+          <button type="button" class="submit" disabled style="opacity:.45;cursor:not-allowed">Submit Test</button>
         </div>
       </form>
     </div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../shared/supabase-config.js"></script>
   <script>
-    const jars = [
-      {
-        id:1,name:"Serafina Jar",supplier:"Dulceria Candles",price:3.42,diameter:'3.50"',height:'4.10"',fill:"12 oz",
-        tests:42,successRate:82,topWax:"Golden Brands 464",topWick:"CD 12",
-        description:"A clean, modern vessel with a wide opening and strong community interest.",
-        community:[
-          {status:"success",wax:"Golden Brands 464",wick:"CD 12",load:"8%",fill:"11 oz",hours:20,notes:"Great melt pool after about 2.5 hours. Good flame height and very little mushrooming."},
-          {status:"adjust",wax:"Golden Brands 464",wick:"CD 10",load:"9%",fill:"11 oz",hours:16,notes:"Slight tunneling late in the burn. I would wick up one size next time."},
-          {status:"success",wax:"Coconut Apricot",wick:"Premier 735",load:"9%",fill:"11.5 oz",hours:24,notes:"Even melt pool and steady flame with strong hot throw."}
-        ]
-      },
-      {
-        id:2,name:"Medium Straight Sided Jar",supplier:"CandleScience",price:2.10,diameter:'3.06"',height:'3.52"',fill:"8.5 oz",
-        tests:67,successRate:79,topWax:"Golden Brands 464",topWick:"ECO 8",
-        description:"A familiar workhorse vessel that gives makers a large pool of community data to compare.",
-        community:[
-          {status:"success",wax:"Golden Brands 464",wick:"ECO 8",load:"8%",fill:"8 oz",hours:22,notes:"Consistent melt pool and clean burn through the middle of the candle."},
-          {status:"success",wax:"IGI 6006",wick:"CD 8",load:"9%",fill:"8 oz",hours:18,notes:"Good throw and stable flame."}
-        ]
-      },
-      {
-        id:3,name:"Aura Tumbler",supplier:"Makesy",price:2.85,diameter:'3.10"',height:'3.90"',fill:"10 oz",
-        tests:27,successRate:85,topWax:"Coconut Apricot",topWick:"Premier 735",
-        description:"A premium tumbler profile that pairs especially well with softer wax blends.",
-        community:[
-          {status:"success",wax:"Coconut Apricot",wick:"Premier 735",load:"9%",fill:"9.5 oz",hours:25,notes:"Very steady flame and beautiful melt pool."},
-          {status:"adjust",wax:"Golden Brands 464",wick:"CD 10",load:"8%",fill:"9.5 oz",hours:14,notes:"Burned a little cooler than expected."}
-        ]
-      },
-      {
-        id:4,name:"Classic Apothecary",supplier:"Fillmore Container",price:2.36,diameter:'3.00"',height:'4.00"',fill:"9 oz",
-        tests:18,successRate:76,topWax:"ProBlend 600",topWick:"CD 8",
-        description:"Traditional apothecary styling with enough test data to get a useful starting point.",
-        community:[
-          {status:"success",wax:"ProBlend 600",wick:"CD 8",load:"8%",fill:"8.5 oz",hours:19,notes:"Clean sides after the third burn and a nice medium flame."}
-        ]
-      },
-      {
-        id:5,name:"Modern Ceramic",supplier:"Makesy",price:4.80,diameter:'3.40"',height:'3.60"',fill:"11 oz",
-        tests:11,successRate:73,topWax:"Coconut Apricot",topWick:"LX 18",
-        description:"A heavier ceramic vessel where community notes can be especially helpful for heat management.",
-        community:[
-          {status:"adjust",wax:"Coconut Apricot",wick:"LX 18",load:"9%",fill:"10.5 oz",hours:15,notes:"Good throw, but I would test one size down for a calmer flame."}
-        ]
-      },
-      {
-        id:6,name:"Studio Tumbler",supplier:"Dulceria Candles",price:3.10,diameter:'3.20"',height:'4.00"',fill:"10.5 oz",
-        tests:31,successRate:81,topWax:"Golden Brands 464",topWick:"CD 10",
-        description:"A versatile straight-sided tumbler with enough room for multiple common wick families.",
-        community:[
-          {status:"success",wax:"Golden Brands 464",wick:"CD 10",load:"8.5%",fill:"10 oz",hours:21,notes:"Balanced flame, full melt pool and minimal soot."}
-        ]
-      }
-    ];
+    let jars = [];
+    let waxRows = [];
+    let wickRows = [];
+    let currentSupplier = "";
 
-    const state = { supplier:"" };
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({
+      '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
+    }[m]));
 
-    const esc = s => String(s).replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+    function money(n){
+      return n === null || n === undefined || Number.isNaN(Number(n))
+        ? null
+        : `$${Number(n).toFixed(2)}`;
+    }
 
-    function setupFilters(){
-      const suppliers = [...new Set(jars.map(j=>j.supplier))].sort();
-      const waxes = [...new Set(jars.map(j=>j.topWax))].sort();
-      const supplierFilter = document.getElementById("supplierFilter");
-      const waxFilter = document.getElementById("waxFilter");
+    function priceLabel(variants, fallback){
+      const prices = (variants || [])
+        .map(v => Number(v.price))
+        .filter(v => Number.isFinite(v));
 
-      suppliers.forEach(s=>{
-        supplierFilter.insertAdjacentHTML("beforeend", `<option value="${esc(s)}">${esc(s)}</option>`);
-      });
-      waxes.forEach(w=>{
-        waxFilter.insertAdjacentHTML("beforeend", `<option value="${esc(w)}">${esc(w)}</option>`);
+      if(!prices.length) return fallback != null ? money(fallback) : "Price not listed";
+
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      return min === max ? money(min) : `${money(min)}–${money(max)}`;
+    }
+
+    function inches(n){
+      return n == null ? null : `${Number(n).toFixed(2).replace(/\.00$/,"")}"`;
+    }
+
+    function fillLabel(n){
+      return n == null ? "Fill not listed" : `${Number(n).toFixed(2).replace(/\.00$/,"")} oz`;
+    }
+
+    function normalizeData({suppliers, jarRows, variants, tests, waxes, wicks}){
+      const supplierMap = new Map((suppliers || []).map(s => [s.id, s]));
+      const variantMap = new Map();
+      (variants || []).forEach(v => {
+        if(!variantMap.has(v.jar_id)) variantMap.set(v.jar_id, []);
+        variantMap.get(v.jar_id).push(v);
       });
 
-      document.getElementById("supplierPills").innerHTML =
-        `<button class="pill active" data-supplier="">All suppliers</button>` +
-        suppliers.map(s=>`<button class="pill" data-supplier="${esc(s)}">${esc(s)}</button>`).join("");
+      const waxMap = new Map((waxes || []).map(w => [w.id, w]));
+      const wickMap = new Map((wicks || []).map(w => [w.id, w]));
+      const testMap = new Map();
 
-      document.querySelectorAll(".pill").forEach(btn=>{
-        btn.addEventListener("click", ()=>{
-          state.supplier = btn.dataset.supplier || "";
-          supplierFilter.value = state.supplier;
-          document.querySelectorAll(".pill").forEach(x=>x.classList.toggle("active", x===btn));
-          renderJars();
+      (tests || []).forEach(t => {
+        if(!testMap.has(t.jar_id)) testMap.set(t.jar_id, []);
+        const wax = waxMap.get(t.wax_id);
+        const wick = wickMap.get(t.wick_id);
+        testMap.get(t.jar_id).push({
+          status: t.result,
+          wax: wax?.name || "Wax",
+          wick: wick ? `${wick.series} ${wick.size}`.trim() : "Wick",
+          load: t.fragrance_load_percent == null ? "—" : `${t.fragrance_load_percent}%`,
+          fill: t.fill_weight_oz == null ? "—" : `${t.fill_weight_oz} oz`,
+          hours: t.hours_tested || 0,
+          notes: t.notes || "No notes added."
         });
       });
 
-      const testJar = document.getElementById("testJar");
-      testJar.innerHTML = jars.map(j=>`<option value="${j.id}">${esc(j.name)} — ${esc(j.supplier)}</option>`).join("");
+      return (jarRows || []).map(j => {
+        const supplier = supplierMap.get(j.supplier_id) || {};
+        const community = testMap.get(j.id) || [];
+        const jarVariants = (variantMap.get(j.id) || []).filter(v => v.is_active !== false);
+
+        const successes = community.filter(t => t.status === "success").length;
+        const successRate = community.length ? Math.round((successes / community.length) * 100) : null;
+
+        const waxCounts = {};
+        const wickCounts = {};
+        community.forEach(t => {
+          waxCounts[t.wax] = (waxCounts[t.wax] || 0) + 1;
+          wickCounts[t.wick] = (wickCounts[t.wick] || 0) + 1;
+        });
+
+        const mostCommon = obj => {
+          const rows = Object.entries(obj).sort((a,b) => b[1] - a[1]);
+          return rows.length ? rows[0][0] : null;
+        };
+
+        return {
+          id: j.id,
+          name: j.name,
+          slug: j.slug,
+          supplier: supplier.name || "Unknown supplier",
+          supplierUrl: supplier.affiliate_url || supplier.website_url || j.product_url || "#",
+          imageUrl: j.image_url || jarVariants.find(v => v.image_url)?.image_url || null,
+          price: j.price,
+          diameter: inches(j.diameter_inches),
+          height: inches(j.height_inches),
+          fill: fillLabel(j.recommended_fill_oz),
+          material: j.material || "—",
+          tests: community.length,
+          successRate,
+          topWax: mostCommon(waxCounts),
+          topWick: mostCommon(wickCounts),
+          variants: jarVariants.sort((a,b) => String(a.color).localeCompare(String(b.color))),
+          community,
+          description: `${j.name} from ${supplier.name || "this supplier"}. Community burn data will grow as makers submit standardized tests.`
+        };
+      });
+    }
+
+    async function loadLibrary(){
+      const grid = document.getElementById("jarGrid");
+      grid.innerHTML = `<div class="loading-note">Loading your live Jar Library from Supabase…</div>`;
+
+      try{
+        const config = window.KINDLE_SUPABASE_CONFIG || {};
+        if(!config.url || !config.key || !window.supabase?.createClient){
+          throw new Error("Supabase configuration is not available.");
+        }
+
+        const client = window.supabase.createClient(config.url, config.key);
+
+        const [
+          suppliersRes,
+          jarsRes,
+          variantsRes,
+          waxesRes,
+          wicksRes,
+          testsRes
+        ] = await Promise.all([
+          client.from("suppliers").select("id,name,website_url,affiliate_url").eq("is_active", true).order("name"),
+          client.from("jars").select("*").eq("is_active", true).order("name"),
+          client.from("jar_variants").select("*").eq("is_active", true).order("color"),
+          client.from("waxes").select("id,name,supplier_id").eq("is_active", true).order("name"),
+          client.from("wicks").select("id,series,size,supplier_id").eq("is_active", true).order("series"),
+          client.from("burn_tests").select("id,jar_id,wax_id,wick_id,fragrance_load_percent,fill_weight_oz,hours_tested,result,notes").eq("status","approved")
+        ]);
+
+        const responses = [suppliersRes,jarsRes,variantsRes,waxesRes,wicksRes,testsRes];
+        const failed = responses.find(r => r.error);
+        if(failed) throw failed.error;
+
+        waxRows = waxesRes.data || [];
+        wickRows = wicksRes.data || [];
+
+        jars = normalizeData({
+          suppliers: suppliersRes.data,
+          jarRows: jarsRes.data,
+          variants: variantsRes.data,
+          tests: testsRes.data,
+          waxes: waxRows,
+          wicks: wickRows
+        });
+
+        setupFilters();
+        renderJars();
+
+        const totalTests = jars.reduce((sum,j) => sum + j.tests, 0);
+        document.getElementById("totalTests").textContent = totalTests;
+
+        const testJar = document.getElementById("testJar");
+        testJar.innerHTML = jars.map(j =>
+          `<option value="${esc(j.id)}">${esc(j.name)} — ${esc(j.supplier)}</option>`
+        ).join("");
+
+      }catch(error){
+        console.error("Jar Library load error:", error);
+        grid.innerHTML = `
+          <div class="empty">
+            <strong>We couldn't load the Jar Library.</strong><br>
+            ${esc(error?.message || "Please check the Supabase connection and RLS policies.")}
+          </div>`;
+        document.getElementById("resultCount").textContent = "Database connection error";
+        document.getElementById("totalTests").textContent = "—";
+      }
+    }
+
+    function setupFilters(){
+      const supplierFilter = document.getElementById("supplierFilter");
+      const waxFilter = document.getElementById("waxFilter");
+
+      const suppliers = [...new Set(jars.map(j => j.supplier))].sort();
+      supplierFilter.innerHTML = `<option value="">All suppliers</option>` +
+        suppliers.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join("");
+
+      if(waxRows.length){
+        const waxes = [...new Set(waxRows.map(w => w.name))].sort();
+        waxFilter.innerHTML = `<option value="">All waxes</option>` +
+          waxes.map(w => `<option value="${esc(w)}">${esc(w)}</option>`).join("");
+        waxFilter.disabled = false;
+      }else{
+        waxFilter.innerHTML = `<option value="">Wax filters coming next</option>`;
+        waxFilter.disabled = true;
+      }
+
+      document.getElementById("supplierPills").innerHTML =
+        `<button class="pill active" data-supplier="">All suppliers</button>` +
+        suppliers.map(s => `<button class="pill" data-supplier="${esc(s)}">${esc(s)}</button>`).join("");
+
+      document.querySelectorAll(".pill").forEach(btn => {
+        btn.addEventListener("click", () => {
+          currentSupplier = btn.dataset.supplier || "";
+          supplierFilter.value = currentSupplier;
+          document.querySelectorAll(".pill").forEach(x => x.classList.toggle("active", x === btn));
+          renderJars();
+        });
+      });
     }
 
     function renderJars(){
       const q = document.getElementById("searchInput").value.trim().toLowerCase();
       const supplier = document.getElementById("supplierFilter").value;
-      const wax = document.getElementById("waxFilter").value;
+      const wax = document.getElementById("waxFilter").disabled ? "" : document.getElementById("waxFilter").value;
 
-      const filtered = jars.filter(j=>{
-        const haystack = [j.name,j.supplier,j.topWax,j.topWick].join(" ").toLowerCase();
+      const filtered = jars.filter(j => {
+        const colors = j.variants.map(v => v.color).join(" ");
+        const haystack = [j.name,j.supplier,j.topWax,j.topWick,colors].join(" ").toLowerCase();
+
+        const waxMatch = !wax || j.community.some(t => t.wax === wax);
         return (!q || haystack.includes(q))
-          && (!supplier || j.supplier===supplier)
-          && (!wax || j.topWax===wax);
+          && (!supplier || j.supplier === supplier)
+          && waxMatch;
       });
 
-      document.getElementById("resultCount").textContent = `${filtered.length} jar${filtered.length===1?"":"s"} shown`;
+      document.getElementById("resultCount").textContent =
+        `${filtered.length} jar${filtered.length === 1 ? "" : "s"} shown`;
 
       const grid = document.getElementById("jarGrid");
       if(!filtered.length){
-        grid.innerHTML = `<div class="empty"><strong>No jars found.</strong><br>Try a different supplier, wax, or search term.</div>`;
+        grid.innerHTML = `<div class="empty"><strong>No jars found.</strong><br>Try a different supplier or search term.</div>`;
         return;
       }
 
-      grid.innerHTML = filtered.map(j=>`
-        <article class="jar-card">
-          <div class="jar-visual">
-            <span class="badge">${j.tests} community tests</span>
-            <div class="jar-shape" aria-hidden="true"></div>
-          </div>
-          <div class="jar-body">
-            <div class="supplier">${esc(j.supplier)}</div>
-            <h3>${esc(j.name)}</h3>
-            <div class="meta">${esc(j.diameter)} diameter · ${esc(j.fill)} fill · $${j.price.toFixed(2)} each</div>
+      grid.innerHTML = filtered.map(j => {
+        const metaBits = [];
+        if(j.diameter) metaBits.push(`${esc(j.diameter)} diameter`);
+        if(j.fill) metaBits.push(`${esc(j.fill)} recommended fill`);
+        metaBits.push(priceLabel(j.variants,j.price));
+        const testsCopy = j.tests ? `${j.tests} community test${j.tests===1?"":"s"}` : "Be the first to test";
 
-            <div class="mini-stats">
-              <div class="mini-stat"><span>Top Wax</span><strong>${esc(j.topWax)}</strong></div>
-              <div class="mini-stat"><span>Top Wick</span><strong>${esc(j.topWick)}</strong></div>
-              <div class="mini-stat"><span>Success Rate</span><strong>${j.successRate}%</strong></div>
-              <div class="mini-stat"><span>Tests</span><strong>${j.tests}</strong></div>
+        return `
+          <article class="jar-card">
+            <div class="jar-visual">
+              <span class="badge">${testsCopy}</span>
+              ${j.imageUrl
+                ? `<img src="${esc(j.imageUrl)}" alt="${esc(j.name)}" style="width:100%;height:100%;object-fit:cover">`
+                : `<div class="jar-shape" aria-hidden="true"></div>`}
             </div>
+            <div class="jar-body">
+              <div class="supplier">${esc(j.supplier)}</div>
+              <h3>${esc(j.name)}</h3>
+              <div class="meta">${metaBits.join(" · ")}</div>
 
-            <div class="card-actions">
-              <button class="primary" onclick="openDetail(${j.id})">View Jar</button>
-              <button class="secondary" onclick="openSubmit(${j.id})">Add Test</button>
+              <div class="mini-stats">
+                <div class="mini-stat"><span>Variants</span><strong>${j.variants.length || "—"}</strong></div>
+                <div class="mini-stat"><span>Tests</span><strong>${j.tests}</strong></div>
+                <div class="mini-stat"><span>Top Wax</span><strong>${esc(j.topWax || "No data yet")}</strong></div>
+                <div class="mini-stat"><span>Top Wick</span><strong>${esc(j.topWick || "No data yet")}</strong></div>
+              </div>
+
+              <div class="card-actions">
+                <button class="primary" onclick="openDetail('${esc(j.id)}')">View Jar</button>
+                <button class="secondary" onclick="openSubmit('${esc(j.id)}')">Add Test</button>
+              </div>
             </div>
-          </div>
-        </article>
-      `).join("");
+          </article>`;
+      }).join("");
     }
 
     function openDetail(id){
-      const j = jars.find(x=>x.id===id);
+      const j = jars.find(x => String(x.id) === String(id));
       if(!j) return;
 
       const statusLabel = {success:"SUCCESSFUL",adjust:"NEEDS ADJUSTMENT",fail:"DIDN'T WORK"};
+      const variantPrices = priceLabel(j.variants,j.price);
 
       document.getElementById("detailContent").innerHTML = `
         <div class="detail-grid">
-          <div class="detail-visual"><div class="jar-shape"></div></div>
+          <div class="detail-visual">
+            ${j.imageUrl
+              ? `<img src="${esc(j.imageUrl)}" alt="${esc(j.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:18px">`
+              : `<div class="jar-shape"></div>`}
+          </div>
           <div>
             <div class="supplier">${esc(j.supplier)}</div>
             <h2>${esc(j.name)}</h2>
             <p>${esc(j.description)}</p>
 
             <div class="spec-grid">
-              <div class="spec"><span>Current Price</span><strong>$${j.price.toFixed(2)} each</strong></div>
-              <div class="spec"><span>Diameter</span><strong>${esc(j.diameter)}</strong></div>
-              <div class="spec"><span>Height</span><strong>${esc(j.height)}</strong></div>
+              <div class="spec"><span>Current Price Range</span><strong>${esc(variantPrices)}</strong></div>
+              <div class="spec"><span>Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
+              <div class="spec"><span>Height</span><strong>${esc(j.height || "Not added yet")}</strong></div>
               <div class="spec"><span>Recommended Fill</span><strong>${esc(j.fill)}</strong></div>
             </div>
 
-            <button class="buy-link" type="button" title="Supplier links will be connected when product data is added">View at Supplier ↗</button>
+            ${j.supplierUrl && j.supplierUrl !== "#"
+              ? `<a class="buy-link" href="${esc(j.supplierUrl)}" target="_blank" rel="noopener">View Supplier ↗</a>`
+              : ""}
+          </div>
+        </div>
+
+        <div class="variant-block">
+          <h3>${j.variants.length} available color / finish variants</h3>
+          <div class="variant-chips">
+            ${j.variants.length
+              ? j.variants.map(v => `
+                  <span class="variant-chip">
+                    <b>${esc(v.color)}</b>
+                    ${v.price != null ? `<span>${esc(money(v.price))}</span>` : ""}
+                  </span>`).join("")
+              : `<span class="meta">No variants have been added yet.</span>`}
           </div>
         </div>
 
         <div class="summary-grid">
-          <div class="summary"><span>Most Used Wax</span><strong>${esc(j.topWax)}</strong></div>
-          <div class="summary"><span>Most Successful Wick</span><strong>${esc(j.topWick)}</strong></div>
-          <div class="summary"><span>Community Success Rate</span><strong>${j.successRate}%</strong></div>
+          <div class="summary"><span>Most Used Wax</span><strong>${esc(j.topWax || "No tests yet")}</strong></div>
+          <div class="summary"><span>Most Successful Wick</span><strong>${esc(j.topWick || "No tests yet")}</strong></div>
+          <div class="summary"><span>Community Success Rate</span><strong>${j.successRate == null ? "No tests yet" : `${j.successRate}%`}</strong></div>
         </div>
 
         <div class="tests-head">
           <div>
             <h3>Community Burn Tests</h3>
-            <p>${j.tests} total tests submitted for this jar.</p>
+            <p>${j.tests ? `${j.tests} approved test${j.tests===1?"":"s"} for this jar.` : "No approved tests yet. This is where community results will appear."}</p>
           </div>
-          <button class="primary" style="flex:0 0 auto" onclick="closeModal('detailModal');openSubmit(${j.id})">+ Add Your Test</button>
+          <button class="primary" style="flex:0 0 auto" onclick="closeModal('detailModal');openSubmit('${esc(j.id)}')">+ Add Your Test</button>
         </div>
 
-        ${j.community.map(t=>`
-          <article class="test">
-            <div class="test-top">
-              <strong>${esc(t.wax)} + ${esc(t.wick)}</strong>
-              <span class="status ${t.status}">${statusLabel[t.status]}</span>
-            </div>
-            <div class="test-meta">
-              <span>Wax: <b>${esc(t.wax)}</b></span>
-              <span>Wick: <b>${esc(t.wick)}</b></span>
-              <span>Fragrance: <b>${esc(t.load)}</b></span>
-              <span>Fill: <b>${esc(t.fill)}</b></span>
-              <span>Tested: <b>${t.hours} hrs</b></span>
-            </div>
-            <p>${esc(t.notes)}</p>
-          </article>
-        `).join("")}
+        ${j.community.length
+          ? j.community.map(t => `
+              <article class="test">
+                <div class="test-top">
+                  <strong>${esc(t.wax)} + ${esc(t.wick)}</strong>
+                  <span class="status ${esc(t.status)}">${esc(statusLabel[t.status] || t.status)}</span>
+                </div>
+                <div class="test-meta">
+                  <span>Wax: <b>${esc(t.wax)}</b></span>
+                  <span>Wick: <b>${esc(t.wick)}</b></span>
+                  <span>Fragrance: <b>${esc(t.load)}</b></span>
+                  <span>Fill: <b>${esc(t.fill)}</b></span>
+                  <span>Tested: <b>${esc(t.hours)} hrs</b></span>
+                </div>
+                <p>${esc(t.notes)}</p>
+              </article>`).join("")
+          : `<div class="db-note" style="margin-top:12px">The database connection is live. Once we add waxes, wicks, and approved burn tests, those results will populate here automatically.</div>`}
       `;
 
       document.getElementById("detailModal").classList.add("open");
@@ -591,7 +723,7 @@
     }
 
     function openSubmit(id){
-      if(id) document.getElementById("testJar").value = String(id);
+      if(id && document.getElementById("testJar")) document.getElementById("testJar").value = String(id);
       document.getElementById("submitModal").classList.add("open");
       document.body.style.overflow = "hidden";
     }
@@ -601,56 +733,29 @@
       if(!document.querySelector(".modal.open")) document.body.style.overflow = "";
     }
 
-    document.getElementById("testForm").addEventListener("submit", e=>{
-      e.preventDefault();
-      const jarId = Number(document.getElementById("testJar").value);
-      const jar = jars.find(j=>j.id===jarId);
-      if(!jar) return;
-
-      const status = document.getElementById("testResult").value;
-      const newTest = {
-        status,
-        wax:document.getElementById("testWax").value,
-        wick:document.getElementById("testWick").value.trim(),
-        load:document.getElementById("testFragrance").value + "%",
-        fill:document.getElementById("testFill").value + " oz",
-        hours:Number(document.getElementById("testHours").value || 0),
-        notes:document.getElementById("testNotes").value.trim() || "No notes added."
-      };
-
-      jar.community.unshift(newTest);
-      jar.tests += 1;
-      document.getElementById("totalTests").textContent = jars.reduce((a,b)=>a+b.tests,0);
-
-      e.target.reset();
-      closeModal("submitModal");
-      renderJars();
-      openDetail(jarId);
-    });
-
     document.getElementById("searchInput").addEventListener("input", renderJars);
-    document.getElementById("supplierFilter").addEventListener("change", ()=>{
-      state.supplier = document.getElementById("supplierFilter").value;
-      document.querySelectorAll(".pill").forEach(x=>x.classList.toggle("active", (x.dataset.supplier||"")===state.supplier));
+    document.getElementById("supplierFilter").addEventListener("change", () => {
+      currentSupplier = document.getElementById("supplierFilter").value;
+      document.querySelectorAll(".pill").forEach(x =>
+        x.classList.toggle("active", (x.dataset.supplier || "") === currentSupplier)
+      );
       renderJars();
     });
     document.getElementById("waxFilter").addEventListener("change", renderJars);
 
-    document.querySelectorAll(".modal").forEach(modal=>{
-      modal.addEventListener("click", e=>{
-        if(e.target===modal) closeModal(modal.id);
+    document.querySelectorAll(".modal").forEach(modal => {
+      modal.addEventListener("click", e => {
+        if(e.target === modal) closeModal(modal.id);
       });
     });
 
-    document.addEventListener("keydown", e=>{
-      if(e.key==="Escape"){
-        document.querySelectorAll(".modal.open").forEach(m=>closeModal(m.id));
+    document.addEventListener("keydown", e => {
+      if(e.key === "Escape"){
+        document.querySelectorAll(".modal.open").forEach(m => closeModal(m.id));
       }
     });
 
-    setupFilters();
-    document.getElementById("totalTests").textContent = jars.reduce((a,b)=>a+b.tests,0);
-    renderJars();
+    loadLibrary();
   </script>
 </body>
 </html>
