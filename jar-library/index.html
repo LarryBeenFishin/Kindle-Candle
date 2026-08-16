@@ -512,6 +512,7 @@
           imageUrl: j.image_url || jarVariants.find(v => v.image_url)?.image_url || null,
           price: j.price,
           diameter: inches(j.diameter_inches),
+          innerDiameter: inches(j.inner_diameter_inches),
           height: inches(j.height_inches),
           fill: fillLabel(j.recommended_fill_oz),
           material: j.material || "—",
@@ -753,9 +754,11 @@
 
             <div class="spec-grid">
               <div class="spec"><span>Current Price Range</span><strong>${esc(variantPrices)}</strong></div>
-              <div class="spec"><span>Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
+              <div class="spec"><span>Outer Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
+              <div class="spec"><span>Inner Diameter</span><strong>${esc(j.innerDiameter || "Not added yet")}</strong></div>
               <div class="spec"><span>Height</span><strong>${esc(j.height || "Not added yet")}</strong></div>
               <div class="spec"><span>Recommended Fill</span><strong>${esc(j.fill)}</strong></div>
+              <div class="spec"><span>Material</span><strong>${esc(j.material || "Not added yet")}</strong></div>
             </div>
 
             ${j.supplierUrl && j.supplierUrl !== "#"
