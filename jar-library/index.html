@@ -754,11 +754,17 @@
 
             <div class="spec-grid">
               <div class="spec"><span>Current Price Range</span><strong>${esc(variantPrices)}</strong></div>
-              <div class="spec"><span>Outer Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
-              <div class="spec"><span>Inner Diameter</span><strong>${esc(j.innerDiameter || "Not added yet")}</strong></div>
-              <div class="spec"><span>Height</span><strong>${esc(j.height || "Not added yet")}</strong></div>
+              ${j.innerDiameter
+                ? `<div class="spec"><span>Outer Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
+                   <div class="spec"><span>Inner Diameter</span><strong>${esc(j.innerDiameter)}</strong></div>`
+                : (j.diameter
+                    ? `<div class="spec"><span>Diameter</span><strong>${esc(j.diameter)}</strong></div>`
+                    : "")}
+              ${j.height ? `<div class="spec"><span>Height</span><strong>${esc(j.height)}</strong></div>` : ""}
               <div class="spec"><span>Recommended Fill</span><strong>${esc(j.fill)}</strong></div>
-              <div class="spec"><span>Material</span><strong>${esc(j.material || "Not added yet")}</strong></div>
+              ${j.material && j.material !== "—"
+                ? `<div class="spec"><span>Material</span><strong>${esc(j.material)}</strong></div>`
+                : ""}
             </div>
 
             ${j.supplierUrl && j.supplierUrl !== "#"
