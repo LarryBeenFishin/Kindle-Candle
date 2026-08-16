@@ -227,6 +227,14 @@
     .form-actions button{border-radius:12px;padding:11px 16px;font-weight:800}
     .cancel{background:white;border:1px solid var(--line)}
     .submit{background:var(--ink);color:white;border:1px solid var(--ink)}
+    .submit:disabled{opacity:.55;cursor:not-allowed}
+    .form-message{
+      display:none;margin-bottom:16px;padding:12px 14px;border-radius:12px;font-size:.9rem;line-height:1.5
+    }
+    .form-message.show{display:block}
+    .form-message.info{background:#efe6dc;color:#665d55}
+    .form-message.success{background:var(--success-bg);color:var(--success)}
+    .form-message.error{background:var(--danger-bg);color:var(--danger)}
 
     footer{border-top:1px solid var(--line);padding:34px 0 50px;color:var(--muted);font-size:.9rem}
 
@@ -348,26 +356,61 @@
         <button class="close" onclick="closeModal('submitModal')" aria-label="Close">×</button>
       </div>
       <form id="testForm">
-        <div class="db-note">
-          The Jar Library is now connected to Supabase. Burn-test submissions will turn on after we add the wax and wick libraries so every submission uses clean, standardized data.
-        </div>
+        <div id="formMessage" class="form-message" role="status" aria-live="polite"></div>
+
         <div class="form-grid">
           <div class="form-group full">
             <label for="testJar">Jar</label>
             <select id="testJar" required></select>
           </div>
+
           <div class="form-group">
-            <label>Wax</label>
-            <input value="Wax library coming next" disabled />
+            <label for="testWax">Wax</label>
+            <select id="testWax" required></select>
           </div>
+
           <div class="form-group">
-            <label>Wick</label>
-            <input value="Wick library coming next" disabled />
+            <label for="testWick">Wick</label>
+            <select id="testWick" required></select>
+          </div>
+
+          <div class="form-group">
+            <label for="testFragrance">Fragrance Load (%)</label>
+            <input id="testFragrance" type="number" min="0" max="20" step="0.1" placeholder="8.5" required />
+          </div>
+
+          <div class="form-group">
+            <label for="testFill">Fill Weight (oz)</label>
+            <input id="testFill" type="number" min="0.1" step="0.1" placeholder="11" required />
+          </div>
+
+          <div class="form-group">
+            <label for="testResult">Result</label>
+            <select id="testResult" required>
+              <option value="success">Works Great</option>
+              <option value="adjust">Needs Adjustment</option>
+              <option value="fail">Didn't Work</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="testHours">Hours Tested</label>
+            <input id="testHours" type="number" min="0" step="0.5" placeholder="20" />
+          </div>
+
+          <div class="form-group full">
+            <label for="testNotes">Notes</label>
+            <textarea id="testNotes" maxlength="2000" placeholder="What did you notice about flame height, melt pool, soot, mushrooming, tunneling, or hot throw?"></textarea>
           </div>
         </div>
+
+        <div class="db-note" style="margin:16px 0 0">
+          Submissions are saved as <strong>pending</strong> and will appear publicly after approval.
+        </div>
+
         <div class="form-actions">
-          <button type="button" class="cancel" onclick="closeModal('submitModal')">Close</button>
-          <button type="button" class="submit" disabled style="opacity:.45;cursor:not-allowed">Submit Test</button>
+          <button type="button" class="cancel" onclick="closeModal('submitModal')">Cancel</button>
+          <button id="submitTestBtn" type="submit" class="submit">Submit Test</button>
         </div>
       </form>
     </div>
@@ -375,11 +418,13 @@
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script src="../shared/supabase-config.js"></script>
+  <script src="../shared/kindle-cloud.js"></script>
   <script>
     let jars = [];
     let waxRows = [];
     let wickRows = [];
     let currentSupplier = "";
+    let jarClient = null;
 
     const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
@@ -491,7 +536,12 @@
           throw new Error("Supabase configuration is not available.");
         }
 
-        const client = window.supabase.createClient(config.url, config.key);
+        if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+        jarClient = window.KindleCloud?.client || window.supabase.createClient(config.url, config.key, {
+          auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true }
+        });
+
+        const client = jarClient;
 
         const [
           suppliersRes,
@@ -531,10 +581,7 @@
         const totalTests = jars.reduce((sum,j) => sum + j.tests, 0);
         document.getElementById("totalTests").textContent = totalTests;
 
-        const testJar = document.getElementById("testJar");
-        testJar.innerHTML = jars.map(j =>
-          `<option value="${esc(j.id)}">${esc(j.name)} — ${esc(j.supplier)}</option>`
-        ).join("");
+        populateTestFormOptions();
 
       }catch(error){
         console.error("Jar Library load error:", error);
@@ -546,6 +593,51 @@
         document.getElementById("resultCount").textContent = "Database connection error";
         document.getElementById("totalTests").textContent = "—";
       }
+    }
+
+
+    function populateTestFormOptions(){
+      const testJar = document.getElementById("testJar");
+      const testWax = document.getElementById("testWax");
+      const testWick = document.getElementById("testWick");
+
+      if(testJar){
+        testJar.innerHTML = jars.map(j =>
+          `<option value="${esc(j.id)}">${esc(j.name)} — ${esc(j.supplier)}</option>`
+        ).join("");
+      }
+
+      if(testWax){
+        testWax.innerHTML = waxRows.length
+          ? waxRows.map(w => `<option value="${esc(w.id)}">${esc(w.name)}</option>`).join("")
+          : `<option value="">No waxes available</option>`;
+      }
+
+      if(testWick){
+        const grouped = [...wickRows]
+          .sort((a,b) => {
+            const seriesCompare = String(a.series).localeCompare(String(b.series));
+            if(seriesCompare) return seriesCompare;
+            return String(a.size).localeCompare(String(b.size), undefined, {numeric:true});
+          })
+          .reduce((acc, w) => {
+            (acc[w.series] ||= []).push(w);
+            return acc;
+          }, {});
+
+        testWick.innerHTML = Object.entries(grouped).map(([series, rows]) =>
+          `<optgroup label="${esc(series)}">` +
+          rows.map(w => `<option value="${esc(w.id)}">${esc(w.series)} ${esc(w.size)}</option>`).join("") +
+          `</optgroup>`
+        ).join("") || `<option value="">No wicks available</option>`;
+      }
+    }
+
+    function setFormMessage(message, type = "info"){
+      const el = document.getElementById("formMessage");
+      if(!el) return;
+      el.textContent = message || "";
+      el.className = `form-message${message ? " show " + type : ""}`;
     }
 
     function setupFilters(){
@@ -715,23 +807,113 @@
                 </div>
                 <p>${esc(t.notes)}</p>
               </article>`).join("")
-          : `<div class="db-note" style="margin-top:12px">The database connection is live. Once we add waxes, wicks, and approved burn tests, those results will populate here automatically.</div>`}
+          : `<div class="db-note" style="margin-top:12px">The database connection is live. Approved community burn tests will populate here automatically.</div>`}
       `;
 
       document.getElementById("detailModal").classList.add("open");
       document.body.style.overflow = "hidden";
     }
 
-    function openSubmit(id){
-      if(id && document.getElementById("testJar")) document.getElementById("testJar").value = String(id);
-      document.getElementById("submitModal").classList.add("open");
-      document.body.style.overflow = "hidden";
+    async function openSubmit(id){
+      try{
+        if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+
+        const user = window.KindleCloud?.currentUser || null;
+        if(!user){
+          if(window.KindleCloud?.openAuth){
+            window.KindleCloud.openAuth("signin", "Sign in to submit a community burn test.");
+          }else{
+            alert("Please sign in before submitting a burn test.");
+          }
+          return;
+        }
+
+        populateTestFormOptions();
+        if(id && document.getElementById("testJar")){
+          document.getElementById("testJar").value = String(id);
+        }
+
+        setFormMessage(`Signed in as ${user.email || "your account"}. Your test will be reviewed before it appears publicly.`, "info");
+        document.getElementById("submitModal").classList.add("open");
+        document.body.style.overflow = "hidden";
+      }catch(error){
+        console.error("Could not open submission form:", error);
+        alert("We couldn't open the submission form. Please try again.");
+      }
+    }
+
+    async function submitBurnTest(event){
+      event.preventDefault();
+
+      const button = document.getElementById("submitTestBtn");
+      const user = window.KindleCloud?.currentUser || null;
+
+      if(!user){
+        setFormMessage("Your session has expired. Please sign in again.", "error");
+        window.KindleCloud?.openAuth?.("signin", "Sign in to submit a community burn test.");
+        return;
+      }
+
+      if(!jarClient){
+        setFormMessage("The database connection is not ready yet. Please refresh and try again.", "error");
+        return;
+      }
+
+      const payload = {
+        user_id: user.id,
+        jar_id: document.getElementById("testJar").value,
+        wax_id: document.getElementById("testWax").value,
+        wick_id: document.getElementById("testWick").value,
+        fragrance_load_percent: Number(document.getElementById("testFragrance").value),
+        fill_weight_oz: Number(document.getElementById("testFill").value),
+        hours_tested: document.getElementById("testHours").value
+          ? Number(document.getElementById("testHours").value)
+          : null,
+        result: document.getElementById("testResult").value,
+        notes: document.getElementById("testNotes").value.trim() || null,
+        status: "pending"
+      };
+
+      if(!payload.jar_id || !payload.wax_id || !payload.wick_id){
+        setFormMessage("Please select a jar, wax, and wick.", "error");
+        return;
+      }
+
+      button.disabled = true;
+      button.textContent = "Submitting…";
+      setFormMessage("Saving your burn test…", "info");
+
+      try{
+        const { error } = await jarClient.from("burn_tests").insert(payload);
+        if(error) throw error;
+
+        const selectedJar = payload.jar_id;
+        document.getElementById("testForm").reset();
+        populateTestFormOptions();
+        document.getElementById("testJar").value = selectedJar;
+
+        setFormMessage("Submitted! Your burn test is pending review and will appear in the Jar Library after approval.", "success");
+        button.textContent = "Submitted";
+
+        setTimeout(() => {
+          closeModal("submitModal");
+          button.textContent = "Submit Test";
+        }, 1800);
+      }catch(error){
+        console.error("Burn test submission error:", error);
+        setFormMessage(error?.message || "We couldn't submit your burn test. Please try again.", "error");
+        button.textContent = "Submit Test";
+      }finally{
+        button.disabled = false;
+      }
     }
 
     function closeModal(id){
       document.getElementById(id).classList.remove("open");
       if(!document.querySelector(".modal.open")) document.body.style.overflow = "";
     }
+
+    document.getElementById("testForm").addEventListener("submit", submitBurnTest);
 
     document.getElementById("searchInput").addEventListener("input", renderJars);
     document.getElementById("supplierFilter").addEventListener("change", () => {
