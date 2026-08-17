@@ -474,7 +474,7 @@
 
       if(Number.isFinite(casePrice) && Number.isFinite(qty) && qty > 0){
         const each = casePrice / qty;
-        return `${money(casePrice)} / case of ${qty} · ${money(each)} each`;
+        return `${money(casePrice)} / case of ${qty} · ${money(each)} per jar`;
       }
 
       if(v.price != null && Number.isFinite(Number(v.price))){
@@ -488,12 +488,17 @@
       const rows = variants || [];
 
       const singlePrices = rows
+        .filter(v => v.single_price !== null && v.single_price !== undefined && v.single_price !== "")
         .map(v => Number(v.single_price))
         .filter(Number.isFinite);
 
       const caseRows = rows.filter(v =>
-        v.case_price != null &&
-        v.case_quantity != null &&
+        v.case_price !== null &&
+        v.case_price !== undefined &&
+        v.case_price !== "" &&
+        v.case_quantity !== null &&
+        v.case_quantity !== undefined &&
+        v.case_quantity !== "" &&
         Number.isFinite(Number(v.case_price)) &&
         Number.isFinite(Number(v.case_quantity)) &&
         Number(v.case_quantity) > 0
@@ -519,7 +524,7 @@
           const eachMin = min / qty;
           const eachMax = max / qty;
           const eachText = eachMin === eachMax ? money(eachMin) : `${money(eachMin)}–${money(eachMax)}`;
-          return `${caseText} / case of ${qty} · ${eachText} each`;
+          return `${caseText} / case of ${qty} · ${eachText} per jar`;
         }
       }
 
