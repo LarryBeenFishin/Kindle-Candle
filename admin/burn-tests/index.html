@@ -19,28 +19,12 @@
     .details{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.chip{font-family:Arial,sans-serif;border:1px solid var(--line);padding:7px 9px;border-radius:999px;font-size:.82rem;background:white}
     .notes{font-family:Arial,sans-serif;background:white;border:1px solid var(--line);padding:14px;border-radius:12px;line-height:1.55;margin-top:12px}
     .actions{display:flex;gap:10px;margin-top:18px}.actions button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
-    .approve{background:var(--green);color:white}.reject{background:var(--red);color:white}.pending{color:#8a6124}.approved{color:var(--green)}.rejected{color:var(--red)}
+    .approve{background:var(--green);color:white}.reject{background:var(--red);color:white}.delete{background:#2a2521;color:white}.pending{color:#8a6124}.approved{color:var(--green)}.rejected{color:var(--red)}
     .empty{text-align:center;padding:45px 20px;background:var(--surface);border:1px dashed var(--line);border-radius:18px;color:var(--muted);font-family:Arial,sans-serif}
     @media(max-width:650px){.card-head{display:block}.top .wrap{align-items:flex-start}}
-  
-
-    .announcement {
-      background: #7f452f;
-      color: #fffdf9;
-      text-align: center;
-      padding: 9px 16px 8px;
-      font-family: "Courier New", Courier, monospace;
-      font-size: 11px;
-      font-weight: 400;
-      line-height: normal;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-</style>
+  </style>
 </head>
 <body>
-  <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
 <header class="top"><div class="wrap"><div class="brand">Kindle Candle · Admin</div><a class="back" href="../../jar-library/">← Jar Library</a></div></header>
 <main class="wrap">
   <h1>Burn Test Moderation</h1>
@@ -115,7 +99,11 @@ async function loadTests(){
         <span class="chip">Result: <b>${esc(t.result)}</b></span>
       </div>
       <div class="notes">${esc(t.notes||"No notes provided.")}</div>
-      ${t.status==="pending"?`<div class="actions"><button class="approve" onclick="moderate('${esc(t.id)}','approved')">Approve</button><button class="reject" onclick="moderate('${esc(t.id)}','rejected')">Reject</button></div>`:""}
+      ${t.status==="pending"
+        ? `<div class="actions"><button class="approve" onclick="moderate('${esc(t.id)}','approved')">Approve</button><button class="reject" onclick="moderate('${esc(t.id)}','rejected')">Reject</button></div>`
+        : t.status==="approved"
+          ? `<div class="actions"><button class="delete" onclick="deleteBurnTest('${esc(t.id)}')">Delete Test</button></div>`
+          : ""}
     </article>`).join("");
 }
 
@@ -124,6 +112,21 @@ async function moderate(id,status){
   if(error){alert("Could not update test: "+error.message);return}
   loadTests();
 }
+
+async function deleteBurnTest(id){
+  const ok = window.confirm("Delete this approved burn test permanently? This cannot be undone.");
+  if(!ok) return;
+
+  const {error}=await client.from("burn_tests").delete().eq("id",id);
+
+  if(error){
+    alert("Could not delete test: "+error.message);
+    return;
+  }
+
+  loadTests();
+}
+
 document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
   currentStatus=b.dataset.status;
   document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
