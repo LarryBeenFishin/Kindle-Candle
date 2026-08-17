@@ -162,6 +162,11 @@
       border-radius:999px;background:#fff;font-size:.82rem;color:#5f574f
     }
     .variant-chip b{color:var(--ink)}
+    .variant-chip.has-image{cursor:pointer;transition:.15s ease}
+    .variant-chip.has-image:hover{transform:translateY(-1px);border-color:#bba897;box-shadow:0 5px 14px rgba(52,42,33,.07)}
+    .variant-chip.selected{background:var(--ink);color:#fff;border-color:var(--ink)}
+    .variant-chip.selected b{color:#fff}
+    .variant-hint{font-size:.78rem;color:var(--muted);margin:7px 0 0;font-family:Arial,sans-serif}
     .db-note{
       background:#efe6dc;border:1px solid var(--line);border-radius:14px;padding:14px 16px;
       color:#665d55;font-size:.9rem;line-height:1.55;margin-bottom:18px
@@ -425,6 +430,8 @@
     let wickRows = [];
     let currentSupplier = "";
     let jarClient = null;
+    let detailBaseImage = null;
+    let detailLockedImage = null;
 
     const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
@@ -740,12 +747,15 @@
       const statusLabel = {success:"SUCCESSFUL",adjust:"NEEDS ADJUSTMENT",fail:"DIDN'T WORK"};
       const variantPrices = priceLabel(j.variants,j.price);
 
+      detailBaseImage = j.imageUrl || null;
+      detailLockedImage = null;
+
       document.getElementById("detailContent").innerHTML = `
         <div class="detail-grid">
-          <div class="detail-visual">
+          <div class="detail-visual" id="detailVisual">
             ${j.imageUrl
-              ? `<img src="${esc(j.imageUrl)}" alt="${esc(j.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:18px">`
-              : `<div class="jar-shape"></div>`}
+              ? `<img id="detailJarImage" src="${esc(j.imageUrl)}" alt="${esc(j.name)}" style="width:100%;height:100%;object-fit:cover;border-radius:18px;transition:opacity .14s ease">`
+              : `<div class="jar-shape" id="detailJarPlaceholder"></div>`}
           </div>
           <div>
             <div class="supplier">${esc(j.supplier)}</div>
@@ -777,13 +787,25 @@
           <h3>${j.variants.length} available color / finish variants</h3>
           <div class="variant-chips">
             ${j.variants.length
-              ? j.variants.map(v => `
-                  <span class="variant-chip">
+              ? j.variants.map((v,index) => `
+                  <span
+                    class="variant-chip${v.image_url ? " has-image" : ""}"
+                    data-variant-index="${index}"
+                    ${v.image_url ? `
+                      onmouseenter="previewVariantImage('${esc(v.image_url)}')"
+                      onmouseleave="restoreVariantImage()"
+                      onclick="lockVariantImage('${esc(v.image_url)}', this)"
+                      title="Preview ${esc(v.color)}"
+                    ` : ""}
+                  >
                     <b>${esc(v.color)}</b>
                     ${v.price != null ? `<span>${esc(money(v.price))}</span>` : ""}
                   </span>`).join("")
               : `<span class="meta">No variants have been added yet.</span>`}
           </div>
+          ${j.variants.some(v => v.image_url)
+            ? `<p class="variant-hint">Hover a color to preview it. Tap or click a color to keep that image selected.</p>`
+            : `<p class="variant-hint">Color photos can be added to these variants as they become available.</p>`}
         </div>
 
         <div class="summary-grid">
@@ -821,6 +843,51 @@
 
       document.getElementById("detailModal").classList.add("open");
       document.body.style.overflow = "hidden";
+    }
+
+
+    function setDetailImage(url){
+      if(!url) return;
+      const visual = document.getElementById("detailVisual");
+      if(!visual) return;
+
+      let img = document.getElementById("detailJarImage");
+      if(!img){
+        visual.innerHTML = `<img id="detailJarImage" src="${esc(url)}" alt="Jar color preview" style="width:100%;height:100%;object-fit:cover;border-radius:18px;transition:opacity .14s ease">`;
+        return;
+      }
+
+      if(img.src === url) return;
+      img.style.opacity = ".35";
+      const preload = new Image();
+      preload.onload = () => {
+        img.src = url;
+        img.style.opacity = "1";
+      };
+      preload.onerror = () => {
+        img.style.opacity = "1";
+      };
+      preload.src = url;
+    }
+
+    function previewVariantImage(url){
+      if(detailLockedImage) return;
+      setDetailImage(url);
+    }
+
+    function restoreVariantImage(){
+      if(detailLockedImage){
+        setDetailImage(detailLockedImage);
+      }else if(detailBaseImage){
+        setDetailImage(detailBaseImage);
+      }
+    }
+
+    function lockVariantImage(url, chip){
+      detailLockedImage = url;
+      setDetailImage(url);
+      document.querySelectorAll(".variant-chip").forEach(x => x.classList.remove("selected"));
+      if(chip) chip.classList.add("selected");
     }
 
     async function openSubmit(id){
