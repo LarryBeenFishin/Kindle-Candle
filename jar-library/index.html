@@ -449,6 +449,7 @@
     let wickRows = [];
     let currentSupplier = "";
     let jarClient = null;
+    let profileRows = [];
     let detailBaseImage = null;
     let detailLockedImage = null;
     let detailSupplierUrl = null;
@@ -536,7 +537,7 @@
       return n == null ? "Fill not listed" : `${Number(n).toFixed(2).replace(/\.00$/,"")} oz`;
     }
 
-    function normalizeData({suppliers, jarRows, variants, tests, waxes, wicks}){
+    function normalizeData({suppliers, jarRows, variants, tests, waxes, wicks, profiles}){
       const supplierMap = new Map((suppliers || []).map(s => [s.id, s]));
       const variantMap = new Map();
       (variants || []).forEach(v => {
@@ -546,6 +547,7 @@
 
       const waxMap = new Map((waxes || []).map(w => [w.id, w]));
       const wickMap = new Map((wicks || []).map(w => [w.id, w]));
+      const profileMap = new Map((profiles || []).map(p => [p.user_id, p]));
       const testMap = new Map();
 
       (tests || []).forEach(t => {
@@ -559,7 +561,8 @@
           load: t.fragrance_load_percent == null ? "—" : `${t.fragrance_load_percent}%`,
           fill: t.fill_weight_oz == null ? "—" : `${t.fill_weight_oz} oz`,
           hours: t.hours_tested || 0,
-          notes: t.notes || "No notes added."
+          notes: t.notes || "No notes added.",
+          username: profileMap.get(t.user_id)?.username || "Candle Maker"
         });
       });
 
@@ -639,7 +642,7 @@
           client.from("jar_variants").select("*").eq("is_active", true).order("color"),
           client.from("waxes").select("id,name,supplier_id").eq("is_active", true).order("name"),
           client.from("wicks").select("id,series,size,supplier_id").eq("is_active", true).order("series"),
-          client.from("burn_tests").select("id,jar_id,wax_id,wick_id,fragrance_load_percent,fill_weight_oz,hours_tested,result,notes").eq("status","approved")
+          client.from("burn_tests").select("id,user_id,jar_id,wax_id,wick_id,fragrance_load_percent,fill_weight_oz,hours_tested,result,notes").eq("status","approved")
         ]);
 
         const responses = [suppliersRes,jarsRes,variantsRes,waxesRes,wicksRes,testsRes];
@@ -649,13 +652,25 @@
         waxRows = waxesRes.data || [];
         wickRows = wicksRes.data || [];
 
+        const userIds = [...new Set((testsRes.data || []).map(t => t.user_id).filter(Boolean))];
+        profileRows = [];
+        if(userIds.length){
+          const { data: profilesData, error: profilesError } = await client
+            .from("profiles")
+            .select("user_id,username")
+            .in("user_id", userIds);
+          if(profilesError) throw profilesError;
+          profileRows = profilesData || [];
+        }
+
         jars = normalizeData({
           suppliers: suppliersRes.data,
           jarRows: jarsRes.data,
           variants: variantsRes.data,
           tests: testsRes.data,
           waxes: waxRows,
-          wicks: wickRows
+          wicks: wickRows,
+          profiles: profileRows
         });
 
         setupFilters();
@@ -915,6 +930,7 @@
         ${j.community.length
           ? j.community.map(t => `
               <article class="test">
+                <div style="font-size:.82rem;font-weight:800;color:var(--accent);margin-bottom:8px">Tested by ${esc(t.username)}</div>
                 <div class="test-top">
                   <strong>${esc(t.wax)} + ${esc(t.wick)}</strong>
                   <span class="status ${esc(t.status)}">${esc(statusLabel[t.status] || t.status)}</span>
@@ -1009,12 +1025,17 @@
           return;
         }
 
+        const profile = window.KindleCloud?.currentProfile || await window.KindleCloud?.requireProfile?.(
+          "Choose a community username before submitting a burn test."
+        );
+        if(!profile?.username) return;
+
         populateTestFormOptions();
         if(id && document.getElementById("testJar")){
           document.getElementById("testJar").value = String(id);
         }
 
-        setFormMessage(`Signed in as ${user.email || "your account"}. Your test will be reviewed before it appears publicly.`, "info");
+        setFormMessage(`Submitting as ${profile.username}. Your test will be reviewed before it appears publicly.`, "info");
         document.getElementById("submitModal").classList.add("open");
         document.body.style.overflow = "hidden";
       }catch(error){

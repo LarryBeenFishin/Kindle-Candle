@@ -16,6 +16,8 @@
 
   let client = null;
   let currentUser = null;
+  let currentProfile = null;
+  let profilePromptShownForUser = null;
   let modalMessage = '';
   let readyResolve;
   const ready = new Promise(resolve => { readyResolve = resolve; });
@@ -185,6 +187,129 @@
         .kindle-mobile-account-btn svg { width: 28px !important; height: 28px !important; }
         .header-inner .nav { padding: 6px 16px 16px !important; }
         .header-inner .nav a { padding: 14px 1px !important; font-size: 12.5px !important; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+
+
+  function installUsernameStyles() {
+    if (document.getElementById('kindle-username-styles')) return;
+    const style = document.createElement('style');
+    style.id = 'kindle-username-styles';
+    style.textContent = `
+      .kindle-username-overlay {
+        position: fixed;
+        inset: 0;
+        z-index: 12000;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+        background: rgba(35,31,27,.58);
+        backdrop-filter: blur(6px);
+      }
+      .kindle-username-overlay.open { display: flex; }
+      .kindle-username-dialog {
+        width: min(560px, 100%);
+        position: relative;
+        border: 1px solid #ded5ca;
+        border-radius: 22px;
+        padding: 28px;
+        background: #fffdf9;
+        color: #231f1b;
+        box-shadow: 0 24px 70px rgba(35,31,27,.20);
+        font-family: Arial, Helvetica, sans-serif;
+      }
+      .kindle-username-dialog h2 {
+        margin: 0 0 10px;
+        font-family: Georgia, 'Times New Roman', serif;
+        font-size: 30px;
+        line-height: 1.1;
+      }
+      .kindle-username-dialog > p {
+        margin: 0 0 22px;
+        color: #71685f;
+        line-height: 1.6;
+        font-size: 15px;
+      }
+      .kindle-username-field {
+        display: flex;
+        flex-direction: column;
+        gap: 7px;
+        margin-bottom: 16px;
+      }
+      .kindle-username-field label {
+        font-size: 13px;
+        font-weight: 700;
+      }
+      .kindle-username-field input {
+        width: 100%;
+        border: 1px solid #ded5ca;
+        border-radius: 12px;
+        padding: 13px 14px;
+        background: #fff;
+        color: #231f1b;
+        font-size: 16px;
+        outline: none;
+      }
+      .kindle-username-field input:focus {
+        border-color: #a85f3f;
+        box-shadow: 0 0 0 3px rgba(168,95,63,.10);
+      }
+      .kindle-username-hint {
+        color: #8a8177;
+        font-size: 12px;
+        line-height: 1.45;
+      }
+      .kindle-username-submit {
+        width: 100%;
+        border: 0;
+        border-radius: 12px;
+        padding: 13px 16px;
+        background: #231f1b;
+        color: #fff;
+        font-weight: 800;
+        font-size: 15px;
+        cursor: pointer;
+      }
+      .kindle-username-submit:disabled { opacity: .55; cursor: wait; }
+      .kindle-username-message {
+        min-height: 20px;
+        margin: 12px 0 0;
+        color: #984b42;
+        font-size: 13px;
+        line-height: 1.45;
+      }
+      .kindle-username-later {
+        width: 100%;
+        margin-top: 8px;
+        border: 0;
+        background: transparent;
+        color: #71685f;
+        font-size: 13px;
+        cursor: pointer;
+        text-decoration: underline;
+        text-underline-offset: 3px;
+      }
+      .kindle-username-account-row {
+        margin-top: 12px;
+        padding: 12px 14px;
+        border-radius: 12px;
+        background: #f3ece4;
+      }
+      .kindle-username-account-row strong {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: .07em;
+        color: #7a6f65;
+      }
+      .kindle-username-account-row span { font-size: 15px; }
+      @media (max-width: 560px) {
+        .kindle-username-dialog { padding: 22px; border-radius: 18px; }
+        .kindle-username-dialog h2 { font-size: 26px; }
       }
     `;
     document.head.appendChild(style);
@@ -369,6 +494,8 @@
             <h2>Signed in</h2>
             <p>Your saved candle profiles and fragrance blends are synced to this account.</p>
             <div class="kindle-auth-account"><strong>Email</strong><div class="kindle-auth-email" id="kindleAuthAccountEmail"></div></div>
+            <div class="kindle-username-account-row"><strong>Community username</strong><span id="kindleAuthAccountUsername">Not set</span></div>
+            <button id="kindleEditUsername" class="kindle-auth-logout" type="button" style="margin-top:10px">Set / Change Username</button>
             <button id="kindleAuthLogout" class="kindle-auth-logout" type="button">Sign Out</button>
             <p class="kindle-auth-message" id="kindleAuthAccountMessage" aria-live="polite"></p>
           </div>
@@ -383,7 +510,18 @@
       document.getElementById('kindleAuthForm').addEventListener('submit', handleAuthSubmit);
       document.getElementById('kindleForgotPassword').addEventListener('click', handleForgotPassword);
       document.getElementById('kindleAuthLogout').addEventListener('click', signOut);
-      document.addEventListener('keydown', event => { if (event.key === 'Escape') closeAuth(); });
+      document.getElementById('kindleEditUsername')?.addEventListener('click', () => {
+        closeAuth();
+        openUsernamePrompt(true);
+        const input = document.getElementById('kindleUsernameInput');
+        if (input && currentProfile?.username) input.value = currentProfile.username;
+      });
+      document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+          closeAuth();
+          closeUsernamePrompt();
+        }
+      });
     }
     updateAuthUI();
   }
@@ -403,6 +541,167 @@
     if (message) message.textContent = '';
   }
 
+
+  function normalizeUsername(value) {
+    return String(value || '').trim();
+  }
+
+  function validUsername(value) {
+    return /^[A-Za-z0-9_-]{3,24}$/.test(normalizeUsername(value));
+  }
+
+  async function loadCurrentProfile() {
+    if (!client || !currentUser) {
+      currentProfile = null;
+      return null;
+    }
+
+    const { data, error } = await client
+      .from('profiles')
+      .select('user_id, username, created_at')
+      .eq('user_id', currentUser.id)
+      .maybeSingle();
+
+    if (error) {
+      console.error('Could not load community profile:', error);
+      currentProfile = null;
+      return null;
+    }
+
+    currentProfile = data || null;
+    return currentProfile;
+  }
+
+  function injectUsernamePrompt() {
+    installUsernameStyles();
+    if (document.getElementById('kindleUsernameOverlay')) return;
+
+    const wrap = document.createElement('div');
+    wrap.id = 'kindleUsernameOverlay';
+    wrap.className = 'kindle-username-overlay';
+    wrap.innerHTML = `
+      <div class="kindle-username-dialog" role="dialog" aria-modal="true" aria-labelledby="kindleUsernameTitle">
+        <h2 id="kindleUsernameTitle">Choose your community username</h2>
+        <p>This is the name other candle makers will see on your burn tests. Your email stays private.</p>
+
+        <form id="kindleUsernameForm">
+          <div class="kindle-username-field">
+            <label for="kindleUsernameInput">Username</label>
+            <input
+              id="kindleUsernameInput"
+              type="text"
+              maxlength="24"
+              autocomplete="username"
+              placeholder="CandleMaker123"
+              required
+            >
+            <div class="kindle-username-hint">3–24 characters. Letters, numbers, underscores, and dashes.</div>
+          </div>
+
+          <button id="kindleUsernameSubmit" class="kindle-username-submit" type="submit">Save Username</button>
+          <p id="kindleUsernameMessage" class="kindle-username-message" aria-live="polite"></p>
+          <button id="kindleUsernameLater" class="kindle-username-later" type="button">Not now</button>
+        </form>
+      </div>
+    `;
+    document.body.appendChild(wrap);
+
+    document.getElementById('kindleUsernameForm')?.addEventListener('submit', saveUsername);
+    document.getElementById('kindleUsernameLater')?.addEventListener('click', closeUsernamePrompt);
+  }
+
+  function openUsernamePrompt(force = false) {
+    if (!currentUser) return;
+    injectUsernamePrompt();
+
+    if (!force && currentProfile?.username) return;
+
+    const overlay = document.getElementById('kindleUsernameOverlay');
+    if (!overlay) return;
+
+    const input = document.getElementById('kindleUsernameInput');
+    const message = document.getElementById('kindleUsernameMessage');
+    if (input && !input.value) input.value = '';
+    if (message) message.textContent = '';
+
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    setTimeout(() => input?.focus(), 60);
+  }
+
+  function closeUsernamePrompt() {
+    document.getElementById('kindleUsernameOverlay')?.classList.remove('open');
+    if (!document.getElementById('kindleAuthOverlay')?.classList.contains('open')) {
+      document.body.style.overflow = '';
+    }
+  }
+
+  async function saveUsername(event) {
+    event?.preventDefault();
+    if (!client || !currentUser) return;
+
+    const input = document.getElementById('kindleUsernameInput');
+    const message = document.getElementById('kindleUsernameMessage');
+    const submit = document.getElementById('kindleUsernameSubmit');
+    const username = normalizeUsername(input?.value);
+
+    if (!validUsername(username)) {
+      if (message) message.textContent = 'Use 3–24 letters, numbers, underscores, or dashes.';
+      input?.focus();
+      return;
+    }
+
+    if (submit) {
+      submit.disabled = true;
+      submit.textContent = 'Saving…';
+    }
+    if (message) message.textContent = '';
+
+    try {
+      const { data, error } = await client
+        .from('profiles')
+        .upsert(
+          { user_id: currentUser.id, username },
+          { onConflict: 'user_id' }
+        )
+        .select('user_id, username, created_at')
+        .single();
+
+      if (error) {
+        if (String(error.code) === '23505') {
+          throw new Error('That username is already taken. Try another one.');
+        }
+        throw error;
+      }
+
+      currentProfile = data;
+      profilePromptShownForUser = currentUser.id;
+      closeUsernamePrompt();
+      updateAuthUI();
+      dispatch('kindle-profile-change', { profile: currentProfile });
+    } catch (error) {
+      if (message) message.textContent = error?.message || 'We could not save that username. Please try again.';
+    } finally {
+      if (submit) {
+        submit.disabled = false;
+        submit.textContent = 'Save Username';
+      }
+    }
+  }
+
+  async function requireProfile(message = 'Choose a community username before using this feature.') {
+    await ready;
+    if (!currentUser) {
+      openAuth('signup', message);
+      return null;
+    }
+    if (!currentProfile) await loadCurrentProfile();
+    if (currentProfile?.username) return currentProfile;
+    openUsernamePrompt(true);
+    return null;
+  }
+
   function updateAuthUI() {
     const btn = document.getElementById('kindleAccountBtn');
     if (btn) {
@@ -415,6 +714,9 @@
     if (inside) inside.hidden = !currentUser;
     const email = document.getElementById('kindleAuthAccountEmail');
     if (email) email.textContent = currentUser?.email || '';
+
+    const username = document.getElementById('kindleAuthAccountUsername');
+    if (username) username.textContent = currentProfile?.username || 'Not set';
   }
 
   function openAuth(mode = 'signin', message = '') {
@@ -605,15 +907,27 @@
 
   async function handleSession(session) {
     currentUser = session?.user || null;
-    updateAuthUI();
+
     if (currentUser) {
+      await loadCurrentProfile();
+      updateAuthUI();
       await migrateLegacy();
       await syncCaches();
+
+      if (!currentProfile?.username && profilePromptShownForUser !== currentUser.id) {
+        profilePromptShownForUser = currentUser.id;
+        setTimeout(() => openUsernamePrompt(false), 450);
+      }
     } else {
+      currentProfile = null;
+      profilePromptShownForUser = null;
+      updateAuthUI();
       clearActiveCaches();
       dispatch('kindle-cloud-data-ready', { user: null, recipes: [], blends: [] });
     }
+
     dispatch('kindle-auth-change', { user: currentUser });
+    dispatch('kindle-profile-change', { profile: currentProfile });
   }
 
   async function requireUser(message = 'Create a free account to save this data.') {
@@ -650,8 +964,12 @@
     ready,
     isConfigured: () => configured,
     get currentUser() { return currentUser; },
+    get currentProfile() { return currentProfile; },
     get client() { return client; },
     openAuth,
+    openUsernamePrompt,
+    requireProfile,
+    loadCurrentProfile,
     closeAuth,
     requireUser,
     saveItem,
@@ -662,6 +980,7 @@
 
 
   installMobileHeaderStyles();
+  installUsernameStyles();
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init, { once: true });
   else init();
