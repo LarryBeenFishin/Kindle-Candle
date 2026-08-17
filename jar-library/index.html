@@ -1539,13 +1539,168 @@
       }
     }
 
+
+    /* ===== Unified Kindle Candle banner + header ===== */
+    .announcement{
+      background:#7f452f !important;
+      color:#fffdf9 !important;
+      text-align:center !important;
+      padding:9px 16px 8px !important;
+      font-family:"Courier New",Courier,monospace !important;
+      font-size:11px !important;
+      font-weight:400 !important;
+      line-height:normal !important;
+      letter-spacing:.16em !important;
+      text-transform:uppercase !important;
+    }
+
+    .site-header{
+      width:100% !important;
+      margin:0 !important;
+      padding:0 !important;
+      background:#f7f2ea !important;
+      border-bottom:1px solid rgba(90,56,38,.14) !important;
+      position:relative !important;
+      z-index:5000 !important;
+    }
+
+    .header-inner{
+      width:min(1300px,calc(100% - 48px)) !important;
+      min-height:132px !important;
+      margin:0 auto !important;
+      padding:0 !important;
+      display:flex !important;
+      align-items:center !important;
+      gap:0 !important;
+    }
+
+    .header-inner .brand{
+      width:150px !important;
+      flex:0 0 150px !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:center !important;
+      margin:0 !important;
+      padding:0 !important;
+      text-decoration:none !important;
+    }
+
+    .header-inner .brand-logo{
+      display:block !important;
+      width:150px !important;
+      height:auto !important;
+      max-width:none !important;
+      max-height:88px !important;
+      object-fit:contain !important;
+    }
+
+    .header-inner .nav{
+      flex:1 1 auto !important;
+      display:flex !important;
+      align-items:center !important;
+      justify-content:flex-start !important;
+      gap:28px !important;
+      margin-left:38px !important;
+      padding:0 !important;
+      font-family:Arial,Helvetica,sans-serif !important;
+      font-size:11px !important;
+      font-weight:500 !important;
+      line-height:1.2 !important;
+      letter-spacing:.12em !important;
+      text-transform:uppercase !important;
+      white-space:nowrap !important;
+    }
+
+    .header-inner .nav a{
+      padding:9px 0 7px !important;
+      border:0 !important;
+      border-bottom:1px solid transparent !important;
+      background:transparent !important;
+      text-decoration:none !important;
+      color:#241d18 !important;
+      box-shadow:none !important;
+    }
+
+    .header-inner .nav a:hover,
+    .header-inner .nav a[aria-current="page"]{
+      border-bottom-color:currentColor !important;
+    }
+
+    .header-inner .kindle-account-btn{
+      margin-left:auto !important;
+      padding:9px 0 7px !important;
+      border:0 !important;
+      border-bottom:1px solid transparent !important;
+      background:transparent !important;
+      color:#241d18 !important;
+      box-shadow:none !important;
+      font-family:Arial,Helvetica,sans-serif !important;
+      font-size:11px !important;
+      font-weight:500 !important;
+      line-height:1.2 !important;
+      letter-spacing:.12em !important;
+      text-transform:uppercase !important;
+    }
+
+    .header-inner .kindle-account-btn:hover{
+      border-bottom-color:currentColor !important;
+      background:transparent !important;
+    }
+
+    @media(max-width:900px){
+      .header-inner{
+        width:min(100% - 28px,1300px) !important;
+        min-height:auto !important;
+        padding:16px 0 12px !important;
+        display:grid !important;
+        grid-template-columns:auto 1fr !important;
+        align-items:center !important;
+        gap:10px 16px !important;
+      }
+
+      .header-inner .brand{
+        width:118px !important;
+        flex:none !important;
+        justify-content:flex-start !important;
+      }
+
+      .header-inner .brand-logo{
+        width:118px !important;
+        max-height:72px !important;
+      }
+
+      .header-inner .nav{
+        grid-column:1 / -1 !important;
+        width:100% !important;
+        margin:4px 0 0 !important;
+        padding:8px 0 2px !important;
+        gap:18px !important;
+        overflow-x:auto !important;
+        scrollbar-width:none !important;
+        font-size:9px !important;
+        letter-spacing:.08em !important;
+      }
+
+      .header-inner .nav::-webkit-scrollbar{
+        display:none !important;
+      }
+
+      .header-inner .kindle-account-btn{
+        justify-self:end !important;
+        margin-left:0 !important;
+        font-size:9px !important;
+        letter-spacing:.08em !important;
+      }
+    }
+
 </style>
 </head>
 <body>
+
   <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/" aria-label="Kindle Candle tools home">
+      <a class="brand" href="/" aria-label="Kindle Candle home">
         <img class="brand-logo" src="../shared/kindle-candle-logo.png" alt="Kindle Candle" />
       </a>
 
@@ -1554,11 +1709,12 @@
         <a href="/fragranceLoadCalc/">Wax + Fragrance Calculator</a>
         <a href="/Candle%20Cost%20Calculator/">Candle Cost Calculator</a>
         <a href="/jar-library/" aria-current="page">Jar Library</a>
-        <a href="/about/">Our Story</a>
         <a href="/my-candles/">My Candles</a>
+        <a href="/about/">Our Story</a>
       </nav>
     </div>
   </header>
+
 <main>
     <section class="hero">
       <div class="container">
