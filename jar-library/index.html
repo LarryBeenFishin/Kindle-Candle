@@ -485,14 +485,7 @@
     }
 
     function jarPriceSummary(variants, fallback){
-      const rows = variants || [];
-
-      const singlePrices = rows
-        .filter(v => v.single_price !== null && v.single_price !== undefined && v.single_price !== "")
-        .map(v => Number(v.single_price))
-        .filter(Number.isFinite);
-
-      const caseRows = rows.filter(v =>
+      const rows = (variants || []).filter(v =>
         v.case_price !== null &&
         v.case_price !== undefined &&
         v.case_price !== "" &&
@@ -504,33 +497,30 @@
         Number(v.case_quantity) > 0
       );
 
-      if(singlePrices.length){
-        const min = Math.min(...singlePrices);
-        const max = Math.max(...singlePrices);
-        return min === max
-          ? `${money(min)} each`
-          : `${money(min)}–${money(max)} each`;
-      }
+      if(!rows.length) return "Case pricing not listed";
 
-      if(caseRows.length){
-        const quantities = [...new Set(caseRows.map(v => Number(v.case_quantity)))];
-        const casePrices = caseRows.map(v => Number(v.case_price));
-        const min = Math.min(...casePrices);
-        const max = Math.max(...casePrices);
+      const quantities = [...new Set(rows.map(v => Number(v.case_quantity)))];
+      if(quantities.length !== 1) return "Case pricing varies";
 
-        if(quantities.length === 1){
-          const qty = quantities[0];
-          const caseText = min === max ? money(min) : `${money(min)}–${money(max)}`;
-          const eachMin = min / qty;
-          const eachMax = max / qty;
-          const eachText = eachMin === eachMax ? money(eachMin) : `${money(eachMin)}–${money(eachMax)}`;
-          return `${caseText} / case of ${qty} · ${eachText} per jar`;
-        }
-      }
+      const qty = quantities[0];
+      const casePrices = rows.map(v => Number(v.case_price));
+      const perJarPrices = rows.map(v => Number(v.case_price) / qty);
 
-      return fallback != null ? money(fallback) : "Price not listed";
+      const caseMin = Math.min(...casePrices);
+      const caseMax = Math.max(...casePrices);
+      const eachMin = Math.min(...perJarPrices);
+      const eachMax = Math.max(...perJarPrices);
+
+      const caseText = caseMin === caseMax
+        ? money(caseMin)
+        : `${money(caseMin)}–${money(caseMax)}`;
+
+      const eachText = Math.abs(eachMin - eachMax) < 0.001
+        ? money(eachMin)
+        : `${money(eachMin)}–${money(eachMax)}`;
+
+      return `${caseText} / case of ${qty} · ${eachText} per jar`;
     }
-
     function inches(n){
       return n == null ? null : `${Number(n).toFixed(2).replace(/\.00$/,"")}"`;
     }
@@ -853,7 +843,7 @@
             <p>${esc(j.description)}</p>
 
             <div class="spec-grid">
-              <div class="spec"><span>Current Pricing</span><strong>${esc(variantPrices)}</strong></div>
+              <div class="spec"><span>Case Pricing</span><strong>${esc(variantPrices)}</strong></div>
               ${j.innerDiameter
                 ? `<div class="spec"><span>Outer Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
                    <div class="spec"><span>Inner Diameter</span><strong>${esc(j.innerDiameter)}</strong></div>`
@@ -892,9 +882,7 @@
                     ` : ""}
                   >
                     <b>${esc(v.color)}</b>
-                    ${(v.single_price != null || v.case_price != null || v.price != null)
-                      ? `<span>${esc(variantPriceText(v))}</span>`
-                      : ""}
+
                   </span>`).join("")
               : `<span class="meta">No variants have been added yet.</span>`}
           </div>
