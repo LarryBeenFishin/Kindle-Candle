@@ -3,135 +3,857 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Burn Test Moderation | Kindle Candle</title>
+  <title>Kindle Candle Admin</title>
   <style>
-    :root{--bg:#f7f1e9;--surface:#fffaf4;--ink:#211d19;--muted:#776b61;--line:#e5d6c8;--accent:#ad5d3d;--green:#356a46;--red:#984b42}
-    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font-family:Georgia,serif}
-    .wrap{width:min(1100px,92%);margin:auto}.top{padding:28px 0;border-bottom:1px solid var(--line);background:rgba(255,250,244,.85)}
-    .top .wrap{display:flex;justify-content:space-between;align-items:center;gap:20px}.brand{font-size:1.3rem;font-weight:700}
-    a{color:inherit}.back{text-decoration:none;font-family:Arial,sans-serif;font-size:.9rem}
-    main{padding:42px 0 70px} h1{font-size:clamp(2rem,5vw,3.5rem);margin:0 0 10px} .lead{color:var(--muted);font-family:Arial,sans-serif;margin:0 0 28px}
-    .status{padding:18px;border:1px solid var(--line);border-radius:16px;background:var(--surface);font-family:Arial,sans-serif;color:var(--muted)}
-    .tabs{display:flex;gap:8px;margin:24px 0;flex-wrap:wrap}.tab{border:1px solid var(--line);background:var(--surface);padding:10px 14px;border-radius:999px;cursor:pointer;font-weight:700}
-    .tab.active{background:var(--ink);color:white;border-color:var(--ink)}
-    .cards{display:grid;gap:16px}.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px}
-    .card-head{display:flex;justify-content:space-between;gap:15px;align-items:flex-start}.card h2{font-size:1.15rem;margin:0 0 5px}.meta{font-family:Arial,sans-serif;color:var(--muted);font-size:.88rem;line-height:1.65}
-    .details{display:flex;gap:10px;flex-wrap:wrap;margin:16px 0}.chip{font-family:Arial,sans-serif;border:1px solid var(--line);padding:7px 9px;border-radius:999px;font-size:.82rem;background:white}
-    .notes{font-family:Arial,sans-serif;background:white;border:1px solid var(--line);padding:14px;border-radius:12px;line-height:1.55;margin-top:12px}
-    .actions{display:flex;gap:10px;margin-top:18px}.actions button{border:0;border-radius:10px;padding:11px 15px;font-weight:700;cursor:pointer}
-    .approve{background:var(--green);color:white}.reject{background:var(--red);color:white}.delete{background:#2a2521;color:white}.pending{color:#8a6124}.approved{color:var(--green)}.rejected{color:var(--red)}
-    .empty{text-align:center;padding:45px 20px;background:var(--surface);border:1px dashed var(--line);border-radius:18px;color:var(--muted);font-family:Arial,sans-serif}
-    @media(max-width:650px){.card-head{display:block}.top .wrap{align-items:flex-start}}
+    :root{
+      --bg:#f7f2ea;
+      --paper:#fffdf9;
+      --paper-2:#f1e7db;
+      --ink:#241d18;
+      --muted:#74685e;
+      --line:#ddd0c1;
+      --accent:#8f4c31;
+      --accent-dark:#7f452f;
+      --green:#356a46;
+      --green-bg:#eaf3ec;
+      --red:#994b42;
+      --red-bg:#f6e9e6;
+      --amber:#8d6428;
+      --amber-bg:#f6efdf;
+      --shadow:0 18px 45px rgba(61,43,30,.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      background:
+        radial-gradient(rgba(123,90,67,.05) 1px, transparent 1px),
+        var(--bg);
+      background-size:18px 18px;
+      color:var(--ink);
+      font-family:Arial,Helvetica,sans-serif;
+    }
+
+    a{color:inherit}
+    button,input,select{font:inherit}
+
+    .announcement{
+      background:var(--accent-dark);
+      color:#fffdf9;
+      text-align:center;
+      padding:9px 16px 8px;
+      font-family:"Courier New",Courier,monospace;
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .topbar{
+      background:rgba(255,253,249,.95);
+      border-bottom:1px solid var(--line);
+    }
+
+    .topbar-inner{
+      width:min(1320px,94%);
+      min-height:94px;
+      margin:auto;
+      display:flex;
+      align-items:center;
+      gap:22px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-decoration:none;
+      font-family:Georgia,"Times New Roman",serif;
+      font-weight:800;
+      font-size:1.2rem;
+    }
+
+    .brand img{
+      width:110px;
+      max-height:68px;
+      object-fit:contain;
+      display:block;
+    }
+
+    .admin-pill{
+      padding:6px 9px;
+      border-radius:999px;
+      background:#ead8c7;
+      color:#73432f;
+      font-family:"Courier New",monospace;
+      font-size:.67rem;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    .top-actions{
+      margin-left:auto;
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
+
+    .top-actions a{
+      text-decoration:none;
+      font-size:.82rem;
+      font-weight:700;
+      color:var(--muted);
+    }
+
+    .shell{
+      width:min(1320px,94%);
+      margin:0 auto;
+      padding:36px 0 70px;
+    }
+
+    .hero{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:30px;
+      margin-bottom:28px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      margin-bottom:10px;
+      color:var(--accent);
+      font-family:"Courier New",monospace;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.09em;
+      text-transform:uppercase;
+    }
+
+    h1{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:clamp(2.7rem,5vw,4.8rem);
+      line-height:.95;
+      letter-spacing:-.05em;
+    }
+
+    .hero p{
+      max-width:560px;
+      margin:0;
+      color:var(--muted);
+      line-height:1.6;
+    }
+
+    .gate{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      padding:22px;
+      box-shadow:var(--shadow);
+      color:var(--muted);
+    }
+
+    .app{display:none}
+    .app.ready{display:block}
+
+    .stats{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:14px;
+      margin-bottom:22px;
+    }
+
+    .stat{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:18px;
+      box-shadow:var(--shadow);
+    }
+
+    .stat span{
+      display:block;
+      color:var(--muted);
+      font-family:"Courier New",monospace;
+      font-size:.68rem;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+
+    .stat strong{
+      display:block;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:2rem;
+      line-height:1;
+    }
+
+    .dashboard{
+      display:grid;
+      grid-template-columns:230px 1fr;
+      gap:22px;
+      align-items:start;
+    }
+
+    .sidebar{
+      position:sticky;
+      top:18px;
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:16px;
+      padding:10px;
+      box-shadow:var(--shadow);
+    }
+
+    .nav-btn{
+      width:100%;
+      border:0;
+      background:transparent;
+      color:var(--muted);
+      text-align:left;
+      padding:12px 13px;
+      border-radius:11px;
+      cursor:pointer;
+      font-weight:800;
+      margin:2px 0;
+    }
+
+    .nav-btn.active{
+      background:var(--ink);
+      color:white;
+    }
+
+    .view{display:none}
+    .view.active{display:block}
+
+    .panel{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .panel-head{
+      padding:20px 22px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      align-items:center;
+    }
+
+    .panel-head h2{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.7rem;
+    }
+
+    .panel-head p{
+      margin:5px 0 0;
+      color:var(--muted);
+      font-size:.9rem;
+    }
+
+    .tabs{
+      display:flex;
+      gap:7px;
+      flex-wrap:wrap;
+    }
+
+    .tab{
+      border:1px solid var(--line);
+      background:white;
+      color:var(--muted);
+      padding:8px 11px;
+      border-radius:999px;
+      cursor:pointer;
+      font-size:.8rem;
+      font-weight:800;
+    }
+
+    .tab.active{
+      background:var(--ink);
+      color:white;
+      border-color:var(--ink);
+    }
+
+    .list{
+      padding:18px;
+      display:grid;
+      gap:13px;
+    }
+
+    .item{
+      border:1px solid var(--line);
+      border-radius:15px;
+      background:#fff;
+      padding:18px;
+    }
+
+    .item-top{
+      display:flex;
+      justify-content:space-between;
+      gap:20px;
+      align-items:flex-start;
+    }
+
+    .item h3{
+      margin:0 0 5px;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.25rem;
+    }
+
+    .sub{
+      color:var(--muted);
+      font-size:.84rem;
+      line-height:1.5;
+    }
+
+    .badge{
+      flex:0 0 auto;
+      padding:6px 9px;
+      border-radius:999px;
+      font-family:"Courier New",monospace;
+      font-size:.67rem;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    .badge.pending{background:var(--amber-bg);color:var(--amber)}
+    .badge.approved{background:var(--green-bg);color:var(--green)}
+    .badge.rejected{background:var(--red-bg);color:var(--red)}
+
+    .chips{
+      display:flex;
+      flex-wrap:wrap;
+      gap:7px;
+      margin:14px 0;
+    }
+
+    .chip{
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:7px 9px;
+      font-size:.78rem;
+      background:#fffdf9;
+      color:#5f554d;
+    }
+
+    .notes{
+      background:#f7f1ea;
+      border-radius:12px;
+      padding:13px 14px;
+      color:#5d534b;
+      line-height:1.55;
+      font-size:.9rem;
+      margin-top:12px;
+      white-space:pre-wrap;
+      overflow-wrap:anywhere;
+    }
+
+    .actions{
+      display:flex;
+      gap:9px;
+      flex-wrap:wrap;
+      margin-top:15px;
+    }
+
+    .actions button,
+    .actions a{
+      border:0;
+      border-radius:10px;
+      padding:10px 13px;
+      font-weight:800;
+      text-decoration:none;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:40px;
+    }
+
+    .approve{background:var(--green);color:white}
+    .reject{background:var(--red);color:white}
+    .delete{background:var(--ink);color:white}
+    .link{background:#eee4da;color:var(--ink);border:1px solid var(--line)!important}
+
+    .empty{
+      margin:18px;
+      padding:42px 20px;
+      text-align:center;
+      border:1px dashed var(--line);
+      border-radius:14px;
+      color:var(--muted);
+      background:#fffdf9;
+    }
+
+    .overview-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+    }
+
+    .overview-card{
+      background:var(--paper);
+      border:1px solid var(--line);
+      border-radius:18px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .overview-card .title{
+      padding:18px 20px;
+      border-bottom:1px solid var(--line);
+      display:flex;
+      justify-content:space-between;
+      gap:16px;
+      align-items:center;
+    }
+
+    .overview-card h2{
+      margin:0;
+      font-family:Georgia,"Times New Roman",serif;
+      font-size:1.35rem;
+    }
+
+    .mini-list{
+      padding:12px;
+      display:grid;
+      gap:9px;
+    }
+
+    .mini{
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      background:#fff;
+    }
+
+    .mini strong{
+      display:block;
+      margin-bottom:3px;
+    }
+
+    .mini span{
+      color:var(--muted);
+      font-size:.8rem;
+    }
+
+    @media(max-width:900px){
+      .stats{grid-template-columns:1fr 1fr}
+      .dashboard{grid-template-columns:1fr}
+      .sidebar{
+        position:static;
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+      }
+      .nav-btn{text-align:center}
+      .overview-grid{grid-template-columns:1fr}
+    }
+
+    @media(max-width:620px){
+      .announcement{font-size:9px;letter-spacing:.11em}
+      .topbar-inner{width:calc(100% - 24px);min-height:80px}
+      .brand img{width:88px}
+      .admin-pill{display:none}
+      .top-actions a:first-child{display:none}
+      .shell{width:calc(100% - 24px);padding-top:24px}
+      .hero{display:block}
+      .hero p{margin-top:12px}
+      .stats{grid-template-columns:1fr 1fr;gap:9px}
+      .stat{padding:14px}
+      .stat strong{font-size:1.6rem}
+      .sidebar{grid-template-columns:1fr;gap:5px}
+      .panel-head{display:block}
+      .tabs{margin-top:14px}
+      .item-top{display:block}
+      .badge{display:inline-block;margin-top:8px}
+      .actions{display:grid;grid-template-columns:1fr 1fr}
+      .actions button,.actions a{width:100%}
+    }
   </style>
 </head>
+
 <body>
-<header class="top"><div class="wrap"><div class="brand">Kindle Candle · Admin</div><a class="back" href="../../jar-library/">← Jar Library</a></div></header>
-<main class="wrap">
-  <h1>Burn Test Moderation</h1>
-  <p class="lead">Review community submissions before they appear publicly.</p>
-  <div id="gate" class="status">Checking your admin access…</div>
-  <section id="app" hidden>
-    <div class="tabs">
-      <button class="tab active" data-status="pending">Pending</button>
-      <button class="tab" data-status="approved">Approved</button>
-      <button class="tab" data-status="rejected">Rejected</button>
+  <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
+
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="../../">
+        <img src="../../shared/kindle-candle-logo.png" alt="Kindle Candle">
+        <span class="admin-pill">Admin</span>
+      </a>
+
+      <div class="top-actions">
+        <a href="../../jar-library/">View Jar Library</a>
+        <a href="../../">Home</a>
+      </div>
     </div>
-    <div id="cards" class="cards"></div>
-  </section>
-</main>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../../shared/supabase-config.js"></script>
-<script src="../../shared/kindle-cloud.js"></script>
-<script>
-let client, currentStatus="pending";
-const esc=s=>String(s??"").replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+  </header>
 
-async function init(){
-  try{
-    if(window.KindleCloud?.ready) await window.KindleCloud.ready;
-    const user=window.KindleCloud?.currentUser;
-    if(!user){
-      document.getElementById("gate").innerHTML='Please <a href="../../">sign in</a> with your Kindle Candle admin account first.';
-      return;
-    }
-    const cfg=window.KINDLE_SUPABASE_CONFIG||{};
-    client=window.KindleCloud?.client||window.supabase.createClient(cfg.url,cfg.key);
-    const {data,error}=await client.from("admin_users").select("user_id").eq("user_id",user.id).maybeSingle();
-    if(error) throw error;
-    if(!data){
-      document.getElementById("gate").textContent="This account does not have administrator access.";
-      return;
-    }
-    document.getElementById("gate").hidden=true;
-    document.getElementById("app").hidden=false;
-    loadTests();
-  }catch(e){document.getElementById("gate").textContent="Could not verify admin access: "+(e.message||e)}
-}
-
-async function loadTests(){
-  const cards=document.getElementById("cards");
-  cards.innerHTML='<div class="status">Loading '+esc(currentStatus)+' tests…</div>';
-  const {data:tests,error}=await client.from("burn_tests")
-    .select("id,user_id,jar_id,wax_id,wick_id,fragrance_load_percent,fill_weight_oz,hours_tested,result,notes,status,created_at")
-    .eq("status",currentStatus).order("created_at",{ascending:false});
-  if(error){cards.innerHTML='<div class="empty">'+esc(error.message)+'</div>';return}
-  if(!tests.length){cards.innerHTML='<div class="empty">No '+esc(currentStatus)+' burn tests.</div>';return}
-
-  const jarIds=[...new Set(tests.map(x=>x.jar_id))], waxIds=[...new Set(tests.map(x=>x.wax_id))], wickIds=[...new Set(tests.map(x=>x.wick_id))];
-  const [jr,wr,kr]=await Promise.all([
-    client.from("jars").select("id,name").in("id",jarIds),
-    client.from("waxes").select("id,name").in("id",waxIds),
-    client.from("wicks").select("id,series,size").in("id",wickIds)
-  ]);
-  const jm=new Map((jr.data||[]).map(x=>[x.id,x.name])), wm=new Map((wr.data||[]).map(x=>[x.id,x.name])), km=new Map((kr.data||[]).map(x=>[x.id,`${x.series} ${x.size}`]));
-  cards.innerHTML=tests.map(t=>`
-    <article class="card" id="test-${esc(t.id)}">
-      <div class="card-head">
-        <div><h2>${esc(jm.get(t.jar_id)||"Unknown jar")}</h2><div class="meta">${new Date(t.created_at).toLocaleString()}</div></div>
-        <strong class="${esc(t.status)}">${esc(t.status.toUpperCase())}</strong>
+  <main class="shell">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Kindle Candle Admin</div>
+        <h1>Community Dashboard</h1>
       </div>
-      <div class="details">
-        <span class="chip">Wax: <b>${esc(wm.get(t.wax_id)||"Unknown")}</b></span>
-        <span class="chip">Wick: <b>${esc(km.get(t.wick_id)||"Unknown")}</b></span>
-        <span class="chip">Fragrance: <b>${esc(t.fragrance_load_percent)}%</b></span>
-        <span class="chip">Fill: <b>${esc(t.fill_weight_oz)} oz</b></span>
-        <span class="chip">Tested: <b>${esc(t.hours_tested??"—")} hrs</b></span>
-        <span class="chip">Result: <b>${esc(t.result)}</b></span>
+      <p>Review burn tests, manage jar requests, and keep the community data clean before it reaches the public library.</p>
+    </div>
+
+    <div id="gate" class="gate">Checking your admin access…</div>
+
+    <section id="app" class="app">
+      <div class="stats">
+        <div class="stat"><span>Pending Burn Tests</span><strong id="statPendingTests">0</strong></div>
+        <div class="stat"><span>Approved Burn Tests</span><strong id="statApprovedTests">0</strong></div>
+        <div class="stat"><span>Pending Jar Requests</span><strong id="statPendingRequests">0</strong></div>
+        <div class="stat"><span>Total Jar Requests</span><strong id="statTotalRequests">0</strong></div>
       </div>
-      <div class="notes">${esc(t.notes||"No notes provided.")}</div>
-      ${t.status==="pending"
-        ? `<div class="actions"><button class="approve" onclick="moderate('${esc(t.id)}','approved')">Approve</button><button class="reject" onclick="moderate('${esc(t.id)}','rejected')">Reject</button></div>`
-        : t.status==="approved"
-          ? `<div class="actions"><button class="delete" onclick="deleteBurnTest('${esc(t.id)}')">Delete Test</button></div>`
-          : ""}
-    </article>`).join("");
-}
 
-async function moderate(id,status){
-  const {error}=await client.from("burn_tests").update({status}).eq("id",id);
-  if(error){alert("Could not update test: "+error.message);return}
-  loadTests();
-}
+      <div class="dashboard">
+        <aside class="sidebar">
+          <button class="nav-btn active" data-view="overview">Overview</button>
+          <button class="nav-btn" data-view="burn-tests">Burn Tests</button>
+          <button class="nav-btn" data-view="jar-requests">Jar Requests</button>
+        </aside>
 
-async function deleteBurnTest(id){
-  const ok = window.confirm("Delete this approved burn test permanently? This cannot be undone.");
-  if(!ok) return;
+        <div>
+          <section id="overview" class="view active">
+            <div class="overview-grid">
+              <div class="overview-card">
+                <div class="title">
+                  <h2>Pending Burn Tests</h2>
+                  <button class="tab" onclick="switchView('burn-tests')">View Queue</button>
+                </div>
+                <div id="overviewTests" class="mini-list"></div>
+              </div>
 
-  const {error}=await client.from("burn_tests").delete().eq("id",id);
+              <div class="overview-card">
+                <div class="title">
+                  <h2>Pending Jar Requests</h2>
+                  <button class="tab" onclick="switchView('jar-requests')">View Queue</button>
+                </div>
+                <div id="overviewRequests" class="mini-list"></div>
+              </div>
+            </div>
+          </section>
 
-  if(error){
-    alert("Could not delete test: "+error.message);
-    return;
-  }
+          <section id="burn-tests" class="view">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Burn Test Moderation</h2>
+                  <p>Approve useful community tests, reject bad submissions, or remove approved data later.</p>
+                </div>
 
-  loadTests();
-}
+                <div class="tabs" id="burnTabs">
+                  <button class="tab active" data-status="pending">Pending</button>
+                  <button class="tab" data-status="approved">Approved</button>
+                  <button class="tab" data-status="rejected">Rejected</button>
+                </div>
+              </div>
 
-document.querySelectorAll(".tab").forEach(b=>b.onclick=()=>{
-  currentStatus=b.dataset.status;
-  document.querySelectorAll(".tab").forEach(x=>x.classList.toggle("active",x===b));
-  loadTests();
-});
-init();
-</script>
-</body></html>
+              <div id="burnList" class="list"></div>
+            </div>
+          </section>
+
+          <section id="jar-requests" class="view">
+            <div class="panel">
+              <div class="panel-head">
+                <div>
+                  <h2>Jar Requests</h2>
+                  <p>Review vessel requests from signed-in makers and jump straight to the supplier page.</p>
+                </div>
+
+                <div class="tabs" id="requestTabs">
+                  <button class="tab active" data-status="pending">Pending</button>
+                  <button class="tab" data-status="approved">Approved</button>
+                  <button class="tab" data-status="rejected">Rejected</button>
+                </div>
+              </div>
+
+              <div id="requestList" class="list"></div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../../shared/supabase-config.js"></script>
+  <script src="../../shared/kindle-cloud.js"></script>
+
+  <script>
+    let client = null;
+    let burnStatus = "pending";
+    let requestStatus = "pending";
+    let allBurnTests = [];
+    let allRequests = [];
+    let jarMap = new Map();
+    let waxMap = new Map();
+    let wickMap = new Map();
+
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[ch]));
+
+    const fmtDate = value => {
+      try{
+        return new Date(value).toLocaleString([], {
+          month:"short", day:"numeric", year:"numeric", hour:"numeric", minute:"2-digit"
+        });
+      }catch{
+        return "";
+      }
+    };
+
+    function switchView(id){
+      document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.id === id));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.toggle("active", b.dataset.view === id));
+    }
+
+    async function init(){
+      try{
+        if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+
+        const user = window.KindleCloud?.currentUser;
+        if(!user){
+          document.getElementById("gate").innerHTML = 'Please <a href="../../">sign in</a> with your Kindle Candle admin account first.';
+          return;
+        }
+
+        const cfg = window.KINDLE_SUPABASE_CONFIG || {};
+        client = window.KindleCloud?.client || window.supabase.createClient(cfg.url, cfg.key);
+
+        const {data:admin,error:adminError} = await client
+          .from("admin_users")
+          .select("user_id")
+          .eq("user_id", user.id)
+          .maybeSingle();
+
+        if(adminError) throw adminError;
+
+        if(!admin){
+          document.getElementById("gate").textContent = "This account does not have administrator access.";
+          return;
+        }
+
+        document.getElementById("gate").style.display = "none";
+        document.getElementById("app").classList.add("ready");
+
+        await loadReferenceData();
+        await refreshAll();
+      }catch(error){
+        console.error(error);
+        document.getElementById("gate").textContent = "Could not load admin dashboard: " + (error?.message || error);
+      }
+    }
+
+    async function loadReferenceData(){
+      const [jarsRes,waxesRes,wicksRes] = await Promise.all([
+        client.from("jars").select("id,name"),
+        client.from("waxes").select("id,name"),
+        client.from("wicks").select("id,series,size")
+      ]);
+
+      if(jarsRes.error) throw jarsRes.error;
+      if(waxesRes.error) throw waxesRes.error;
+      if(wicksRes.error) throw wicksRes.error;
+
+      jarMap = new Map((jarsRes.data || []).map(x => [x.id,x.name]));
+      waxMap = new Map((waxesRes.data || []).map(x => [x.id,x.name]));
+      wickMap = new Map((wicksRes.data || []).map(x => [x.id,`${x.series} ${x.size}`]));
+    }
+
+    async function refreshAll(){
+      const [testsRes,requestsRes] = await Promise.all([
+        client.from("burn_tests")
+          .select("id,user_id,jar_id,wax_id,wick_id,fragrance_load_percent,fill_weight_oz,hours_tested,result,notes,status,created_at")
+          .order("created_at",{ascending:false}),
+        client.from("jar_requests")
+          .select("id,user_id,jar_name,supplier_name,product_url,notes,status,created_at")
+          .order("created_at",{ascending:false})
+      ]);
+
+      if(testsRes.error) throw testsRes.error;
+      if(requestsRes.error) throw requestsRes.error;
+
+      allBurnTests = testsRes.data || [];
+      allRequests = requestsRes.data || [];
+
+      updateStats();
+      renderOverview();
+      renderBurnTests();
+      renderRequests();
+    }
+
+    function updateStats(){
+      document.getElementById("statPendingTests").textContent =
+        allBurnTests.filter(x => x.status === "pending").length;
+
+      document.getElementById("statApprovedTests").textContent =
+        allBurnTests.filter(x => x.status === "approved").length;
+
+      document.getElementById("statPendingRequests").textContent =
+        allRequests.filter(x => x.status === "pending").length;
+
+      document.getElementById("statTotalRequests").textContent = allRequests.length;
+    }
+
+    function renderOverview(){
+      const tests = allBurnTests.filter(x => x.status === "pending").slice(0,4);
+      const requests = allRequests.filter(x => x.status === "pending").slice(0,4);
+
+      document.getElementById("overviewTests").innerHTML = tests.length
+        ? tests.map(t => `
+          <div class="mini">
+            <strong>${esc(jarMap.get(t.jar_id) || "Unknown jar")}</strong>
+            <span>${esc(waxMap.get(t.wax_id) || "Unknown wax")} · ${esc(wickMap.get(t.wick_id) || "Unknown wick")}</span>
+          </div>`).join("")
+        : `<div class="empty" style="margin:0">No pending burn tests.</div>`;
+
+      document.getElementById("overviewRequests").innerHTML = requests.length
+        ? requests.map(r => `
+          <div class="mini">
+            <strong>${esc(r.jar_name)}</strong>
+            <span>${esc(r.supplier_name)}</span>
+          </div>`).join("")
+        : `<div class="empty" style="margin:0">No pending jar requests.</div>`;
+    }
+
+    function renderBurnTests(){
+      const rows = allBurnTests.filter(t => t.status === burnStatus);
+      const el = document.getElementById("burnList");
+
+      if(!rows.length){
+        el.innerHTML = `<div class="empty">No ${esc(burnStatus)} burn tests.</div>`;
+        return;
+      }
+
+      el.innerHTML = rows.map(t => `
+        <article class="item">
+          <div class="item-top">
+            <div>
+              <h3>${esc(jarMap.get(t.jar_id) || "Unknown jar")}</h3>
+              <div class="sub">${esc(fmtDate(t.created_at))}</div>
+            </div>
+            <span class="badge ${esc(t.status)}">${esc(t.status)}</span>
+          </div>
+
+          <div class="chips">
+            <span class="chip">Wax: <b>${esc(waxMap.get(t.wax_id) || "Unknown")}</b></span>
+            <span class="chip">Wick: <b>${esc(wickMap.get(t.wick_id) || "Unknown")}</b></span>
+            <span class="chip">Fragrance: <b>${esc(t.fragrance_load_percent)}%</b></span>
+            <span class="chip">Fill: <b>${esc(t.fill_weight_oz)} oz</b></span>
+            <span class="chip">Hours: <b>${esc(t.hours_tested ?? "—")}</b></span>
+            <span class="chip">Result: <b>${esc(t.result)}</b></span>
+          </div>
+
+          <div class="notes">${esc(t.notes || "No notes provided.")}</div>
+
+          <div class="actions">
+            ${t.status === "pending"
+              ? `<button class="approve" onclick="moderateBurn('${esc(t.id)}','approved')">Approve</button>
+                 <button class="reject" onclick="moderateBurn('${esc(t.id)}','rejected')">Reject</button>`
+              : ""}
+            ${t.status === "approved"
+              ? `<button class="delete" onclick="deleteBurn('${esc(t.id)}')">Delete Test</button>`
+              : ""}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    function renderRequests(){
+      const rows = allRequests.filter(r => r.status === requestStatus);
+      const el = document.getElementById("requestList");
+
+      if(!rows.length){
+        el.innerHTML = `<div class="empty">No ${esc(requestStatus)} jar requests.</div>`;
+        return;
+      }
+
+      el.innerHTML = rows.map(r => `
+        <article class="item">
+          <div class="item-top">
+            <div>
+              <h3>${esc(r.jar_name)}</h3>
+              <div class="sub">${esc(r.supplier_name)} · ${esc(fmtDate(r.created_at))}</div>
+            </div>
+            <span class="badge ${esc(r.status)}">${esc(r.status)}</span>
+          </div>
+
+          ${r.notes ? `<div class="notes">${esc(r.notes)}</div>` : ""}
+
+          <div class="actions">
+            <a class="link" href="${esc(r.product_url)}" target="_blank" rel="noopener">Open Product Page ↗</a>
+
+            ${r.status === "pending"
+              ? `<button class="approve" onclick="moderateRequest('${esc(r.id)}','approved')">Approve</button>
+                 <button class="reject" onclick="moderateRequest('${esc(r.id)}','rejected')">Reject</button>`
+              : ""}
+          </div>
+        </article>
+      `).join("");
+    }
+
+    async function moderateBurn(id,status){
+      const {error} = await client.from("burn_tests").update({status}).eq("id",id);
+      if(error){
+        alert("Could not update burn test: " + error.message);
+        return;
+      }
+      await refreshAll();
+    }
+
+    async function deleteBurn(id){
+      const ok = window.confirm("Delete this approved burn test permanently? This cannot be undone.");
+      if(!ok) return;
+
+      const {error} = await client.from("burn_tests").delete().eq("id",id);
+      if(error){
+        alert("Could not delete burn test: " + error.message);
+        return;
+      }
+      await refreshAll();
+    }
+
+    async function moderateRequest(id,status){
+      const {error} = await client.from("jar_requests").update({status}).eq("id",id);
+      if(error){
+        alert("Could not update jar request: " + error.message);
+        return;
+      }
+      await refreshAll();
+    }
+
+    document.querySelectorAll(".nav-btn").forEach(btn => {
+      btn.addEventListener("click", () => switchView(btn.dataset.view));
+    });
+
+    document.querySelectorAll("#burnTabs .tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        burnStatus = btn.dataset.status;
+        document.querySelectorAll("#burnTabs .tab").forEach(x => x.classList.toggle("active", x === btn));
+        renderBurnTests();
+      });
+    });
+
+    document.querySelectorAll("#requestTabs .tab").forEach(btn => {
+      btn.addEventListener("click", () => {
+        requestStatus = btn.dataset.status;
+        document.querySelectorAll("#requestTabs .tab").forEach(x => x.classList.toggle("active", x === btn));
+        renderRequests();
+      });
+    });
+
+    init();
+  </script>
+</body>
+</html>
