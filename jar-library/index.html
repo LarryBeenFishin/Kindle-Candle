@@ -194,13 +194,25 @@
     }
     .jar-card:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
     .jar-visual{
-      height:320px;display:grid;place-items:center;position:relative;overflow:hidden;
-      background:
-      radial-gradient(circle at 75% 18%,rgba(255,255,255,.75),transparent 28%),
-      linear-gradient(135deg,#d9c6b6,#f2e9df);
+      aspect-ratio:4/3;
+      height:auto;
+      min-height:0;
+      display:grid;
+      place-items:center;
+      position:relative;
+      overflow:hidden;
+      background:#eee3d7;
     }
     .jar-product-image{
-      display:block;width:100%;height:100%;object-fit:contain;object-position:center;
+      display:block;
+      width:100%;
+      height:100%;
+      max-width:100%;
+      max-height:100%;
+      object-fit:contain;
+      object-position:center center;
+      padding:0;
+      margin:0;
       background:#f3ede5;
     }
     .detail-product-image{
@@ -367,29 +379,20 @@
     }
 
     @media(max-width:640px){
-
+      .hero{padding-top:50px}
       .jar-visual{
-        height:210px;
-        min-height:210px;
+        aspect-ratio:4/3;
+        height:auto;
+        min-height:0;
       }
       .jar-product-image{
         width:100%;
         height:100%;
         object-fit:contain;
         object-position:center;
-        padding:8px;
+        padding:0;
       }
-
-      .hero{padding-top:50px}
-      .jar-visual{height:260px}
-
-      .search-row,.jar-grid,.summary-grid,.form-grid,.spec-grid{grid-template-columns:1fr}
-      .search-row .field:first-child,.form-group.full{grid-column:auto}
-      .section-head{align-items:flex-start;flex-direction:column}
-      .detail{padding:18px}
       .detail-visual{height:280px}
-      .modal{padding:8px}
-      .modal-card{border-radius:18px}
     }
   </style>
 </head>
