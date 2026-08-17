@@ -198,7 +198,8 @@
     .detail{padding:26px}
     .detail-grid{display:grid;grid-template-columns:300px 1fr;gap:28px}
     .detail-visual{
-      min-height:340px;border-radius:18px;background:linear-gradient(135deg,#d6c1b0,#f5ece2);display:grid;place-items:center
+      height:420px;border-radius:18px;background:linear-gradient(135deg,#d6c1b0,#f5ece2);
+      display:grid;place-items:center;overflow:hidden
     }
     .detail-visual .jar-shape{width:120px;height:150px}
     .detail h2{font-size:2.3rem;margin:6px 0 10px;letter-spacing:-.04em}
@@ -269,7 +270,7 @@
       .search-row .field:first-child,.form-group.full{grid-column:auto}
       .section-head{align-items:flex-start;flex-direction:column}
       .detail{padding:18px}
-      .detail-visual{min-height:240px}
+      .detail-visual{height:320px}
       .modal{padding:8px}
       .modal-card{border-radius:18px}
       .nav-cta{display:none}
@@ -751,6 +752,15 @@
       }).join("");
     }
 
+
+    function preloadVariantImages(variants){
+      (variants || []).forEach(v => {
+        if(!v.image_url) return;
+        const img = new Image();
+        img.src = v.image_url;
+      });
+    }
+
     function openDetail(id){
       const j = jars.find(x => String(x.id) === String(id));
       if(!j) return;
@@ -760,6 +770,7 @@
 
       detailBaseImage = j.imageUrl || null;
       detailLockedImage = null;
+      preloadVariantImages(j.variants);
 
       document.getElementById("detailContent").innerHTML = `
         <div class="detail-grid">
