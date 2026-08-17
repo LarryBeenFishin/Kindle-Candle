@@ -168,7 +168,7 @@
     .variant-chips{display:flex;flex-wrap:wrap;gap:8px}
     .variant-chip{
       display:inline-flex;align-items:center;gap:7px;padding:8px 10px;border:1px solid var(--line);
-      border-radius:999px;background:#fff;font-size:.82rem;color:#5f574f
+      border-radius:999px;background:#fff;font-size:.82rem;color:#5f574f;flex-wrap:wrap
     }
     .variant-chip b{color:var(--ink)}
     .variant-chip.has-image{cursor:pointer;transition:.15s ease}
@@ -457,16 +457,73 @@
         : `$${Number(n).toFixed(2)}`;
     }
 
-    function priceLabel(variants, fallback){
-      const prices = (variants || [])
-        .map(v => Number(v.price))
-        .filter(v => Number.isFinite(v));
+    function variantPriceText(v){
+      if(!v) return "Price not listed";
 
-      if(!prices.length) return fallback != null ? money(fallback) : "Price not listed";
+      const single = v.single_price != null ? Number(v.single_price) : null;
+      const casePrice = v.case_price != null ? Number(v.case_price) : null;
+      const qty = v.case_quantity != null ? Number(v.case_quantity) : null;
 
-      const min = Math.min(...prices);
-      const max = Math.max(...prices);
-      return min === max ? money(min) : `${money(min)}–${money(max)}`;
+      if(Number.isFinite(single) && Number.isFinite(casePrice) && Number.isFinite(qty) && qty > 0){
+        return `${money(single)} each · ${money(casePrice)} / case of ${qty}`;
+      }
+
+      if(Number.isFinite(single)){
+        return `${money(single)} each`;
+      }
+
+      if(Number.isFinite(casePrice) && Number.isFinite(qty) && qty > 0){
+        const each = casePrice / qty;
+        return `${money(casePrice)} / case of ${qty} · ${money(each)} each`;
+      }
+
+      if(v.price != null && Number.isFinite(Number(v.price))){
+        return money(Number(v.price));
+      }
+
+      return "Price not listed";
+    }
+
+    function jarPriceSummary(variants, fallback){
+      const rows = variants || [];
+
+      const singlePrices = rows
+        .map(v => Number(v.single_price))
+        .filter(Number.isFinite);
+
+      const caseRows = rows.filter(v =>
+        v.case_price != null &&
+        v.case_quantity != null &&
+        Number.isFinite(Number(v.case_price)) &&
+        Number.isFinite(Number(v.case_quantity)) &&
+        Number(v.case_quantity) > 0
+      );
+
+      if(singlePrices.length){
+        const min = Math.min(...singlePrices);
+        const max = Math.max(...singlePrices);
+        return min === max
+          ? `${money(min)} each`
+          : `${money(min)}–${money(max)} each`;
+      }
+
+      if(caseRows.length){
+        const quantities = [...new Set(caseRows.map(v => Number(v.case_quantity)))];
+        const casePrices = caseRows.map(v => Number(v.case_price));
+        const min = Math.min(...casePrices);
+        const max = Math.max(...casePrices);
+
+        if(quantities.length === 1){
+          const qty = quantities[0];
+          const caseText = min === max ? money(min) : `${money(min)}–${money(max)}`;
+          const eachMin = min / qty;
+          const eachMax = max / qty;
+          const eachText = eachMin === eachMax ? money(eachMin) : `${money(eachMin)}–${money(eachMax)}`;
+          return `${caseText} / case of ${qty} · ${eachText} each`;
+        }
+      }
+
+      return fallback != null ? money(fallback) : "Price not listed";
     }
 
     function inches(n){
@@ -724,7 +781,7 @@
         const metaBits = [];
         if(j.diameter) metaBits.push(`${esc(j.diameter)} diameter`);
         if(j.fill) metaBits.push(`${esc(j.fill)} recommended fill`);
-        metaBits.push(priceLabel(j.variants,j.price));
+        metaBits.push(jarPriceSummary(j.variants,j.price));
         const testsCopy = j.tests ? `${j.tests} community test${j.tests===1?"":"s"}` : "Be the first to test";
 
         return `
@@ -770,7 +827,7 @@
       if(!j) return;
 
       const statusLabel = {success:"SUCCESSFUL",adjust:"NEEDS ADJUSTMENT",fail:"DIDN'T WORK"};
-      const variantPrices = priceLabel(j.variants,j.price);
+      const variantPrices = jarPriceSummary(j.variants,j.price);
 
       detailBaseImage = j.imageUrl || null;
       detailLockedImage = null;
@@ -791,7 +848,7 @@
             <p>${esc(j.description)}</p>
 
             <div class="spec-grid">
-              <div class="spec"><span>Current Price Range</span><strong>${esc(variantPrices)}</strong></div>
+              <div class="spec"><span>Current Pricing</span><strong>${esc(variantPrices)}</strong></div>
               ${j.innerDiameter
                 ? `<div class="spec"><span>Outer Diameter</span><strong>${esc(j.diameter || "Not added yet")}</strong></div>
                    <div class="spec"><span>Inner Diameter</span><strong>${esc(j.innerDiameter)}</strong></div>`
@@ -830,7 +887,9 @@
                     ` : ""}
                   >
                     <b>${esc(v.color)}</b>
-                    ${v.price != null ? `<span>${esc(money(v.price))}</span>` : ""}
+                    ${(v.single_price != null || v.case_price != null || v.price != null)
+                      ? `<span>${esc(variantPriceText(v))}</span>`
+                      : ""}
                   </span>`).join("")
               : `<span class="meta">No variants have been added yet.</span>`}
           </div>
