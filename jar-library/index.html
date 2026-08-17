@@ -535,6 +535,8 @@
           diameter: inches(j.diameter_inches),
           innerDiameter: inches(j.inner_diameter_inches),
           height: inches(j.height_inches),
+          labelWidth: inches(j.label_width_inches),
+          labelHeight: inches(j.label_height_inches),
           fill: fillLabel(j.recommended_fill_oz),
           material: j.material || "—",
           tests: community.length,
@@ -798,6 +800,9 @@
                     : "")}
               ${j.height ? `<div class="spec"><span>Height</span><strong>${esc(j.height)}</strong></div>` : ""}
               <div class="spec"><span>Recommended Fill</span><strong>${esc(j.fill)}</strong></div>
+              ${j.labelWidth && j.labelHeight
+                ? `<div class="spec"><span>Suggested Label Size</span><strong>${esc(j.labelWidth)} × ${esc(j.labelHeight)}</strong></div>`
+                : ""}
               ${j.material && j.material !== "—"
                 ? `<div class="spec"><span>Material</span><strong>${esc(j.material)}</strong></div>`
                 : ""}
