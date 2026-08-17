@@ -518,6 +518,36 @@
         padding:0;
       }
     }
+  
+    /* Mobile product-card focal crops.
+       Full Jar Details remains uncropped in the Jar Library. */
+    @media(max-width:620px){
+      .jar-card .jar-photo img,
+      .hero-card .hero-image img{
+        object-fit:cover;
+        padding:0;
+        transform:scale(1.06);
+      }
+
+      .jar-card[data-slug="serafina"] .jar-photo img,
+      .hero-card[data-slug="serafina"] .hero-image img{
+        object-position:center 67%;
+        transform:scale(1.10);
+      }
+
+      .jar-card[data-slug="minifina"] .jar-photo img,
+      .hero-card[data-slug="minifina"] .hero-image img{
+        object-position:center 62%;
+        transform:scale(1.08);
+      }
+
+      .jar-card[data-slug="corinne-3-wick-bowl"] .jar-photo img,
+      .hero-card[data-slug="corinne-3-wick-bowl"] .hero-image img{
+        object-position:center 58%;
+        transform:scale(1.03);
+      }
+    }
+
   </style>
 </head>
 
@@ -783,7 +813,7 @@
           dimensions.push(`${j.variants.length} finish${j.variants.length === 1 ? "" : "es"}`);
 
           return `
-            <a class="jar-card" href="/jar-library/">
+            <a class="jar-card" data-slug="${esc(j.slug)}" href="/jar-library/">
               <div class="jar-photo">
                 ${j.image
                   ? `<img src="${esc(j.image)}" alt="${esc(j.name)}">`
@@ -813,7 +843,7 @@
 
         const heroJars = normalized.slice(0,3);
         hero.innerHTML = heroJars.map((j,index) => `
-          <a class="hero-card${index === 0 ? " large" : ""}" href="/jar-library/">
+          <a class="hero-card${index === 0 ? " large" : ""}" data-slug="${esc(j.slug)}" href="/jar-library/">
             <div class="hero-image">
               ${j.image
                 ? `<img src="${esc(j.image)}" alt="${esc(j.name)}">`

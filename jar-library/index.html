@@ -394,6 +394,38 @@
       }
       .detail-visual{height:280px}
     }
+  
+    /* Mobile card photos use jar-specific focal crops.
+       The large detail-modal image stays object-fit: contain. */
+    @media(max-width:640px){
+      .jar-card .jar-product-image{
+        object-fit:cover;
+        padding:0;
+        transform:scale(1.06);
+      }
+
+      .jar-card[data-slug="serafina"] .jar-product-image{
+        object-position:center 67%;
+        transform:scale(1.10);
+      }
+
+      .jar-card[data-slug="minifina"] .jar-product-image{
+        object-position:center 62%;
+        transform:scale(1.08);
+      }
+
+      .jar-card[data-slug="corinne-3-wick-bowl"] .jar-product-image{
+        object-position:center 58%;
+        transform:scale(1.03);
+      }
+
+      .detail-product-image{
+        object-fit:contain !important;
+        object-position:center !important;
+        transform:none !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -921,7 +953,7 @@
         const testsCopy = j.tests ? `${j.tests} community test${j.tests===1?"":"s"}` : "Be the first to test";
 
         return `
-          <article class="jar-card">
+          <article class="jar-card" data-slug="${esc(j.slug)}">
             <div class="jar-visual">
               <span class="badge">${testsCopy}</span>
               ${j.cardImageUrl
