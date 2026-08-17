@@ -3,772 +3,838 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Free Candle Making Tools | Kindle Candle</title>
-  <meta name="description" content="Free candle making calculators from Kindle Candle. Plan wax and fragrance batches, calculate true candle costs, compare pricing, and build better production numbers." />
+  <title>Kindle Candle | Candle Making Tools & Jar Library</title>
+  <meta name="description" content="Free candle making tools from Kindle Candle. Calculate wax and fragrance batches, understand candle costs, and explore community burn-test data in the Jar Library." />
+
   <style>
-    :root {
-      --ink: #24170f;
-      --brown: #5a3826;
-      --brown-2: #7b5136;
-      --paper: #f7f0e6;
-      --paper-2: #f3e5d6;
-      --kraft: #c9a77b;
-      --line: rgba(36, 23, 15, 0.25);
-      --muted: #66564a;
-      --white: #fffdf9;
-      --accent: #a15f43;
-      --accent-dark: #7f452f;
-      --accent-soft: #f0dfcf;
-      --shadow: 0 18px 50px rgba(60, 42, 28, .12);
+    :root{
+      --bg:#f7f2ea;
+      --paper:#fffdf9;
+      --paper-2:#f1e4d5;
+      --ink:#241d18;
+      --muted:#73685e;
+      --line:#dccfbe;
+      --accent:#8f4c31;
+      --accent-dark:#7f452f;
+      --cream:#fbf7f1;
+      --shadow:0 18px 45px rgba(61,43,30,.09);
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
-
-    body {
-      margin: 0;
-      color: var(--ink);
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{
+      margin:0;
+      min-height:100vh;
       background:
-        radial-gradient(circle at 12% 18%, rgba(83,55,34,.035) 0 1px, transparent 1.5px),
-        radial-gradient(circle at 78% 68%, rgba(83,55,34,.028) 0 1px, transparent 1.5px),
-        var(--paper);
-      background-size: 18px 18px, 23px 23px, auto;
-      font-family: "Courier New", Courier, monospace;
-      min-height: 100vh;
-    }
-
-    a { color: inherit; }
-
-    .announcement {
-      background: var(--accent-dark);
-      color: var(--white);
-      text-align: center;
-      padding: 9px 16px 8px;
-      font-size: 11px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-    }
-
-    .site-header {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 22px 28px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 24px;
-      border-bottom: 1px solid var(--line);
-    }
-
-    .brand {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: .16em;
-      font-size: 15px;
-      font-weight: 700;
-    }
-
-    .brand-mark {
-      width: 27px;
-      height: 27px;
-      border: 1.5px solid var(--ink);
-      border-radius: 50% 50% 48% 48%;
-      display: grid;
-      place-items: center;
-      position: relative;
-      flex: 0 0 auto;
-    }
-
-    .brand-mark::before {
-      content: "";
-      width: 7px;
-      height: 12px;
-      border-radius: 55% 45% 55% 45%;
-      border: 1.5px solid var(--ink);
-      transform: rotate(12deg);
-    }
-
-    .brand-mark::after {
-      content: "";
-      position: absolute;
-      bottom: -5px;
-      width: 1px;
-      height: 7px;
-      background: var(--ink);
-    }
-
-    .nav {
-      display: flex;
-      align-items: center;
-      gap: 26px;
-      font-size: 11px;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-    }
-
-    .nav a {
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      padding-bottom: 3px;
-    }
-
-    .nav a:hover { border-color: var(--ink); }
-
-    main {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 86px 28px 96px;
-    }
-
-    .hero {
-      max-width: 960px;
-      margin: 0 auto 76px;
-      text-align: center;
-    }
-
-    .eyebrow {
-      display: inline-block;
-      margin-bottom: 18px;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--ink);
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-    }
-
-    h1 {
-      margin: 0;
-      font-size: clamp(42px, 6.5vw, 82px);
-      line-height: .92;
-      letter-spacing: -.055em;
-      font-weight: 500;
-    }
-
-    .hero p {
-      max-width: 740px;
-      margin: 26px auto 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 18px;
-      line-height: 1.7;
-    }
-
-    .hero-actions {
-      margin-top: 31px;
-      display: flex;
-      justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-    }
-
-    .button {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 48px;
-      padding: 14px 20px;
-      border: 1px solid var(--ink);
-      background: var(--accent-dark);
-      color: var(--white);
-      text-decoration: none;
-      text-transform: uppercase;
-      letter-spacing: .11em;
-      font-size: 11px;
-      font-weight: 700;
-      transition: .18s ease;
-    }
-
-    .button:hover {
-      background: var(--accent);
-      transform: translateY(-1px);
-    }
-
-    .button.secondary {
-      background: transparent;
-      color: var(--ink);
-    }
-
-    .button.secondary:hover { background: var(--accent-soft); }
-
-    .tools-wrap {
-      position: relative;
-      margin-top: 34px;
-      border: 1px solid var(--ink);
-      background: #fffdf9;
-      box-shadow: var(--shadow);
-      padding: 48px 34px 34px;
-    }
-
-    .tools-wrap::before {
-      content: "KINDLE CANDLE • MAKER TOOLS";
-      position: absolute;
-      top: -12px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--paper);
-      padding: 3px 12px;
-      white-space: nowrap;
-      font-size: 10px;
-      letter-spacing: .18em;
-    }
-
-    .section-head {
-      display: flex;
-      align-items: end;
-      justify-content: space-between;
-      gap: 24px;
-      margin-bottom: 28px;
-    }
-
-    .section-head h2 {
-      margin: 0;
-      font-size: clamp(26px, 4vw, 42px);
-      line-height: 1;
-      letter-spacing: -.035em;
-      font-weight: 500;
-    }
-
-    .section-head p {
-      max-width: 520px;
-      margin: 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .tool-grid {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      gap: 18px;
-    }
-
-    .tool-card {
-      position: relative;
-      border: 1px solid var(--ink);
-      background: #fffdf9;
-      min-height: 405px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-    }
-
-    .tool-card.featured {
-      background: #f3e5d6;
-    }
-
-    .tool-card::after {
-      content: "";
-      position: absolute;
-      width: 155px;
-      height: 155px;
-      border: 1px solid rgba(33, 26, 20, .15);
-      border-radius: 50%;
-      right: -76px;
-      top: -78px;
-    }
-
-    .card-number {
-      color: var(--muted);
-      font-size: 11px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      margin-bottom: 48px;
-    }
-
-    .tool-card h3 {
-      margin: 0;
-      max-width: 500px;
-      font-size: clamp(25px, 3vw, 38px);
-      line-height: 1.02;
-      letter-spacing: -.035em;
-      font-weight: 500;
-    }
-
-    .tool-card p {
-      margin: 19px 0 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 15px;
-      line-height: 1.65;
-    }
-
-    .mini-list {
-      margin: 22px 0 30px;
-      padding: 0;
-      list-style: none;
-      display: grid;
-      gap: 9px;
-      font-size: 11px;
-      letter-spacing: .04em;
-    }
-
-    .mini-list li::before {
-      content: "→";
-      margin-right: 9px;
-    }
-
-    .card-action {
-      margin-top: auto;
-      padding-top: 8px;
-    }
-
-    .coming {
-      margin-top: 18px;
-      border: 1px dashed var(--brown);
-      background: var(--accent-soft);
-      padding: 24px 26px;
-      display: grid;
-      grid-template-columns: 1fr auto;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .coming h3 {
-      margin: 0 0 8px;
-      font-size: 18px;
-      letter-spacing: -.02em;
-    }
-
-    .coming p {
-      margin: 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    .coming-tag {
-      border: 1px solid var(--ink);
-      padding: 8px 10px;
-      font-size: 10px;
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .why {
-      padding: 92px 0 20px;
-    }
-
-    .why-grid {
-      display: grid;
-      grid-template-columns: .8fr 1.2fr;
-      gap: 72px;
-      align-items: start;
-    }
-
-    .why h2 {
-      margin: 0;
-      font-size: clamp(31px, 4vw, 52px);
-      line-height: .98;
-      letter-spacing: -.045em;
-      font-weight: 500;
-    }
-
-    .why-copy {
-      display: grid;
-      grid-template-columns: repeat(2, minmax(0, 1fr));
-      border-top: 1px solid var(--line);
-      border-left: 1px solid var(--line);
-    }
-
-    .why-item {
-      min-height: 175px;
-      padding: 24px;
-      border-right: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-
-    .why-item strong {
-      display: block;
-      margin-bottom: 10px;
-      font-size: 12px;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-    }
-
-    .why-item p {
-      margin: 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 14px;
-      line-height: 1.6;
-    }
-
-    .shop-strip {
-      margin-top: 76px;
-      border-top: 1px solid var(--ink);
-      border-bottom: 1px solid var(--ink);
-      padding: 31px 0;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 26px;
-    }
-
-    .shop-strip h2 {
-      margin: 0 0 7px;
-      font-size: 20px;
-      letter-spacing: -.02em;
-    }
-
-    .shop-strip p {
-      margin: 0;
-      color: var(--muted);
-      font-family: Georgia, "Times New Roman", serif;
-      font-size: 14px;
-      line-height: 1.55;
-    }
-
-    footer {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 26px 28px 34px;
-      border-top: 1px solid var(--line);
-      display: flex;
-      justify-content: space-between;
-      gap: 24px;
-      color: var(--muted);
-      font-size: 10px;
-      letter-spacing: .10em;
-      text-transform: uppercase;
-    }
-
-    @media (max-width: 800px) {
-      .site-header { align-items: flex-start; }
-      .nav { gap: 14px; flex-wrap: wrap; justify-content: flex-end; }
-      main { padding-top: 64px; }
-      .hero { margin-bottom: 58px; }
-      .section-head { align-items: start; flex-direction: column; }
-      .tool-grid { grid-template-columns: 1fr; }
-      .tool-card { min-height: 365px; }
-      .why-grid { grid-template-columns: 1fr; gap: 32px; }
-      .why-copy { grid-template-columns: 1fr 1fr; }
-    }
-
-    @media (max-width: 560px) {
-      .announcement { font-size: 9px; }
-      .site-header { padding: 18px 18px 16px; flex-direction: column; }
-      .nav { justify-content: flex-start; }
-      main { padding: 52px 18px 72px; }
-      h1 { font-size: clamp(42px, 14vw, 62px); }
-      .hero p { font-size: 16px; }
-      .hero-actions { flex-direction: column; }
-      .button { width: 100%; }
-      .tools-wrap { padding: 42px 16px 16px; }
-      .tools-wrap::before { font-size: 9px; letter-spacing: .12em; }
-      .tool-card { padding: 26px 22px; }
-      .card-number { margin-bottom: 34px; }
-      .coming { grid-template-columns: 1fr; }
-      .coming-tag { justify-self: start; }
-      .why-copy { grid-template-columns: 1fr; }
-      .shop-strip { align-items: flex-start; flex-direction: column; }
-      footer { padding: 24px 18px 32px; flex-direction: column; }
-    }
-  
-    .brand-logo {
-      display: block;
-      height: 54px;
-      width: auto;
-      max-width: 170px;
-      object-fit: contain;
-    }
-    @media (max-width: 720px) {
-      .brand-logo { height: 46px; max-width: 150px; }
-    }
-  
-
-    /* Header proportions matched to the main Kindle Candle storefront */
-    .site-header {
-      max-width: none !important;
-      width: 100%;
-      margin: 0 !important;
-      padding: 0 !important;
-      background: var(--paper);
-      border-bottom: 1px solid rgba(90,56,38,.14) !important;
-    }
-
-    .header-inner {
-      width: min(1300px, calc(100% - 48px));
-      min-height: 132px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      gap: 0;
-    }
-
-    .header-inner .brand {
-      width: 150px;
-      flex: 0 0 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 !important;
-      padding: 0 !important;
-      text-decoration: none;
-    }
-
-    .header-inner .brand-logo {
-      display: block;
-      width: 150px !important;
-      height: auto !important;
-      max-width: none !important;
-      max-height: 88px;
-      object-fit: contain;
-    }
-
-    .header-inner .nav {
-      flex: 1 1 auto;
-      display: flex;
-      align-items: center;
-      justify-content: flex-start;
-      gap: 28px;
-      margin-left: 38px;
-      width: auto !important;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 11px;
-      font-weight: 500;
-      line-height: 1.2;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      white-space: nowrap;
-    }
-
-    .header-inner .nav a {
-      padding: 9px 0 7px;
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-    }
-
-    .header-inner .nav a:hover,
-    .header-inner .nav a[aria-current="page"] {
-      border-bottom-color: currentColor;
-    }
-
-    .header-inner .kindle-account-btn {
-      margin-left: auto !important;
-      padding: 9px 0 7px !important;
-      border: 0 !important;
-      border-bottom: 1px solid transparent !important;
-      background: transparent !important;
-      color: var(--ink) !important;
-      box-shadow: none !important;
-      font-family: Arial, Helvetica, sans-serif !important;
-      font-size: 11px !important;
-      font-weight: 500 !important;
-      line-height: 1.2 !important;
-      letter-spacing: .12em !important;
-      text-transform: uppercase !important;
-    }
-
-    .header-inner .kindle-account-btn:hover {
-      border-bottom-color: currentColor !important;
-      background: transparent !important;
-    }
-
-    main { max-width: 1300px !important; }
-    footer { max-width: 1300px !important; }
-
-    @media (max-width: 1120px) {
-      .header-inner {
-        width: min(100% - 36px, 1300px);
-        min-height: 112px;
-      }
-      .header-inner .brand { width: 138px; flex-basis: 138px; }
-      .header-inner .brand-logo { width: 138px !important; }
-      .header-inner .nav { margin-left: 24px; gap: 18px; font-size: 10px; letter-spacing: .09em; }
-      .header-inner .kindle-account-btn { font-size: 10px !important; letter-spacing: .09em !important; }
-    }
-
-    @media (max-width: 820px) {
-      .header-inner {
-        width: calc(100% - 36px);
-        min-height: 0;
-        padding: 18px 0 16px;
-        flex-direction: column;
-        align-items: flex-start;
-      }
-      .header-inner .brand {
-        width: 136px;
-        flex: 0 0 auto;
-        margin-bottom: 16px !important;
-      }
-      .header-inner .brand-logo { width: 136px !important; max-height: 78px; }
-      .header-inner .nav {
-        width: 100% !important;
-        margin-left: 0;
-        gap: 8px 18px;
-        flex-wrap: wrap;
-        white-space: normal;
-        justify-content: flex-start;
-      }
-      .header-inner .kindle-account-btn { margin-left: 0 !important; }
-    }
-
-    @media (max-width: 520px) {
-      .header-inner { width: calc(100% - 28px); }
-      .header-inner .nav { display: grid; grid-template-columns: 1fr 1fr; column-gap: 18px; row-gap: 2px; }
-      .header-inner .nav a,
-      .header-inner .kindle-account-btn { width: max-content; max-width: 100%; }
-    }
-
-
-    /* Accessibility typography pass — larger, easier-to-read type without changing tool logic */
-    html { -webkit-text-size-adjust: 100%; }
-    body { font-size: 17px; }
-    .announcement { font-size: 12px !important; line-height: 1.45; }
-    .header-inner .nav, .nav { font-size: 12px !important; line-height: 1.35; }
-    .header-inner .nav a, .nav a { font-size: 12px !important; }
-    .header-inner .kindle-account-btn, .kindle-account-btn { font-size: 12px !important; line-height: 1.25 !important; }
-    input, select, textarea, button { font-size: 16px; }
-    input, select, textarea { line-height: 1.35; }
-    button, .btn { line-height: 1.25; }
-
-    .hero p, .tool-card p, .about-copy p, .intro-copy, .section-copy { font-size: 17px !important; line-height: 1.65 !important; }
-    .eyebrow, .kicker, .card-kicker, .tools-wrap::before { font-size: 12px !important; }
-    .tool-card h3 { font-size: 22px !important; line-height: 1.2; }
-    .tool-card .btn, .tool-card a, .cta, .button, .primary-button { font-size: 13px !important; }
-    footer { font-size: 12px !important; line-height: 1.5; }
-
-    @media (max-width: 760px) {
-      body { font-size: 16px; }
-      .announcement { font-size: 11px !important; }
-      .header-inner .nav, .nav, .header-inner .nav a, .nav a, .header-inner .kindle-account-btn, .kindle-account-btn { font-size: 11px !important; }
-      input, select, textarea { font-size: 16px !important; }
+        radial-gradient(rgba(123,90,67,.055) 1px, transparent 1px),
+        var(--bg);
+      background-size:18px 18px;
+      color:var(--ink);
+      font-family:Georgia,"Times New Roman",serif;
+    }
+
+    a{color:inherit;text-decoration:none}
+    button{font:inherit}
+
+    .announcement{
+      background:var(--accent-dark);
+      color:#fffdf9;
+      text-align:center;
+      padding:9px 16px 8px;
+      font-family:"Courier New",Courier,monospace;
+      font-size:11px;
+      font-weight:400;
+      line-height:normal;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+
+    .site-header{
+      width:100%;
+      background:rgba(247,242,234,.96);
+      border-bottom:1px solid rgba(90,56,38,.16);
+      position:relative;
+      z-index:5000;
+    }
+
+    .header-inner{
+      width:min(1300px,calc(100% - 48px));
+      min-height:132px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      gap:0;
+    }
+
+    .brand{
+      width:150px;
+      flex:0 0 150px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+    }
+
+    .brand-logo{
+      display:block;
+      width:150px;
+      height:auto;
+      max-height:88px;
+      object-fit:contain;
+    }
+
+    .nav{
+      flex:1 1 auto;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:28px;
+      margin-left:38px;
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:11px;
+      font-weight:500;
+      line-height:1.2;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .nav a{
+      padding:9px 0 7px;
+      border-bottom:1px solid transparent;
+    }
+
+    .nav a:hover,
+    .nav a[aria-current="page"]{
+      border-bottom-color:currentColor;
+    }
+
+    .header-inner .kindle-account-btn{
+      margin-left:auto !important;
+      padding:9px 0 7px !important;
+      border:0 !important;
+      border-bottom:1px solid transparent !important;
+      background:transparent !important;
+      color:var(--ink) !important;
+      box-shadow:none !important;
+      font-family:Arial,Helvetica,sans-serif !important;
+      font-size:11px !important;
+      font-weight:500 !important;
+      line-height:1.2 !important;
+      letter-spacing:.12em !important;
+      text-transform:uppercase !important;
+    }
+
+    .header-inner .kindle-account-btn:hover{
+      border-bottom-color:currentColor !important;
+      background:transparent !important;
+    }
+
+    .wrap{width:min(1220px,92%);margin:auto}
+
+    .hero{
+      min-height:670px;
+      display:grid;
+      grid-template-columns:1.02fr .98fr;
+      gap:64px;
+      align-items:center;
+      padding:70px 0 80px;
+    }
+
+    .eyebrow{
+      display:inline-block;
+      background:#ead8c7;
+      color:#78422e;
+      padding:8px 12px;
+      border-radius:999px;
+      font-family:"Courier New",monospace;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+      margin-bottom:20px;
+    }
+
+    h1{
+      font-size:clamp(3.7rem,7vw,7rem);
+      line-height:.9;
+      letter-spacing:-.065em;
+      margin:0 0 24px;
+      max-width:780px;
     }
 
+    .hero-copy{
+      max-width:670px;
+      font-size:1.14rem;
+      line-height:1.7;
+      color:#655b53;
+      margin:0 0 28px;
+    }
+
+    .cta-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .btn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:48px;
+      padding:0 18px;
+      border:1px solid var(--ink);
+      font-family:"Courier New",monospace;
+      font-size:.75rem;
+      font-weight:700;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      transition:.18s ease;
+    }
+
+    .btn:hover{transform:translateY(-1px)}
+    .btn.dark{background:var(--ink);color:white}
+    .btn.light{background:transparent}
+
+    .hero-art{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:18px;
+      align-items:end;
+    }
+
+    .hero-card{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:22px;
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero-card.large{grid-row:span 2}
+
+    .hero-image{
+      min-height:310px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#d7c2ae,#f3e9de);
+      overflow:hidden;
+    }
+
+    .hero-card:not(.large) .hero-image{min-height:185px}
+
+    .hero-image img,
+    .jar-photo img{
+      width:100%;
+      height:100%;
+      object-fit:contain;
+      display:block;
+      background:#f3ede5;
+    }
+
+    .jar-placeholder{
+      width:126px;
+      height:170px;
+      border:5px solid rgba(78,59,45,.42);
+      border-radius:18px 18px 26px 26px;
+      background:rgba(255,255,255,.45);
+      box-shadow:0 15px 25px rgba(62,47,36,.08);
+    }
+
+    .jar-placeholder.small{width:90px;height:118px}
+    .jar-placeholder.bowl{width:150px;height:72px;border-radius:18px 18px 46px 46px}
+
+    .hero-card-body{padding:18px 20px 20px}
+
+    .supplier{
+      font-family:"Courier New",monospace;
+      font-size:.67rem;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      color:#8c7564;
+      font-weight:700;
+    }
+
+    .hero-card h3{
+      font-size:1.35rem;
+      margin:7px 0 7px;
+    }
+
+    .hero-card p{
+      color:var(--muted);
+      font-size:.9rem;
+      line-height:1.45;
+      margin:0;
+    }
+
+    section{padding:88px 0}
+
+    .section-head{
+      display:flex;
+      align-items:end;
+      justify-content:space-between;
+      gap:30px;
+      margin-bottom:34px;
+    }
+
+    .section-head h2{
+      font-size:clamp(2.4rem,5vw,4.6rem);
+      line-height:.95;
+      letter-spacing:-.05em;
+      margin:0;
+    }
+
+    .section-head p{
+      color:var(--muted);
+      max-width:480px;
+      line-height:1.6;
+      margin:0;
+    }
+
+    .jar-feature{
+      border-top:1px solid var(--line);
+      border-bottom:1px solid var(--line);
+      background:rgba(255,253,249,.48);
+    }
+
+    .jar-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:20px;
+    }
+
+    .jar-card{
+      border:1px solid var(--line);
+      background:var(--paper);
+      border-radius:20px;
+      overflow:hidden;
+      transition:.18s ease;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .jar-card:hover{
+      transform:translateY(-3px);
+      box-shadow:var(--shadow);
+    }
+
+    .jar-photo{
+      height:270px;
+      display:grid;
+      place-items:center;
+      background:linear-gradient(135deg,#e1d2c2,#f4ede4);
+      overflow:hidden;
+    }
+
+    .jar-card .body{
+      padding:20px;
+      display:flex;
+      flex-direction:column;
+      flex:1;
+    }
+
+    .jar-card h3{
+      font-size:1.5rem;
+      margin:7px 0;
+    }
+
+    .meta{
+      color:var(--muted);
+      font-size:.88rem;
+      line-height:1.5;
+    }
+
+    .stats{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:8px;
+      margin-top:16px;
+    }
+
+    .stat{
+      background:#f3ece4;
+      border-radius:12px;
+      padding:11px 12px;
+    }
+
+    .stat span{
+      display:block;
+      color:#8b7d71;
+      font-size:.68rem;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      font-family:"Courier New",monospace;
+    }
+
+    .stat strong{
+      display:block;
+      margin-top:4px;
+      font-size:.92rem;
+    }
+
+    .jar-link{
+      margin-top:auto;
+      padding-top:18px;
+      font-family:"Courier New",monospace;
+      font-size:.72rem;
+      font-weight:700;
+      letter-spacing:.05em;
+      text-transform:uppercase;
+    }
+
+    .tools-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:18px;
+    }
+
+    .tool{
+      min-height:350px;
+      border:1px solid var(--ink);
+      background:var(--paper);
+      padding:28px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    .tool:nth-child(2){background:#ead7c6}
+
+    .tool .num{
+      font-family:"Courier New",monospace;
+      font-size:.72rem;
+      letter-spacing:.12em;
+      margin-bottom:90px;
+    }
+
+    .tool h3{
+      font-size:2rem;
+      line-height:1.05;
+      margin:0 0 12px;
+    }
+
+    .tool p{
+      color:#62574f;
+      line-height:1.55;
+      margin:0 0 20px;
+    }
+
+    .tool a{
+      margin-top:auto;
+      font-family:"Courier New",monospace;
+      font-size:.75rem;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+    }
+
+    .library-callout{
+      background:var(--ink);
+      color:white;
+      padding:68px 0;
+    }
+
+    .callout-grid{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:40px;
+      align-items:center;
+    }
+
+    .callout-grid h2{
+      margin:0 0 12px;
+      font-size:clamp(2.3rem,5vw,4.4rem);
+      line-height:.95;
+      letter-spacing:-.05em;
+    }
+
+    .callout-grid p{
+      color:#d5c9bf;
+      max-width:720px;
+      line-height:1.7;
+      margin:0;
+    }
+
+    .library-callout .btn{
+      color:white;
+      border-color:white;
+      white-space:nowrap;
+    }
+
+    .loading{
+      grid-column:1/-1;
+      padding:38px;
+      text-align:center;
+      border:1px dashed var(--line);
+      background:var(--paper);
+      color:var(--muted);
+      border-radius:18px;
+    }
+
+    footer{
+      border-top:1px solid var(--line);
+      padding:42px 0 60px;
+      color:#7c7067;
+      font-size:.9rem;
+    }
+
+    @media(max-width:950px){
+      .hero{grid-template-columns:1fr;padding-top:48px}
+      .hero-art{margin-top:8px}
+      .jar-grid,.tools-grid{grid-template-columns:1fr}
+      .section-head{display:block}
+      .section-head p{margin-top:16px}
+      .callout-grid{grid-template-columns:1fr}
+    }
+
+    @media(max-width:620px){
+      .hero-art{grid-template-columns:1fr}
+      .hero-card.large{grid-row:auto}
+      h1{font-size:3.7rem}
+      .hero{min-height:auto}
+      .hero-image{min-height:250px}
+      .hero-card:not(.large) .hero-image{min-height:220px}
+      .jar-photo{height:245px}
+    }
   </style>
 </head>
+
 <body>
   <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
 
   <header class="site-header">
     <div class="header-inner">
-      <a class="brand" href="/" aria-label="Kindle Candle tools home">
-        <img class="brand-logo" src="shared/kindle-candle-logo.png" alt="Kindle Candle" />
+      <a class="brand" href="/" aria-label="Kindle Candle home">
+        <img class="brand-logo" src="./shared/kindle-candle-logo.png" alt="Kindle Candle" />
       </a>
+
       <nav class="nav" aria-label="Main navigation">
-      <a href="/" aria-current="page">Home</a>
-      <a href="/fragranceLoadCalc/">Wax + Fragrance Calculator</a>
-      <a href="/Candle%20Cost%20Calculator/">Candle Cost Calculator</a>
-      <a href="/jar-library/">Jar Library</a>
-      <a href="/my-candles/">My Candles</a>
-    </nav>
+        <a href="/" aria-current="page">Home</a>
+        <a href="/fragranceLoadCalc/">Wax + Fragrance Calculator</a>
+        <a href="/Candle%20Cost%20Calculator/">Candle Cost Calculator</a>
+        <a href="/jar-library/">Jar Library</a>
+        <a href="/my-candles/">My Candles</a>
+      </nav>
     </div>
   </header>
 
   <main>
-    <section class="hero">
-      <span class="eyebrow">Kindle Candle • Maker Tools</span>
-      <h1>Better candle math.<br>Less guesswork.</h1>
-      <p>Simple, practical calculators for the numbers candle makers deal with every day — from planning a pour to figuring out what a finished candle actually costs.</p>
-      <div class="hero-actions">
-        <a class="button" href="#tools">Explore the tools</a>
-        <a class="button secondary" href="https://kindlecandle.com/" target="_blank" rel="noopener">Visit Kindle Candle</a>
-      </div>
-    </section>
-
-    <section class="tools-wrap" id="tools">
-      <div class="section-head">
-        <div>
-          <span class="eyebrow">Free calculators</span>
-          <h2>Tools made for the pour table.</h2>
-        </div>
-        <p>No complicated spreadsheet setup. Enter the numbers you already have and get the production numbers you actually need.</p>
-      </div>
-
-      <div class="tool-grid">
-        <article class="tool-card featured">
-          <div class="card-number">Tool 01 • Production</div>
-          <h3>Wax + Fragrance Batch Calculator</h3>
-          <p>Plan a single candle or a full production run using your vessel size, quantity, fragrance percentage, and wax density.</p>
-          <ul class="mini-list">
-            <li>Wax needed for the full batch</li>
-            <li>Fragrance oil needed</li>
-            <li>Per-candle breakdown</li>
-            <li>Wax density reference guide</li>
-          </ul>
-          <div class="card-action">
-            <a class="button" href="/fragranceLoadCalc/">Open batch calculator →</a>
-          </div>
-        </article>
-
-        <article class="tool-card">
-          <div class="card-number">Tool 02 • Pricing</div>
-          <h3>Basic Candle Cost Calculator</h3>
-          <p>Quickly work out what one candle costs to make using the material prices you already know, then see your profit and batch totals.</p>
-          <ul class="mini-list">
-            <li>Calculate wax and fragrance cost from purchase price</li>
-            <li>Add jar, lid, wick, wick sticker, label, and packaging</li>
-            <li>Load usage from a saved candle</li>
-            <li>See cost, profit, margin, and batch totals</li>
-          </ul>
-          <div class="card-action">
-            <a class="button" href="/Candle%20Cost%20Calculator/">Open cost calculator →</a>
-          </div>
-        </article>
-      </div>
-
-      <div class="coming">
-        <div>
-          <h3>More Tools Coming Soon</h3>
-          <p>We’re continuing to build practical tools for candle makers. Check back soon for new calculators and resources.</p>
-        </div>
-        <span class="coming-tag">Coming soon</span>
-      </div>
-    </section>
-
-    <section class="why" id="why">
-      <div class="why-grid">
-        <div>
-          <span class="eyebrow">Why Kindle tools</span>
-          <h2>Built around real candle production.</h2>
-        </div>
-        <div class="why-copy">
-          <div class="why-item">
-            <strong>Fast to use</strong>
-            <p>Designed for quick checks while you are planning, weighing, pricing, or getting a batch ready to pour.</p>
-          </div>
-          <div class="why-item">
-            <strong>Useful numbers</strong>
-            <p>The focus is on practical outputs like batch weights, landed material cost, margins, and per-candle totals.</p>
-          </div>
-          <div class="why-item">
-            <strong>No account needed to calculate</strong>
-            <p>Use the calculators freely. Create an account only when you want to save candles, fragrance blends, and cost data across devices.</p>
-          </div>
-          <div class="why-item">
-            <strong>Made to grow</strong>
-            <p>We are building this into a larger collection of free tools for makers running real candle businesses.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="shop-strip">
+    <div class="wrap hero">
       <div>
-        <h2>Made by Kindle Candle</h2>
-        <p>We make candles and fragrance products ourselves, so these tools are built around the same production questions we deal with.</p>
+        <div class="eyebrow">Built for candle makers</div>
+        <h1>Better candles start with better data.</h1>
+        <p class="hero-copy">
+          Calculate your batches, understand your costs, and learn from real burn tests
+          shared by other candle makers.
+        </p>
+
+        <div class="cta-row">
+          <a class="btn dark" href="/fragranceLoadCalc/">Start a Calculation →</a>
+          <a class="btn light" href="/jar-library/">Explore the Jar Library</a>
+        </div>
       </div>
-      <a class="button secondary" href="https://kindlecandle.com/" target="_blank" rel="noopener">Shop Kindle Candle ↗</a>
+
+      <div class="hero-art" id="heroJarCards">
+        <article class="hero-card large">
+          <div class="hero-image"><div class="jar-placeholder"></div></div>
+          <div class="hero-card-body">
+            <div class="supplier">Jar Library</div>
+            <h3>Loading vessels…</h3>
+            <p>Real jar data from Kindle Candle.</p>
+          </div>
+        </article>
+        <article class="hero-card">
+          <div class="hero-image"><div class="jar-placeholder small"></div></div>
+          <div class="hero-card-body"><div class="supplier">Community Data</div><h3>Burn Tests</h3></div>
+        </article>
+        <article class="hero-card">
+          <div class="hero-image"><div class="jar-placeholder bowl"></div></div>
+          <div class="hero-card-body"><div class="supplier">Candle Makers</div><h3>Shared Results</h3></div>
+        </article>
+      </div>
+    </div>
+
+    <section id="jars" class="jar-feature">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Jar Library</div>
+            <h2>Find the jar.<br>See what works.</h2>
+          </div>
+
+          <p>
+            Browse popular vessels, compare case pricing, and see the waxes, wicks,
+            fragrance loads, and burn-test results other makers are using.
+          </p>
+        </div>
+
+        <div class="jar-grid" id="homeJarGrid">
+          <div class="loading">Loading the Jar Library…</div>
+        </div>
+
+        <div style="margin-top:28px">
+          <a class="btn dark" href="/jar-library/">Browse All Jars →</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="tools">
+      <div class="wrap">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Calculators</div>
+            <h2>Tools for the numbers<br>behind the candle.</h2>
+          </div>
+
+          <p>
+            Two focused tools for the calculations candle makers use most:
+            batch weights and true candle cost.
+          </p>
+        </div>
+
+        <div class="tools-grid">
+          <article class="tool">
+            <div class="num">01 / WAX + FRAGRANCE</div>
+            <h3>Calculate your batch.</h3>
+            <p>
+              Turn vessel capacity and fragrance load into exact wax and fragrance weights,
+              with the density adjustment handled for you.
+            </p>
+            <a href="/fragranceLoadCalc/">Open Calculator →</a>
+          </article>
+
+          <article class="tool">
+            <div class="num">02 / CANDLE COST</div>
+            <h3>Know your true cost.</h3>
+            <p>
+              Track vessel, wax, fragrance, packaging, fees, and profit so you know what
+              each candle actually costs to make.
+            </p>
+            <a href="/Candle%20Cost%20Calculator/">Open Cost Calculator →</a>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="library-callout">
+      <div class="wrap callout-grid">
+        <div>
+          <div class="eyebrow">Community-Powered</div>
+          <h2>Testing data that gets better with every maker.</h2>
+          <p>
+            Approved burn tests turn individual experiments into useful starting points.
+            Pick a vessel, compare wax and wick combinations, and contribute what worked for you.
+          </p>
+        </div>
+
+        <a class="btn" href="/jar-library/">Open Jar Library →</a>
+      </div>
     </section>
   </main>
 
   <footer>
-    <span>© <span id="year"></span> Kindle Candle • Maker Tools</span>
-    <span>For planning and educational use</span>
+    <div class="wrap">Kindle Candle · Candle-making tools and community data for makers.</div>
   </footer>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="/shared/supabase-config.js"></script>
-  <script src="/shared/kindle-cloud.js"></script>
+  <script src="./shared/supabase-config.js"></script>
+  <script src="./shared/kindle-cloud.js"></script>
+
   <script>
-    document.getElementById('year').textContent = new Date().getFullYear();
+    const esc = value => String(value ?? "").replace(/[&<>"']/g, ch => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[ch]));
+
+    const money = value =>
+      Number.isFinite(Number(value)) ? `$${Number(value).toFixed(2)}` : null;
+
+    function inches(value){
+      if(value == null) return null;
+      return `${Number(value).toFixed(2).replace(/\.00$/,"").replace(/0$/,"")}"`;
+    }
+
+    function fillOz(value){
+      if(value == null) return null;
+      return `${Number(value).toFixed(2).replace(/\.00$/,"").replace(/0$/,"")} oz fill`;
+    }
+
+    function casePriceSummary(variants){
+      const rows = (variants || []).filter(v =>
+        v.case_price != null &&
+        v.case_quantity != null &&
+        Number(v.case_quantity) > 0
+      );
+
+      if(!rows.length) return "Pricing in Jar Library";
+
+      const quantities = [...new Set(rows.map(v => Number(v.case_quantity)))];
+      if(quantities.length !== 1) return "Case pricing varies";
+
+      const qty = quantities[0];
+      const prices = rows.map(v => Number(v.case_price)).filter(Number.isFinite);
+      if(!prices.length) return "Pricing in Jar Library";
+
+      const min = Math.min(...prices);
+      const max = Math.max(...prices);
+      const label = min === max ? money(min) : `${money(min)}–${money(max)}`;
+      return `${label} / ${qty}`;
+    }
+
+    async function loadHomepageJars(){
+      const grid = document.getElementById("homeJarGrid");
+      const hero = document.getElementById("heroJarCards");
+
+      try{
+        if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+
+        const cfg = window.KINDLE_SUPABASE_CONFIG || {};
+        const client = window.KindleCloud?.client ||
+          window.supabase?.createClient?.(cfg.url, cfg.key);
+
+        if(!client) throw new Error("Supabase connection unavailable.");
+
+        const desiredSlugs = ["serafina","minifina","corinne-3-wick-bowl"];
+
+        const [
+          {data:jars,error:jarsError},
+          {data:suppliers,error:suppliersError},
+          {data:variants,error:variantsError},
+          {data:tests,error:testsError}
+        ] = await Promise.all([
+          client.from("jars")
+            .select("id,supplier_id,name,slug,image_url,diameter_inches,inner_diameter_inches,recommended_fill_oz,is_active")
+            .in("slug", desiredSlugs)
+            .eq("is_active", true),
+          client.from("suppliers")
+            .select("id,name")
+            .eq("is_active", true),
+          client.from("jar_variants")
+            .select("jar_id,color,image_url,case_price,case_quantity,is_active")
+            .eq("is_active", true),
+          client.from("burn_tests")
+            .select("jar_id")
+            .eq("status","approved")
+        ]);
+
+        if(jarsError) throw jarsError;
+        if(suppliersError) throw suppliersError;
+        if(variantsError) throw variantsError;
+        if(testsError) throw testsError;
+
+        const supplierMap = new Map((suppliers || []).map(s => [s.id,s.name]));
+        const variantMap = new Map();
+        (variants || []).forEach(v => {
+          if(!variantMap.has(v.jar_id)) variantMap.set(v.jar_id,[]);
+          variantMap.get(v.jar_id).push(v);
+        });
+
+        const testCounts = {};
+        (tests || []).forEach(t => testCounts[t.jar_id] = (testCounts[t.jar_id] || 0) + 1);
+
+        const jarMap = new Map((jars || []).map(j => [j.slug,j]));
+        const ordered = desiredSlugs.map(slug => jarMap.get(slug)).filter(Boolean);
+
+        const normalized = ordered.map(j => {
+          const vars = variantMap.get(j.id) || [];
+          return {
+            ...j,
+            supplier:supplierMap.get(j.supplier_id) || "Candle Supplier",
+            variants:vars,
+            image:j.image_url || vars.find(v => v.image_url)?.image_url || null,
+            tests:testCounts[j.id] || 0
+          };
+        });
+
+        if(!normalized.length) throw new Error("No featured jars found.");
+
+        grid.innerHTML = normalized.map(j => {
+          const dimensions = [];
+          if(j.inner_diameter_inches != null) dimensions.push(`${inches(j.inner_diameter_inches)} inner diameter`);
+          else if(j.diameter_inches != null) dimensions.push(`${inches(j.diameter_inches)} diameter`);
+          if(j.recommended_fill_oz != null) dimensions.unshift(fillOz(j.recommended_fill_oz));
+          dimensions.push(`${j.variants.length} finish${j.variants.length === 1 ? "" : "es"}`);
+
+          return `
+            <a class="jar-card" href="/jar-library/">
+              <div class="jar-photo">
+                ${j.image
+                  ? `<img src="${esc(j.image)}" alt="${esc(j.name)}">`
+                  : `<div class="jar-placeholder"></div>`}
+              </div>
+
+              <div class="body">
+                <div class="supplier">${esc(j.supplier)}</div>
+                <h3>${esc(j.name)}</h3>
+                <div class="meta">${dimensions.filter(Boolean).map(esc).join(" · ")}</div>
+
+                <div class="stats">
+                  <div class="stat">
+                    <span>Case Pricing</span>
+                    <strong>${esc(casePriceSummary(j.variants))}</strong>
+                  </div>
+                  <div class="stat">
+                    <span>Burn Tests</span>
+                    <strong>${j.tests ? `${j.tests} approved` : "Be the first"}</strong>
+                  </div>
+                </div>
+
+                <div class="jar-link">Explore in Jar Library →</div>
+              </div>
+            </a>`;
+        }).join("");
+
+        const heroJars = normalized.slice(0,3);
+        hero.innerHTML = heroJars.map((j,index) => `
+          <a class="hero-card${index === 0 ? " large" : ""}" href="/jar-library/">
+            <div class="hero-image">
+              ${j.image
+                ? `<img src="${esc(j.image)}" alt="${esc(j.name)}">`
+                : `<div class="jar-placeholder${index === 1 ? " small" : index === 2 ? " bowl" : ""}"></div>`}
+            </div>
+            <div class="hero-card-body">
+              <div class="supplier">${esc(j.supplier)}</div>
+              <h3>${esc(j.name)}</h3>
+              ${index === 0
+                ? `<p>${j.variants.length} finishes · ${j.tests ? `${j.tests} approved burn test${j.tests === 1 ? "" : "s"}` : "community burn testing"}</p>`
+                : ""}
+            </div>
+          </a>
+        `).join("");
+
+      }catch(error){
+        console.error("Homepage jar load error:", error);
+
+        grid.innerHTML = `
+          <a class="jar-card" href="/jar-library/">
+            <div class="jar-photo"><div class="jar-placeholder"></div></div>
+            <div class="body">
+              <div class="supplier">Jar Library</div>
+              <h3>Explore Candle Vessels</h3>
+              <div class="meta">Browse jars, waxes, wicks, and approved community burn tests.</div>
+              <div class="jar-link">Open Jar Library →</div>
+            </div>
+          </a>`;
+
+        hero.innerHTML = `
+          <a class="hero-card large" href="/jar-library/">
+            <div class="hero-image"><div class="jar-placeholder"></div></div>
+            <div class="hero-card-body">
+              <div class="supplier">Kindle Candle</div>
+              <h3>Jar Library</h3>
+              <p>See what other candle makers are testing.</p>
+            </div>
+          </a>
+          <a class="hero-card" href="/fragranceLoadCalc/">
+            <div class="hero-image"><div class="jar-placeholder small"></div></div>
+            <div class="hero-card-body"><div class="supplier">Calculator</div><h3>Wax + Fragrance</h3></div>
+          </a>
+          <a class="hero-card" href="/Candle%20Cost%20Calculator/">
+            <div class="hero-image"><div class="jar-placeholder bowl"></div></div>
+            <div class="hero-card-body"><div class="supplier">Calculator</div><h3>Candle Cost</h3></div>
+          </a>`;
+      }
+    }
+
+    loadHomepageJars();
   </script>
 </body>
 </html>
