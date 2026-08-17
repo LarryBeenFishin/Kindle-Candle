@@ -1108,6 +1108,230 @@
     }
   }
 
+
+  /* =========================================
+     MOBILE REAL PAGE VIEWS
+     Jar Details and Add Test are page layouts.
+     ========================================= */
+  @media (max-width: 768px) {
+    body.mobile-detail-page,
+    body.mobile-submit-page {
+      overflow-x: hidden !important;
+      overflow-y: auto !important;
+      background: var(--bg, #f7f2ea) !important;
+    }
+
+    body.mobile-detail-page > main,
+    body.mobile-submit-page > main {
+      display: none !important;
+    }
+
+    body.mobile-detail-page #detailModal,
+    body.mobile-submit-page #submitModal {
+      position: static !important;
+      inset: auto !important;
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      min-height: calc(100dvh - 100px) !important;
+      max-height: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: transparent !important;
+      backdrop-filter: none !important;
+      overflow: visible !important;
+      z-index: auto !important;
+    }
+
+    body.mobile-detail-page #detailModal .modal-card,
+    body.mobile-submit-page #submitModal .modal-card {
+      position: static !important;
+      width: 100% !important;
+      max-width: 100% !important;
+      height: auto !important;
+      min-height: calc(100dvh - 100px) !important;
+      max-height: none !important;
+      margin: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      overflow: visible !important;
+      background: var(--paper, #fffdf9) !important;
+    }
+
+    body.mobile-detail-page #detailModal .modal-top,
+    body.mobile-submit-page #submitModal .modal-top {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 30 !important;
+      display: flex !important;
+      align-items: center !important;
+      min-height: 64px !important;
+      padding: 14px 16px !important;
+      background: rgba(255,253,249,.98) !important;
+      backdrop-filter: blur(10px) !important;
+      border-bottom: 1px solid var(--line, #ded5ca) !important;
+    }
+
+    body.mobile-detail-page #detailModal .modal-top strong,
+    body.mobile-submit-page #submitModal .modal-top strong {
+      font-size: 20px !important;
+      line-height: 1.15 !important;
+    }
+
+    body.mobile-detail-page #detailModal .modal-top .close,
+    body.mobile-submit-page #submitModal .modal-top .close {
+      margin-left: auto !important;
+      width: 42px !important;
+      min-width: 42px !important;
+      height: 42px !important;
+      min-height: 42px !important;
+      padding: 0 !important;
+      border-radius: 50% !important;
+      display: grid !important;
+      place-items: center !important;
+    }
+
+    /* Jar details page */
+    body.mobile-detail-page #detailContent {
+      padding: 18px 16px 34px !important;
+    }
+
+    body.mobile-detail-page #detailContent .detail-grid {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 18px !important;
+    }
+
+    body.mobile-detail-page #detailContent .detail-visual {
+      height: 300px !important;
+      min-height: 300px !important;
+      border-radius: 16px !important;
+    }
+
+    body.mobile-detail-page #detailContent .detail-product-image {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: contain !important;
+      object-position: center !important;
+      transform: none !important;
+      padding: 10px !important;
+    }
+
+    body.mobile-detail-page #detailContent h2 {
+      font-size: 36px !important;
+      margin: 8px 0 10px !important;
+    }
+
+    body.mobile-detail-page #detailContent .spec-grid {
+      grid-template-columns: 1fr 1fr !important;
+      gap: 8px !important;
+    }
+
+    body.mobile-detail-page #detailContent .variant-chips {
+      display: flex !important;
+      flex-wrap: nowrap !important;
+      overflow-x: auto !important;
+      gap: 8px !important;
+      padding-bottom: 6px !important;
+      scrollbar-width: none;
+    }
+
+    body.mobile-detail-page #detailContent .variant-chips::-webkit-scrollbar {
+      display: none;
+    }
+
+    body.mobile-detail-page #detailContent .variant-chip {
+      flex: 0 0 auto !important;
+      white-space: nowrap !important;
+    }
+
+    body.mobile-detail-page #detailContent .summary-grid {
+      grid-template-columns: 1fr !important;
+      gap: 8px !important;
+    }
+
+    body.mobile-detail-page #detailContent .tests-head {
+      align-items: stretch !important;
+      gap: 14px !important;
+    }
+
+    body.mobile-detail-page #detailContent .tests-head .primary {
+      width: 100% !important;
+    }
+
+    /* Add Test page */
+    body.mobile-submit-page #submitModal form {
+      display: block !important;
+      width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      padding: 18px 16px 34px !important;
+    }
+
+    body.mobile-submit-page #submitModal .form-grid {
+      display: grid !important;
+      grid-template-columns: 1fr !important;
+      gap: 14px !important;
+    }
+
+    body.mobile-submit-page #submitModal .form-group {
+      width: 100% !important;
+      margin: 0 !important;
+    }
+
+    body.mobile-submit-page #submitModal label {
+      display: block !important;
+      margin: 0 0 7px !important;
+      font-size: 14px !important;
+      font-weight: 800 !important;
+    }
+
+    body.mobile-submit-page #submitModal input,
+    body.mobile-submit-page #submitModal select,
+    body.mobile-submit-page #submitModal textarea {
+      width: 100% !important;
+      min-width: 0 !important;
+      min-height: 48px !important;
+      padding: 11px 13px !important;
+      border-radius: 12px !important;
+      font-size: 16px !important;
+    }
+
+    body.mobile-submit-page #submitModal textarea {
+      min-height: 120px !important;
+    }
+
+    body.mobile-submit-page #submitModal .form-actions {
+      position: static !important;
+      display: grid !important;
+      grid-template-columns: 1fr 1.25fr !important;
+      gap: 10px !important;
+      margin-top: 22px !important;
+      padding: 14px 0 calc(14px + env(safe-area-inset-bottom)) !important;
+      border-top: 1px solid var(--line, #ded5ca) !important;
+      background: transparent !important;
+      box-shadow: none !important;
+    }
+
+    body.mobile-submit-page #submitModal .form-actions button {
+      width: 100% !important;
+      min-height: 50px !important;
+      margin: 0 !important;
+    }
+  }
+
+  @media (max-width: 430px) {
+    body.mobile-detail-page #detailContent .spec-grid {
+      grid-template-columns: 1fr !important;
+    }
+
+    body.mobile-submit-page #submitModal .form-actions {
+      grid-template-columns: 1fr !important;
+    }
+  }
+
 </style>
 </head>
 <body>
@@ -1514,6 +1738,18 @@
 
         populateTestFormOptions();
 
+        if(isMobilePageMode()){
+          const params = new URLSearchParams(window.location.search);
+          const detailId = params.get("jar");
+          const submitId = params.get("add-test");
+
+          if(detailId){
+            setTimeout(() => openDetail(detailId, true), 30);
+          }else if(submitId){
+            setTimeout(() => openSubmit(submitId, true), 30);
+          }
+        }
+
       }catch(error){
         console.error("Jar Library load error:", error);
         grid.innerHTML = `
@@ -1672,7 +1908,32 @@
       });
     }
 
-    function openDetail(id){
+
+    function isMobilePageMode(){
+      return window.matchMedia("(max-width: 768px)").matches;
+    }
+
+    function navigateMobilePage(mode, id){
+      const url = new URL(window.location.href);
+      url.searchParams.delete("jar");
+      url.searchParams.delete("add-test");
+      url.searchParams.set(mode, String(id));
+      window.location.assign(url.toString());
+    }
+
+    function mobilePageType(){
+      const params = new URLSearchParams(window.location.search);
+      if(params.has("jar")) return "detail";
+      if(params.has("add-test")) return "submit";
+      return "";
+    }
+
+    function openDetail(id, fromPageLoad=false){
+      if(isMobilePageMode() && !fromPageLoad){
+        navigateMobilePage("jar", id);
+        return;
+      }
+
       const j = jars.find(x => String(x.id) === String(id));
       if(!j) return;
 
@@ -1757,7 +2018,7 @@
             <h3>Community Burn Tests</h3>
             <p>${j.tests ? `${j.tests} approved test${j.tests===1?"":"s"} for this jar.` : "No approved tests yet. This is where community results will appear."}</p>
           </div>
-          <button class="primary" style="flex:0 0 auto" onclick="closeModal('detailModal');openSubmit('${esc(j.id)}')">+ Add Your Test</button>
+          <button class="primary" style="flex:0 0 auto" onclick="openSubmit('${esc(j.id)}')">+ Add Your Test</button>
         </div>
 
         ${j.community.length
@@ -1781,7 +2042,13 @@
       `;
 
       document.getElementById("detailModal").classList.add("open");
-      document.body.style.overflow = "hidden";
+
+      if(isMobilePageMode() && mobilePageType()==="detail"){
+        document.body.classList.add("mobile-detail-page");
+        document.body.style.overflow = "";
+      }else{
+        document.body.style.overflow = "hidden";
+      }
     }
 
 
@@ -1844,8 +2111,16 @@
       updateBuyLink();
     }
 
-    async function openSubmit(id){
+    async function openSubmit(id, fromPageLoad=false){
+      if(isMobilePageMode() && !fromPageLoad){
+        navigateMobilePage("add-test", id);
+        return;
+      }
+
       try{
+        if(!isMobilePageMode()){
+          document.getElementById("detailModal")?.classList.remove("open");
+        }
         if(window.KindleCloud?.ready) await window.KindleCloud.ready;
 
         const user = window.KindleCloud?.currentUser || null;
@@ -1870,7 +2145,13 @@
 
         setFormMessage(`Submitting as ${profile.username}. Your test will be reviewed before it appears publicly.`, "info");
         document.getElementById("submitModal").classList.add("open");
-        document.body.style.overflow = "hidden";
+
+        if(isMobilePageMode() && mobilePageType()==="submit"){
+          document.body.classList.add("mobile-submit-page");
+          document.body.style.overflow = "";
+        }else{
+          document.body.style.overflow = "hidden";
+        }
       }catch(error){
         console.error("Could not open submission form:", error);
         alert("We couldn't open the submission form. Please try again.");
@@ -1944,6 +2225,11 @@
     }
 
     function closeModal(id){
+      if(isMobilePageMode() && (document.body.classList.contains("mobile-detail-page") || document.body.classList.contains("mobile-submit-page"))){
+        window.location.assign("/jar-library/");
+        return;
+      }
+
       document.getElementById(id).classList.remove("open");
       if(!document.querySelector(".modal.open")) document.body.style.overflow = "";
     }
