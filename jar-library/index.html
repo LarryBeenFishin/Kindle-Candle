@@ -444,6 +444,8 @@
     let jarClient = null;
     let detailBaseImage = null;
     let detailLockedImage = null;
+    let detailSupplierUrl = null;
+    let detailSelectedVariantUrl = null;
 
     const esc = s => String(s ?? "").replace(/[&<>"']/g, m => ({
       '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'
@@ -770,6 +772,8 @@
 
       detailBaseImage = j.imageUrl || null;
       detailLockedImage = null;
+      detailSupplierUrl = j.supplierUrl || "#";
+      detailSelectedVariantUrl = null;
       preloadVariantImages(j.variants);
 
       document.getElementById("detailContent").innerHTML = `
@@ -800,7 +804,7 @@
             </div>
 
             ${j.supplierUrl && j.supplierUrl !== "#"
-              ? `<a class="buy-link" href="${esc(j.supplierUrl)}" target="_blank" rel="noopener">View Supplier ↗</a>`
+              ? `<a id="supplierBuyLink" class="buy-link" href="${esc(j.supplierUrl)}" target="_blank" rel="noopener">View Supplier ↗</a>`
               : ""}
           </div>
         </div>
@@ -816,7 +820,7 @@
                     ${v.image_url ? `
                       onmouseenter="previewVariantImage('${esc(v.image_url)}')"
                       onmouseleave="restoreVariantImage()"
-                      onclick="lockVariantImage('${esc(v.image_url)}', this)"
+                      onclick="lockVariantImage('${esc(v.image_url)}', this, '${esc(v.product_url || "")}')"
                       title="Preview ${esc(v.color)}"
                     ` : ""}
                   >
@@ -826,7 +830,7 @@
               : `<span class="meta">No variants have been added yet.</span>`}
           </div>
           ${j.variants.some(v => v.image_url)
-            ? `<p class="variant-hint">Hover a color to preview it. Tap or click a color to keep that image selected.</p>`
+            ? `<p class="variant-hint">Hover a color to preview it. Tap or click a color to keep it selected; the supplier button will use that color's product page when available.</p>`
             : `<p class="variant-hint">Color photos can be added to these variants as they become available.</p>`}
         </div>
 
@@ -905,11 +909,26 @@
       }
     }
 
-    function lockVariantImage(url, chip){
+    function updateBuyLink(){
+      const link = document.getElementById("supplierBuyLink");
+      if(!link) return;
+
+      const target = detailSelectedVariantUrl || detailSupplierUrl;
+      if(!target || target === "#") return;
+
+      link.href = target;
+      link.textContent = detailSelectedVariantUrl ? "View Selected Color ↗" : "View Supplier ↗";
+    }
+
+    function lockVariantImage(url, chip, productUrl = ""){
       detailLockedImage = url;
+      detailSelectedVariantUrl = productUrl || null;
       setDetailImage(url);
+
       document.querySelectorAll(".variant-chip").forEach(x => x.classList.remove("selected"));
       if(chip) chip.classList.add("selected");
+
+      updateBuyLink();
     }
 
     async function openSubmit(id){
