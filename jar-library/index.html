@@ -39,29 +39,86 @@
 
     .container{width:min(1180px,92%);margin-inline:auto}
 
-    header{
-      position:sticky;top:0;z-index:50;
-      background:rgba(255,253,249,.92);
-      backdrop-filter:blur(14px);
-      border-bottom:1px solid rgba(222,213,202,.9);
+    .announcement{
+      background:var(--accent-dark);
+      color:#fff;
+      text-align:center;
+      padding:9px 16px 8px;
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
     }
-    .nav{
-      min-height:72px;
-      display:flex;align-items:center;justify-content:space-between;gap:24px
+
+    .site-header{
+      width:100%;
+      margin:0;
+      padding:0;
+      background:var(--bg);
+      border-bottom:1px solid rgba(90,56,38,.14);
+      position:relative;
+      z-index:5000;
     }
-    .brand{
-      display:flex;align-items:center;gap:10px;font-weight:850;letter-spacing:.06em
+
+    .header-inner{
+      width:min(1300px,calc(100% - 48px));
+      min-height:132px;
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      gap:0;
     }
-    .brand-mark{
-      width:34px;height:34px;border-radius:50% 50% 46% 46%;
-      background:linear-gradient(180deg,#d79062,#a85f3f);
-      display:grid;place-items:center;color:white;font-size:17px
+
+    .header-inner .brand{
+      width:150px;
+      flex:0 0 150px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin:0;
+      padding:0;
+      text-decoration:none;
     }
-    .nav-links{display:flex;gap:22px;color:#5f574f;font-size:.94rem}
-    .nav-links a.active{color:var(--ink);font-weight:750}
-    .nav-cta{
-      border:1px solid var(--line);background:var(--surface);padding:10px 14px;border-radius:12px;font-weight:700
+
+    .header-inner .brand-logo{
+      display:block;
+      width:150px;
+      height:auto;
+      max-width:none;
+      max-height:88px;
+      object-fit:contain;
     }
+
+    .header-inner .nav{
+      flex:1 1 auto;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      gap:28px;
+      margin-left:38px;
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:11px;
+      font-weight:500;
+      line-height:1.2;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+    }
+
+    .header-inner .nav a{
+      padding:9px 0 7px;
+      text-decoration:none;
+      border-bottom:1px solid transparent;
+    }
+
+    .header-inner .nav a:hover,
+    .header-inner .nav a[aria-current="page"]{
+      border-bottom-color:currentColor;
+    }
+
+    .header-inner .kindle-account-btn{
+      margin-left:auto!important;
+    }
+
 
     .hero{padding:78px 0 42px}
     .eyebrow{
@@ -254,7 +311,6 @@
     footer{border-top:1px solid var(--line);padding:34px 0 50px;color:var(--muted);font-size:.9rem}
 
     @media(max-width:900px){
-      .nav-links{display:none}
       .hero-grid,.detail-grid{grid-template-columns:1fr}
       .hero-stat{display:none}
       .search-row{grid-template-columns:1fr 1fr}
@@ -262,6 +318,34 @@
       .search-btn{min-height:48px}
       .jar-grid{grid-template-columns:repeat(2,1fr)}
     }
+    @media(max-width:900px){
+      .header-inner{
+        width:min(100% - 28px,1300px);
+        min-height:auto;
+        padding:18px 0;
+        flex-wrap:wrap;
+      }
+
+      .header-inner .brand{
+        width:120px;
+        flex-basis:120px;
+      }
+
+      .header-inner .brand-logo{
+        width:120px;
+        max-height:72px;
+      }
+
+      .header-inner .nav{
+        order:3;
+        width:100%;
+        margin:14px 0 0;
+        gap:18px;
+        overflow-x:auto;
+        padding-bottom:4px;
+      }
+    }
+
     @media(max-width:640px){
       .hero{padding-top:50px}
       .jar-visual{height:260px}
@@ -273,29 +357,27 @@
       .detail-visual{height:320px}
       .modal{padding:8px}
       .modal-card{border-radius:18px}
-      .nav-cta{display:none}
     }
   </style>
 </head>
 <body>
-  <header>
-    <div class="container nav">
-      <a class="brand" href="/" aria-label="Kindle Candle home">
-        <span class="brand-mark">✦</span>
-        <span>KINDLE CANDLE</span>
+  <div class="announcement">Candle Making Tools • By Makers, For Makers</div>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="/" aria-label="Kindle Candle tools home">
+        <img class="brand-logo" src="../shared/kindle-candle-logo.png" alt="Kindle Candle" />
       </a>
-      <nav class="nav-links" aria-label="Main navigation">
+
+      <nav class="nav" aria-label="Main navigation">
         <a href="/">Home</a>
-        <a href="/fragranceLoadCalc/">Wax + Fragrance</a>
-        <a href="/Candle%20Cost%20Calculator/">Cost Calculator</a>
-        <a class="active" href="/jar-library/" aria-current="page">Jar Library</a>
+        <a href="/fragranceLoadCalc/">Wax + Fragrance Calculator</a>
+        <a href="/Candle%20Cost%20Calculator/">Candle Cost Calculator</a>
+        <a href="/jar-library/" aria-current="page">Jar Library</a>
         <a href="/my-candles/">My Candles</a>
       </nav>
-      <button class="nav-cta" onclick="openSubmit()">+ Add a Test</button>
     </div>
   </header>
-
-  <main>
+<main>
     <section class="hero">
       <div class="container">
         <div class="eyebrow">COMMUNITY-POWERED CANDLE DATA</div>
