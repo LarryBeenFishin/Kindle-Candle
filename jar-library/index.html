@@ -1391,6 +1391,154 @@
     }
   }
 
+
+    .library-head-actions{
+      display:flex;
+      align-items:center;
+      justify-content:flex-end;
+      gap:14px;
+      flex-wrap:wrap;
+    }
+
+    .request-jar-btn{
+      border:1px solid var(--ink);
+      border-radius:999px;
+      background:transparent;
+      color:var(--ink);
+      padding:10px 14px;
+      min-height:40px;
+      font-weight:800;
+      cursor:pointer;
+      transition:.16s ease;
+    }
+
+    .request-jar-btn:hover{
+      background:var(--ink);
+      color:#fff;
+    }
+
+    .request-intro{
+      margin-bottom:18px;
+      padding:14px 15px;
+      border-radius:14px;
+      background:var(--soft);
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.55;
+    }
+
+    .request-modal textarea{
+      min-height:120px;
+      resize:vertical;
+    }
+
+    @media(max-width:768px){
+      .library-head-actions{
+        width:100%;
+        display:grid;
+        grid-template-columns:1fr;
+        justify-items:stretch;
+        gap:10px;
+        margin-top:16px;
+      }
+
+      .request-jar-btn{
+        width:100%;
+        min-height:48px;
+        border-radius:12px;
+      }
+
+      body.mobile-request-page{
+        overflow-x:hidden !important;
+        overflow-y:auto !important;
+        background:var(--bg) !important;
+      }
+
+      body.mobile-request-page > main{
+        display:none !important;
+      }
+
+      body.mobile-request-page #requestJarModal{
+        position:static !important;
+        inset:auto !important;
+        display:block !important;
+        width:100% !important;
+        height:auto !important;
+        min-height:calc(100dvh - 100px) !important;
+        max-height:none !important;
+        margin:0 !important;
+        padding:0 !important;
+        background:transparent !important;
+        backdrop-filter:none !important;
+        overflow:visible !important;
+        z-index:auto !important;
+      }
+
+      body.mobile-request-page #requestJarModal .modal-card{
+        position:static !important;
+        width:100% !important;
+        max-width:100% !important;
+        min-height:calc(100dvh - 100px) !important;
+        max-height:none !important;
+        margin:0 !important;
+        border:0 !important;
+        border-radius:0 !important;
+        box-shadow:none !important;
+        overflow:visible !important;
+        background:var(--paper) !important;
+      }
+
+      body.mobile-request-page #requestJarModal .modal-top{
+        position:sticky !important;
+        top:0 !important;
+        z-index:30 !important;
+        min-height:64px !important;
+        padding:14px 16px !important;
+        background:rgba(255,253,249,.98) !important;
+        backdrop-filter:blur(10px) !important;
+        border-bottom:1px solid var(--line) !important;
+      }
+
+      body.mobile-request-page #requestJarModal form{
+        display:block !important;
+        width:100% !important;
+        height:auto !important;
+        max-height:none !important;
+        overflow:visible !important;
+        padding:18px 16px 34px !important;
+      }
+
+      body.mobile-request-page #requestJarModal .form-grid{
+        grid-template-columns:1fr !important;
+        gap:14px !important;
+      }
+
+      body.mobile-request-page #requestJarModal input,
+      body.mobile-request-page #requestJarModal textarea{
+        width:100% !important;
+        min-width:0 !important;
+        font-size:16px !important;
+      }
+
+      body.mobile-request-page #requestJarModal .form-actions{
+        position:static !important;
+        display:grid !important;
+        grid-template-columns:1fr 1.25fr !important;
+        gap:10px !important;
+        margin-top:22px !important;
+        padding:14px 0 calc(14px + env(safe-area-inset-bottom)) !important;
+        border-top:1px solid var(--line) !important;
+        background:transparent !important;
+        box-shadow:none !important;
+      }
+    }
+
+    @media(max-width:430px){
+      body.mobile-request-page #requestJarModal .form-actions{
+        grid-template-columns:1fr !important;
+      }
+    }
+
 </style>
 </head>
 <body>
@@ -1458,7 +1606,10 @@
           <h2>Jar Library</h2>
           <p>Start with the vessel, then learn from everyone who tested it before you.</p>
         </div>
-        <div class="result-count" id="resultCount"></div>
+        <div class="library-head-actions">
+          <div class="result-count" id="resultCount"></div>
+          <button class="request-jar-btn" type="button" onclick="openJarRequest()">+ Request a Jar</button>
+        </div>
       </div>
 
       <div class="jar-grid" id="jarGrid"></div>
@@ -1550,6 +1701,51 @@
         <div class="form-actions">
           <button type="button" class="cancel" onclick="closeModal('submitModal')">Cancel</button>
           <button id="submitTestBtn" type="submit" class="submit">Submit Test</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+  <div class="modal request-modal" id="requestJarModal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-top">
+        <strong>Request a Jar</strong>
+        <button class="close" onclick="closeModal('requestJarModal')" aria-label="Close">×</button>
+      </div>
+
+      <form id="requestJarForm">
+        <div id="requestJarMessage" class="form-message" role="status" aria-live="polite"></div>
+
+        <div class="request-intro">
+          Don’t see a vessel you use? Send us the product page and we’ll review it for the Jar Library.
+        </div>
+
+        <div class="form-grid">
+          <div class="form-group full">
+            <label for="requestJarName">Jar / Vessel Name</label>
+            <input id="requestJarName" type="text" maxlength="120" placeholder="e.g. Libbey 3-Wick Tumbler" required />
+          </div>
+
+          <div class="form-group full">
+            <label for="requestSupplier">Supplier</label>
+            <input id="requestSupplier" type="text" maxlength="120" placeholder="e.g. CandleScience" required />
+          </div>
+
+          <div class="form-group full">
+            <label for="requestProductUrl">Product Link</label>
+            <input id="requestProductUrl" type="url" maxlength="800" placeholder="https://..." required />
+          </div>
+
+          <div class="form-group full">
+            <label for="requestNotes">Notes <span style="font-weight:500;color:var(--muted)">(optional)</span></label>
+            <textarea id="requestNotes" maxlength="1000" placeholder="Anything useful about the jar, available sizes, finishes, or why you’d like it added."></textarea>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button class="secondary" type="button" onclick="closeModal('requestJarModal')">Cancel</button>
+          <button class="primary" id="requestJarSubmit" type="submit">Submit Request</button>
         </div>
       </form>
     </div>
@@ -1801,11 +1997,14 @@
           const params = new URLSearchParams(window.location.search);
           const detailId = params.get("jar");
           const submitId = params.get("add-test");
+          const requestJar = params.get("request-jar");
 
           if(detailId){
             setTimeout(() => openDetail(detailId, true), 30);
           }else if(submitId){
             setTimeout(() => openSubmit(submitId, true), 30);
+          }else if(requestJar){
+            setTimeout(() => openJarRequest(true), 30);
           }
         }
 
@@ -1976,6 +2175,7 @@
       const url = new URL(window.location.href);
       url.searchParams.delete("jar");
       url.searchParams.delete("add-test");
+      url.searchParams.delete("request-jar");
       url.searchParams.set(mode, String(id));
       window.location.assign(url.toString());
     }
@@ -1984,6 +2184,7 @@
       const params = new URLSearchParams(window.location.search);
       if(params.has("jar")) return "detail";
       if(params.has("add-test")) return "submit";
+      if(params.has("request-jar")) return "request";
       return "";
     }
 
@@ -2170,6 +2371,116 @@
       updateBuyLink();
     }
 
+
+    function setRequestJarMessage(message="", type="info"){
+      const el = document.getElementById("requestJarMessage");
+      if(!el) return;
+      el.textContent = message;
+      el.className = `form-message ${type}`;
+      el.style.display = message ? "block" : "none";
+    }
+
+    async function openJarRequest(fromPageLoad=false){
+      if(isMobilePageMode() && !fromPageLoad){
+        navigateMobilePage("request-jar", "1");
+        return;
+      }
+
+      try{
+        if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+
+        const user = window.KindleCloud?.currentUser || null;
+        if(!user){
+          if(window.KindleCloud?.openAuth){
+            window.KindleCloud.openAuth("signin", "Sign in to request a jar for the library.");
+          }else{
+            alert("Please sign in before requesting a jar.");
+          }
+          return;
+        }
+
+        const profile = window.KindleCloud?.currentProfile || await window.KindleCloud?.requireProfile?.(
+          "Choose a community username before requesting a jar."
+        );
+        if(!profile?.username) return;
+
+        setRequestJarMessage(`Submitting as ${profile.username}. We’ll review your request before adding anything to the library.`, "info");
+        document.getElementById("requestJarModal").classList.add("open");
+
+        if(isMobilePageMode() && mobilePageType()==="request"){
+          document.body.classList.add("mobile-request-page");
+          document.body.style.overflow = "";
+        }else{
+          document.body.style.overflow = "hidden";
+        }
+      }catch(error){
+        console.error("Could not open jar request form:", error);
+        alert("We couldn't open the jar request form. Please try again.");
+      }
+    }
+
+    async function submitJarRequest(event){
+      event.preventDefault();
+
+      try{
+        if(window.KindleCloud?.ready) await window.KindleCloud.ready;
+        const user = window.KindleCloud?.currentUser || null;
+        if(!user){
+          setRequestJarMessage("Please sign in before submitting a request.", "error");
+          return;
+        }
+
+        const jarName = document.getElementById("requestJarName").value.trim();
+        const supplierName = document.getElementById("requestSupplier").value.trim();
+        const productUrl = document.getElementById("requestProductUrl").value.trim();
+        const notes = document.getElementById("requestNotes").value.trim();
+
+        if(!jarName || !supplierName || !productUrl){
+          setRequestJarMessage("Jar name, supplier, and product link are required.", "error");
+          return;
+        }
+
+        const button = document.getElementById("requestJarSubmit");
+        button.disabled = true;
+        button.textContent = "Submitting…";
+
+        const client = window.KindleCloud?.client || jarClient;
+        if(!client) throw new Error("Database connection unavailable.");
+
+        const { error } = await client.from("jar_requests").insert({
+          user_id: user.id,
+          jar_name: jarName,
+          supplier_name: supplierName,
+          product_url: productUrl,
+          notes: notes || null,
+          status: "pending"
+        });
+
+        if(error) throw error;
+
+        document.getElementById("requestJarForm").reset();
+        setRequestJarMessage("Request submitted. Thanks for helping us grow the Jar Library!", "success");
+
+        setTimeout(() => {
+          if(isMobilePageMode()){
+            window.location.assign("/jar-library/");
+          }else{
+            closeModal("requestJarModal");
+          }
+        }, 900);
+
+      }catch(error){
+        console.error("Jar request error:", error);
+        setRequestJarMessage(error?.message || "We couldn't submit your request. Please try again.", "error");
+      }finally{
+        const button = document.getElementById("requestJarSubmit");
+        if(button){
+          button.disabled = false;
+          button.textContent = "Submit Request";
+        }
+      }
+    }
+
     async function openSubmit(id, fromPageLoad=false){
       if(isMobilePageMode() && !fromPageLoad){
         navigateMobilePage("add-test", id);
@@ -2284,7 +2595,11 @@
     }
 
     function closeModal(id){
-      if(isMobilePageMode() && (document.body.classList.contains("mobile-detail-page") || document.body.classList.contains("mobile-submit-page"))){
+      if(isMobilePageMode() && (
+        document.body.classList.contains("mobile-detail-page") ||
+        document.body.classList.contains("mobile-submit-page") ||
+        document.body.classList.contains("mobile-request-page")
+      )){
         window.location.assign("/jar-library/");
         return;
       }
@@ -2294,6 +2609,7 @@
     }
 
     document.getElementById("testForm").addEventListener("submit", submitBurnTest);
+    document.getElementById("requestJarForm").addEventListener("submit", submitJarRequest);
 
     document.getElementById("searchInput").addEventListener("input", renderJars);
     document.getElementById("supplierFilter").addEventListener("change", () => {
