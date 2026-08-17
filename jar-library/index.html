@@ -38,17 +38,18 @@
     a{color:inherit;text-decoration:none}
 
     .container{width:min(1180px,92%);margin-inline:auto}
-    .announcement {
-      background: #7f452f;
-      color: #fffdf9;
-      text-align: center;
-      padding: 9px 16px 8px;
-      font-family: "Courier New", Courier, monospace;
-      font-size: 11px;
-      font-weight: 400;
-      line-height: normal;
-      letter-spacing: .16em;
-      text-transform: uppercase;
+
+    .announcement{
+      background:var(--accent-dark);
+      color:#fff;
+      text-align:center;
+      padding:9px 16px 8px;
+      font-family:Arial,Helvetica,sans-serif;
+      font-size:11px;
+      font-weight:500;
+      line-height:1.2;
+      letter-spacing:.12em;
+      text-transform:uppercase;
     }
 
     .site-header{
@@ -366,6 +367,19 @@
     }
 
     @media(max-width:640px){
+
+      .jar-visual{
+        height:210px;
+        min-height:210px;
+      }
+      .jar-product-image{
+        width:100%;
+        height:100%;
+        object-fit:contain;
+        object-position:center;
+        padding:8px;
+      }
+
       .hero{padding-top:50px}
       .jar-visual{height:260px}
 
@@ -373,7 +387,7 @@
       .search-row .field:first-child,.form-group.full{grid-column:auto}
       .section-head{align-items:flex-start;flex-direction:column}
       .detail{padding:18px}
-      .detail-visual{height:320px}
+      .detail-visual{height:280px}
       .modal{padding:8px}
       .modal-card{border-radius:18px}
     }
@@ -694,6 +708,7 @@
           supplier: supplier.name || "Unknown supplier",
           supplierUrl: supplier.affiliate_url || supplier.website_url || j.product_url || "#",
           imageUrl: j.image_url || jarVariants.find(v => v.image_url)?.image_url || null,
+          cardImageUrl: jarVariants.find(v => v.image_url)?.image_url || j.image_url || null,
           price: j.price,
           diameter: inches(j.diameter_inches),
           innerDiameter: inches(j.inner_diameter_inches),
@@ -906,8 +921,8 @@
           <article class="jar-card">
             <div class="jar-visual">
               <span class="badge">${testsCopy}</span>
-              ${j.imageUrl
-                ? `<img src="${esc(j.imageUrl)}" alt="${esc(j.name)}" class="jar-product-image">`
+              ${j.cardImageUrl
+                ? `<img src="${esc(j.cardImageUrl)}" alt="${esc(j.name)}" class="jar-product-image">`
                 : `<div class="jar-shape" aria-hidden="true"></div>`}
             </div>
             <div class="jar-body">

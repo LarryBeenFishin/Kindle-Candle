@@ -228,7 +228,9 @@
       width:100%;
       height:100%;
       object-fit:contain;
+      object-position:center;
       display:block;
+      padding:10px;
       background:#f3ede5;
     }
 
@@ -491,9 +493,21 @@
       .hero-card.large{grid-row:auto}
       h1{font-size:3.7rem}
       .hero{min-height:auto}
-      .hero-image{min-height:250px}
-      .hero-card:not(.large) .hero-image{min-height:220px}
-      .jar-photo{height:245px}
+      .hero-image{
+        min-height:0;
+        height:220px;
+      }
+      .hero-card:not(.large) .hero-image{
+        min-height:0;
+        height:200px;
+      }
+      .jar-photo{
+        height:210px;
+      }
+      .hero-image img,
+      .jar-photo img{
+        padding:8px;
+      }
     }
   </style>
 </head>
@@ -739,7 +753,7 @@
             ...j,
             supplier:supplierMap.get(j.supplier_id) || "Candle Supplier",
             variants:vars,
-            image:j.image_url || vars.find(v => v.image_url)?.image_url || null,
+            image:vars.find(v => v.image_url)?.image_url || j.image_url || null,
             tests:testCounts[j.id] || 0
           };
         });
